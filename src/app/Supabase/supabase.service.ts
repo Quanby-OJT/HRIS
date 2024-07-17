@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { createClient, SupabaseClient, User, Session, PostgrestSingleResponse, PostgrestResponse } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User, Session, PostgrestSingleResponse,PostgrestError, PostgrestResponse } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -159,60 +159,127 @@ export class SupabaseService {
     return data.length > 0;
   }
 
+  async createSupabaseUser(email: string, password: string) {
+    const { data, error } = await this.supabase.auth.signUp({
+      email: email,
+      password: password
+    });
+    if (error) {
+      console.error('Error creating user in Supabase Auth:', error.message);
+    }
+    return { user: data.user, error };
+  }
+
   async createEmployee(employee: any): Promise<PostgrestSingleResponse<any>> {
-    const response = await this.supabase.from('profile').insert([
-      {
+    try {
+      // Step 1: Sign up user with Supabase authentication
+      const { data: authData, error: authError } = await this.supabase.auth.signUp({
         email: employee.email,
-        first_name: employee.firstname,
-        mid_name: employee.midname,
-        surname: employee.surname,
-        password: employee.password, // Hash the password before storing
-        department: employee.department,
-        position: employee.position,
-        types: employee.type
-      },
-    ]).select('user_id');
-
-  // Step 2: Handle potential errors in the employee creation process
-  if (response.error) {
-    console.error('Error creating employee:', response.error.message);
-    return response; // Return early if there was an error
-  } else {
-    console.log('Employee created successfully:', response.data);
-    const newUserId = response.data[0].user_id;
+        password: employee.password,
+      });
   
-    // Step 3: Fetch the corresponding role_id for the role_name
-    const { data: rolesData, error: rolesError } = await this.supabase
-      .from('roles')
-      .select('role_id')
-      .eq('role_name', employee.position)
-      .single();
-
-    // Step 4: Handle potential errors in fetching the role_id
-    if (rolesError) {
-      console.error('Error fetching role_id:', rolesError.message);
-      return { data: null, error: rolesError } as PostgrestSingleResponse<any>; // Return early if there was an error
+      if (authError) {
+        console.error('Error creating user in Supabase auth:', authError.message);
+        return {
+          data: null,
+          error: authError as unknown as PostgrestError,
+          status: 400,
+          statusText: 'Bad Request',
+          count: null
+        } as PostgrestSingleResponse<any>;
+      }
+  
+      console.log('User created in Supabase auth:', authData);
+  
+      // Step 2: Insert user profile into the profile table
+      const { data: profileData, error: profileError, status, statusText } = await this.supabase.from('profile').insert([
+        {
+          email: employee.email,
+          first_name: employee.firstname,
+          mid_name: employee.midname,
+          surname: employee.surname,
+          department: employee.department,
+          position: employee.position,
+          types: employee.type,
+          user_id: authData.user?.id, // Link to the authentication user
+          password: employee.password, // This should be hashed and securely stored in real scenarios
+        },
+      ]).select('user_id');
+  
+      if (profileError) {
+        console.error('Error creating employee profile:', profileError.message);
+        return {
+          data: null,
+          error: profileError,
+          status,
+          statusText,
+          count: null
+        } as PostgrestSingleResponse<any>;
+      }
+  
+      console.log('Employee profile created successfully:', profileData);
+      const newUserId = profileData[0].user_id;
+  
+      // Step 3: Fetch the corresponding role_id for the role_name
+      const { data: rolesData, error: rolesError, status: rolesStatus, statusText: rolesStatusText } = await this.supabase
+        .from('roles')
+        .select('role_id')
+        .eq('role_name', employee.position)
+        .single();
+  
+      if (rolesError) {
+        console.error('Error fetching role_id:', rolesError.message);
+        return {
+          data: null,
+          error: rolesError,
+          status: rolesStatus,
+          statusText: rolesStatusText,
+          count: null
+        } as PostgrestSingleResponse<any>;
+      }
+  
+      const roleId = rolesData.role_id;
+  
+      // Step 4: Assign role to the user
+      const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
+  
+      if (assignRoleResponse.error) {
+        console.error('Error assigning role:', assignRoleResponse.error.message);
+        return {
+          data: null,
+          error: assignRoleResponse.error,
+          status: assignRoleResponse.status,
+          statusText: assignRoleResponse.statusText,
+          count: null
+        } as PostgrestSingleResponse<any>;
+      } else {
+        console.log('Role assigned successfully:', assignRoleResponse.data);
+      }
+  
+      // Step 5: Refresh the session
+      await this.refreshSession();
+  
+      return {
+        data: profileData,
+        error: null,
+        status,
+        statusText,
+        count: null
+      } as PostgrestSingleResponse<any>;
+  
+    } catch (error) {
+      console.error('Unexpected error during employee creation:', error);
+      return {
+        data: null,
+        error: error as unknown as PostgrestError,
+        count: null,
+        status: 500,
+        statusText: 'Internal Server Error'
+      } as PostgrestSingleResponse<any>;
     }
-
-    const roleId = rolesData.role_id;
-
-    // Step 5: Assign role to the user and store role_name
-    const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
-
-    // Step 6: Handle potential errors in the role assignment process
-    if (assignRoleResponse.error) {
-      console.error('Error assigning role:', assignRoleResponse.error.message);
-    } else {
-      console.log('Role assigned successfully:', assignRoleResponse.data);
-    }
-
-    // Step 7: Refresh the session
-    await this.refreshSession();
   }
-
-  return response;
-  }
-
+  
+  
   async assignUserRole(userId: number, roleId: number): Promise<PostgrestSingleResponse<any>> {
     const response = await this.supabase
       .from('user_roles')

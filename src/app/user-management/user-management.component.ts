@@ -342,6 +342,14 @@ export class UserManagementComponent implements OnInit {
       }
   
       console.log('Creating employee:', this.employee);
+  
+      const { user, error } = await this.supabaseService.createSupabaseUser(this.employee.email, this.employee.password);
+      if (error) {
+        console.error('Error creating user in Supabase Auth:', error.message);
+        alert('Error creating user. Please try again.');
+        return;
+      }
+  
       const response = await this.supabaseService.createEmployee(this.employee);
       if (response.error) {
         console.error('Error creating employee:', response.error.message);
@@ -353,6 +361,7 @@ export class UserManagementComponent implements OnInit {
       }
     }
   }
+  
 
   addRole() {
     if (!this.newRole) {

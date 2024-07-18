@@ -96,7 +96,9 @@ export class UserManagementComponent implements OnInit {
 
   selectedTicket: any = null;
   isModalVisible = false;
-  replyText: string = ''; // Text for the reply
+  replyText: string = ''; // Property to hold the reply Text
+  currentTicketId: string = ''; // Property to hold the current ticket ID
+  userEmail: string = ''; // Property to hold the user's email
 
   employee = {
     email: '',
@@ -1151,15 +1153,29 @@ closeModal() {
   this.isModalVisible = false;
 }
 
-replyTicket(): void {
-  if (this.selectedTicket) {
-    // Logic for replying to a ticket
-    this.selectedTicket.reply = this.replyText;
-    this.updateTicket(this.selectedTicket);
-    this.closeModal();
-    this.replyText = ''; // Reset reply text after sending
-  } else {
-    console.log('No ticket selected to reply.');
+// Method to handle the reply
+async replyTicket() {
+  if (this.replyText.trim() === '') {
+    alert('Reply text cannot be empty.');
+    return;
+  }
+
+  try {
+    (await this.supabaseService.replyToTicket(this.currentTicketId, this.replyText, this.userEmail)).subscribe(
+      () => {
+        alert('Reply sent successfully.');
+        this.replyText = ''; // Clear the reply text
+        // Optionally, refresh the ticket list or the specific ticket
+      },
+      (error: any) => {
+        console.error('Failed to send reply:', error);
+        alert('Failed to send reply. Please try again.');
+      }
+    );
+  } catch (error) {
+    console.error('Error calling replyToTicket:', error);
+    alert('Failed to send reply. Please try again.');
+    }
   }
 }
 
@@ -1197,5 +1213,5 @@ replyTicket(): void {
 //     this.filteredTickets = [...this.tickets];
 //     this.ticketUpdatePagination();
 //   }
-}
+
 

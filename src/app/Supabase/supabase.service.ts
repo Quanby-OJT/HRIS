@@ -2,7 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { createClient, SupabaseClient, User, Session, PostgrestSingleResponse, PostgrestResponse } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, from, switchMap, tap, throwError } from 'rxjs';
 
 
 interface Ticket {
@@ -479,11 +479,44 @@ export class SupabaseService {
       return data;
     }
 
-  //   // Method to send the admin reply
-   // Method to send the admin reply and trigger email
-   replyToTicket(id: string, replyText: string, userEmail: string): Observable<any> {
-    const payload = { replyText, userEmail };
-    return this.http.post(`${this.supabase}/api/tickets/${id}/reply`, payload);
+  // Method to send the admin reply and trigger email
+  replyToTicket(id: string, reply: string, email: string): Observable<any> {
+    let parsedId: bigint;
+  
+    // Try to parse the id as a bigint
+    try {
+      parsedId = BigInt(id);
+    } catch (e) {
+      console.error('Invalid id:', id);
+      return throwError(() => new Error('Invalid ticket ID.'));
+    }
+  
+    // Log the parsed ID to ensure it's correctly parsed
+    console.log('Replying to ticket:', { id: parsedId, reply, email });
+  
+    // Log the update query
+    const updateQuery = {
+      reply: reply,
+      email: email,
+      logres: new Date().toISOString()
+    };
+  
+    console.log('Update query:', updateQuery);
+  
+    // Update the reply field of the existing ticket
+    return from(this.supabase
+      .from('ticket')
+      .update(updateQuery)
+      .eq('id', parsedId.toString())
+    ).pipe(
+      switchMap(() => this.supabase.from('ticket').select().eq('id', parsedId.toString())),
+      tap(response => console.log('Refreshed ticket:', response)),
+      catchError(error => {
+        console.error('Supabase error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        return throwError(() => new Error('Failed to send reply. Please try again.'));
+      })
+    );
   }
   
   async uploadImage(file: File): Promise<{ data: { url: string } | null, error: Error | null }> {

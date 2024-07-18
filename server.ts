@@ -7,7 +7,6 @@ import bootstrap from './src/main.server';
 import nodemailer from 'nodemailer';
 import bodyParser from 'body-parser';
 
-// The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));

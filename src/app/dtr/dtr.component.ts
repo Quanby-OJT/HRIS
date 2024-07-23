@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
 import { SupabaseService } from '../Supabase/supabase.service';
-import { DatePipe } from '@angular/common';
 
 interface Attendance {
   id: number;
@@ -41,6 +40,7 @@ export class DtrComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 8;
   totalPages = 1;
+  selectedDate: string = this.today.toISOString().split('T')[0]; // Default to today
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -50,11 +50,11 @@ export class DtrComponent implements OnInit {
 
   async loadAttendances() {
     try {
-      this.attendances = await this.supabaseService.getTodayAttendances();
+      this.attendances = await this.supabaseService.getAttendances(this.selectedDate);
       this.filteredAttendances = this.attendances;
       this.updatePagination();
     } catch (error) {
-      console.error('Error loading today\'s attendances:', error);
+      console.error('Error loading attendances:', error);
     }
   }
 
@@ -65,6 +65,11 @@ export class DtrComponent implements OnInit {
       attendance.status.toLowerCase().includes(term)
     );
     this.updatePagination();
+  }
+
+  onDateChange(event: any) {
+    this.selectedDate = event.target.value;
+    this.loadAttendances();
   }
 
   formatSchedule(scheduleIn: string, scheduleOut: string): string {
@@ -193,14 +198,5 @@ export class DtrComponent implements OnInit {
     };
   
     return date.toLocaleString('en-US', options);
-  }
-
-  //date
-  selectedDate(){
-
-  }
-
-  onDateChange(){
-
   }
 }

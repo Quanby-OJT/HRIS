@@ -621,24 +621,6 @@ export class SupabaseService {
   }
 
   //dtr
-  async getAttendances(): Promise<any[]> {
-    try {
-      const { data, error } = await this.supabase
-        .from('DTR')
-        .select('*')
-        .order('id', { ascending: true });
-
-      if (error) {
-        throw error;
-      }
-
-      console.log('Fetched data from Supabase:', data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching attendances from Supabase:', error);
-      throw error;
-    }
-  }
 
   async insertDTRRecord(status: string, name: string) {
     try {
@@ -762,7 +744,25 @@ export class SupabaseService {
       throw error;
     }
   }
+  async getAttendances(date: string): Promise<any[]> {
+    try {
+      // Filter the data by the specified date
+      const { data, error } = await this.supabase
+        .from('DTR')
+        .select('*')
+        .order('id', { ascending: true });
   
+      if (error) {
+        throw error;
+      }
+  
+      console.log('Fetched data from Supabase:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching attendances from Supabase:', error);
+      throw error;
+    }
+  }
   //reply
   async createReply(reply: any) {
     return await this.supabase

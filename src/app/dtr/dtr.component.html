@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="w-1/3">
-                <input type="date" [(ngModel)]="selectedDate" (ngModelChange)="onDateChange()" class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+               <input type="date" [(ngModel)]="selectedDate" (ngModelChange)="onDateChange(selectedDate)" class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
             <button *ngIf="isManageMode" (click)="deleteSelectedAttendances()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
             <button (click)="toggleManageMode()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">{{ isManageMode ? 'Exit Manage' : 'Manage' }}</button>

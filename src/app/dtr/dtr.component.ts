@@ -194,4 +194,13 @@ export class DtrComponent implements OnInit {
   
     return date.toLocaleString('en-US', options);
   }
+
+  //date
+  selectedDate(){
+
+  }
+
+  onDateChange(){
+
+  }
 }

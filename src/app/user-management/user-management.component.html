@@ -5,7 +5,7 @@
 
 
     <!-- Main componenet -->
-<div class="bg-white min-h-screen">
+<div class="min-h-screen">
   <main class="p-6">
 
     <div class="mb-6">
@@ -153,27 +153,6 @@
 <!-- Users active tab -->
 <div *ngIf="activeTab === 'users'" class="flex flex-col">
   <section id="user-list" class="flex flex-col h-full">
-    <div class="mb-4 flex flex-col md:flex-row md:justify-between md:items-center">
-      <input type="text" [(ngModel)]="searchTerm" (input)="searchTable()" placeholder="Search Employees..." class="w-full md:w-1/2 p-2 border rounded-lg mb-2 md:mb-0">
-      <div class="flex space-x-4">
-        <!-- Delete button only displayed when in editing mode -->
-        <button *ngIf="isEditing" class="bg-red-500 text-white px-4 py-2 rounded-lg" (click)="deleteUsers()">
-          Delete
-        </button>
-        <!-- Manage User button -->
-        <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
-            class="text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out" (click)="toggleEditMode()">
-          {{ isEditing ? 'Stop Managing' : 'Manage User' }}
-        </button>
-        <!-- New Employee button, disabled when isEditing is true -->
-        <button (click)="toggleModal()"
-          [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
-          [disabled]="isEditing"
-          class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
-          font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button">+ New Employee</button>
-      </div>
-    </div>
 
 <!-- Adding New Employee -->
   <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"
@@ -294,105 +273,121 @@
         </div>
       </div>
 
-<!-- Users active tab -->
-      <div *ngIf="filteredUsers.length > 0" class="rounded-lg shadow-lg bg-transparent">
-        <table class="w-full md:min-w-full border-collapse rounded-lg overflow-hidden">
-          <thead>
-            <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
-              <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Profile</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Name</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Email</th> 
-              <th class="py-3 px-6 text-left font-thin text-lg">Password</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Department</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Role</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Status</th>
-              <th class="py-3 px-6 text-center font-thin text-lg">Access</th>
-              <th *ngIf="isEditing" class="py-3 px-6 text-center text-lg">Edit</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-600 text-sm font-light">
-            <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-100">
-              <td *ngIf="isEditing" class="py-3 px-6 text-center">
-                <input type="checkbox" 
-                       [checked]="user.selected"
-                       (change)="toggleUserSelection(user)">
-              </td>
-              <td class="py-3 px-6 text-left whitespace-nowrap">
-                <div class="flex items-center">
-                  <img [src]="user.profile" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200">
-                </div>
-              </td>
-              <td class="py-3 px-6 text-left">{{ user.name }}</td>
-              <td class="py-3 px-6 text-left">{{ user.email }}</td>
-              <td class="py-3 px-6 text-left">
-                <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
-              </td>
-              <td class="py-3 px-6 text-left">{{ user.department }}</td>
-              <td class="py-3 px-6 text-left">{{ user.position }}<br>{{ getContractType(user.position) }}</td>
-              <td class="py-3 px-6 text-left">
-                <span [ngClass]="{
-                  'bg-green-200 text-green-700': user.status === 'Active',
-                  'bg-red-200 text-red-700': user.status === 'Inactive'}" class="py-1 px-3 rounded-full text-xs">{{ user.status }}
-                </span>
-              </td>
-              <td class="py-3 px-6 text-center">
-                <button
-                  (click)="!showModal && toggleUserAccess(user)"
-                  class="relative inline-flex items-center w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  [ngClass]="{
-                    'bg-blue-600': user.access && !showModal,
-                    'bg-gray-200': !user.access && !showModal,
-                    'bg-[#0D47A1]': user.access && showModal,
-                    'bg-gray-300': !user.access && showModal,
-                    'cursor-not-allowed': showModal
-                  }"
-                  [attr.disabled]="showModal ? '' : null"
-                  aria-label="Toggle user access"
-                >
-                  <span 
-                    class="inline-block w-5 h-5 transform transition-transform duration-200 ease-in-out bg-white rounded-full"
-                    [ngClass]="{'translate-x-6': user.access, 'translate-x-1': !user.access}"
-                  ></span>
-                </button>
-              </td>
-              <td *ngIf="isEditing" class="py-3 px-6 text-center">
-                <button (click)="editUser(user)" class="text-blue-500 hover:text-blue-700">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536-3.536L15.232 5.232zM4 13.5V21h7.5l11-11.5a2.5 2.5 0 00-3.5-3.5L4 13.5z"/>
-                  </svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>      
-      </section>
+      <div class="rounded-xl shadow-lg bg-white">
+        <!-- Row with search input and buttons -->
+        <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+          <input type="text" [(ngModel)]="searchTerm" (input)="searchTable()" placeholder="Search Employees..." class="w-full md:w-1/2 p-2 border rounded-full mb-2 md:mb-0 outline-blue-400">
+          <div class="flex items-center space-x-4">
+            <!-- Delete button only displayed when in editing mode -->
+            <button *ngIf="isEditing" class="bg-red-500 text-white px-4 py-2 rounded-lg" (click)="deleteUsers()">
+              Delete
+            </button>
+            <!-- Manage User button -->
+            <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
+                class="text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out" (click)="toggleEditMode()">
+              {{ isEditing ? 'Stop Managing' : 'Manage User' }}
+            </button>
+            <!-- New Employee button, disabled when isEditing is true -->
+            <button (click)="toggleModal()"
+              [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
+              [disabled]="isEditing"
+              class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
+              font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              type="button">+ New Employee</button>
 
-<!-- Pagination for Editing Users tab -->
-      <div class="flex justify-between items-center mt-4">
-        <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
-        <span class="text-gray-600">Page {{ currentPage }} of {{ totalPages }}</span>
-        <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+              <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+          </div>
+        </div>
+      
+        <!-- Table -->
+        <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto">
+          <table class="w-full border-collapse overflow-hidden">
+            <thead>
+              <tr class="bg-gray-100 text-gray-700 leading-normal">
+                <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Profile</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Name</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Email</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Password</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Department</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Role</th>
+                <th class="py-3 px-6 text-left font-thin text-lg">Status</th>
+                <th class="py-3 px-6 text-center font-thin text-lg">Access</th>
+                <th *ngIf="isEditing" class="py-3 px-6 text-center text-lg">Edit</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+              <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-100">
+                <td *ngIf="isEditing" class="py-3 px-6 text-center">
+                  <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)">
+                </td>
+                <td class="py-3 px-6 text-left whitespace-nowrap">
+                  <div class="flex items-center">
+                    <img [src]="user.profile" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200">
+                  </div>
+                </td>
+                <td class="py-3 px-6 text-left">{{ user.name }}</td>
+                <td class="py-3 px-6 text-left">{{ user.email }}</td>
+                <td class="py-3 px-6 text-left">
+                  <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                </td>
+                <td class="py-3 px-6 text-left">{{ user.department }}</td>
+                <td class="py-3 px-6 text-left">{{ user.position }}<br>{{ getContractType(user.position) }}</td>
+                <td class="py-3 px-6 text-left">
+                  <span [ngClass]="{
+                    'bg-green-200 text-green-700': user.status === 'Active',
+                    'bg-red-200 text-red-700': user.status === 'Inactive'}" class="py-1 px-3 rounded-full text-xs">{{ user.status }}
+                  </span>
+                </td>
+                <td class="py-3 px-6 text-center">
+                  <button (click)="!showModal && toggleUserAccess(user)" class="relative inline-flex items-center w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    [ngClass]="{
+                      'bg-blue-600': user.access && !showModal,
+                      'bg-gray-200': !user.access && !showModal,
+                      'bg-[#0D47A1]': user.access && showModal,
+                      'bg-gray-300': !user.access && showModal,
+                      'cursor-not-allowed': showModal
+                    }" [attr.disabled]="showModal ? '' : null" aria-label="Toggle user access">
+                    <span class="inline-block w-5 h-5 transform transition-transform duration-200 ease-in-out bg-white rounded-full"
+                      [ngClass]="{'translate-x-6': user.access, 'translate-x-1': !user.access}">
+                    </span>
+                  </button>
+                </td>
+                <td *ngIf="isEditing" class="py-3 px-6 text-center">
+                  <button (click)="editUser(user)" class="text-blue-500 hover:text-blue-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536-3.536L15.232 5.232zM4 13.5V21h7.5l11-11.5a2.5 2.5 0 00-3.5-3.5L4 13.5z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      
+      </section>
     </div>
 
 <!-- Roles Active tab -->
     <div *ngIf="activeTab === 'roles'">
       <section id="user-list">
-        <div class="flex justify-between items-stretch mb-6 h-9 space-x-4 mr-2">
+      <div class="bg-white rounded-xl">
+        <div class="flex flex-row items-center justify-between p-4">
           <input type="text" [(ngModel)]="searchRoleTerm" placeholder="Search Roles..." class="w-[10%] h-full p-2 border rounded-lg">
           <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
           <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
           <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
           <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
-          <button class="text-white rounded h-full w-[10%] whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
+          <button class="text-white rounded px-4 py-2 whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
             {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
           </button>
         </div>
         
-        <div class="flex space-x-4">
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
+        <div class="flex space-x-4 p-4">
+          <div class="flex-1 h-[450px] shadow- rounded-xl  bg-white">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <!-- app.component.html -->
@@ -467,7 +462,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
+          <div class="flex-1 h-[450px] rounded-xl borde bg-white">
             <div class="m-10" *ngIf="assignedRole">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black truncate max-w-[200px]">{{ assignedRole.role_name }}</p>
@@ -498,7 +493,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
+          <div class="flex-1 h-[450px rounded-xl border bg-white">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">
@@ -887,7 +882,7 @@
             </div>
           </div>
         </div>        
-        
+        </div>
         
 
 

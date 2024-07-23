@@ -40,6 +40,11 @@ export class SubmitTicketComponent {
         this.ticketSubmitted = true;
         this.submitError = '';
         this.resetForm();
+    
+        // Set a timeout to hide the success message after 5 seconds
+        setTimeout(() => {
+          this.ticketSubmitted = false;
+        }, 5000);
       },
       error => {
         console.error('Error submitting ticket:', error);

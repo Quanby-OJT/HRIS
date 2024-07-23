@@ -7,8 +7,6 @@
       </button>
     </div>
     
-     
-    
     <form (ngSubmit)="onSubmit()" #ticketForm="ngForm">
       <div class="form-group mb-4">
         <label for="email" class="block mb-1">Email</label>
@@ -34,8 +32,8 @@
       <button type="submit" class="bg-green-600 text-white w-full h-9 rounded-lg whitespace-nowrap" [disabled]="!ticketForm.form.valid">Submit Ticket</button>
     </form>
   
-    <div *ngIf="ticketSubmitted" class="success-message mt-4 text-green-600">
-      Ticket submitted successfully!
+    <div *ngIf="ticketSubmitted" class="success-message mt-4">
+      <p class="w-full py-2 px-4 rounded-lg bg-green-50 border border-green-500 text-green-700 text-center">Ticket has been submitted successfully.</p>
     </div>
   
     <div *ngIf="submitError" class="error-message mt-4 text-red-600">

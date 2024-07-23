@@ -134,14 +134,25 @@ popupEntriesRights: string = 'none';
 
   dropdownVisible = false;
   selectedSortOption = 'A-Z';
+  sortOption: 'A-Z' | 'Z-A' = 'A-Z';
 
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
 
-  selectOption(option: string) {
-    this.selectedSortOption = option;
+  selectOption(option: 'A-Z' | 'Z-A') {
+    this.sortOption = option;
     this.dropdownVisible = false;
+  }
+
+  sortedRoles() {
+    return this.roles.sort((a, b) => {
+      if (this.sortOption === 'A-Z') {
+        return a.role_name.localeCompare(b.role_name);
+      } else {
+        return b.role_name.localeCompare(a.role_name);
+      }
+    });
   }
 
   addNewRole() {

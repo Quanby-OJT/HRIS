@@ -400,7 +400,7 @@
                 <div class="flex items-center flex-row justify-center">
                   <p class="text-2xl font-black">
                     Roles
-                    <span class="text-sm font-thin">{{ selectedSortOption }}</span>
+                    <span class="text-sm font-thin">{{ sortOption }}</span>
                   </p>
                   <div class="relative inline-block text-left ml-2">
                     <i (click)="toggleDropdown()" class="fa fa-sort-amount-asc align-middle cursor-pointer text-[10px] mb-[5px] font-thin" aria-hidden="true"></i>
@@ -421,8 +421,8 @@
                 <table class="table-auto w-[100%]">
                   <tbody>
                     <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-                      <tr class="hover:bg-gray-100 h-9 text-gray-600 text-sm font-light border-b" *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}">
-                        <td class =" w-full" [ngClass]="{'bg-gray-100': clickedRoleId === role.role_id}" (click)="onRoleClick(role)" (click)="selectRoleForEditing(role)">
+                      <tr class="hover:bg-gray-100 h-9 text-gray-600 text-sm font-light border-b" *ngFor="let role of sortedRoles()" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}">
+                        <td class="w-full" [ngClass]="{'bg-gray-100': clickedRoleId === role.role_id}" (click)="onRoleClick(role)" (click)="selectRoleForEditing(role)">
                           <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
                             <input [(ngModel)]="role.role_name" class="border rounded outline-none" />
                           </ng-container>
@@ -454,7 +454,7 @@
                             </button>
                           </ng-template>
                         </td>
-                      </tr>                    
+                      </tr>                 
                     </ng-container>
                     <ng-template #noMatch>
                       <tr class="h-9 text-gray-600 text-sm font-light">

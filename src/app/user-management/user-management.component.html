@@ -391,13 +391,32 @@
           </button>
         </div>
         
-        <div class="flex justify-between">
+        <div class="flex space-x-4">
           <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
-                <p class="text-2xl font-black">Roles</p>
+                <!-- app.component.html -->
+                <!-- app.component.html -->
+                <div class="flex items-center flex-row justify-center">
+                  <p class="text-2xl font-black">
+                    Roles
+                    <span class="text-sm font-thin">{{ selectedSortOption }}</span>
+                  </p>
+                  <div class="relative inline-block text-left ml-2">
+                    <i (click)="toggleDropdown()" class="fa fa-sort-amount-asc align-middle cursor-pointer text-[10px] mb-[5px] font-thin" aria-hidden="true"></i>
+                    <div *ngIf="dropdownVisible" class="absolute left-0 mt-2 w-14 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                      <div class="py-1">
+                        <a (click)="selectOption('A-Z')" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer">A-Z</a>
+                        <a (click)="selectOption('Z-A')" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer">Z-A</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+
+
                 <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="openRolePopup()" *ngIf="!isManageMode">Add Role</button>
-              </div>
+              </div>              
               <div class="custom-scrollbar overflow-y-auto overflow-x-hidden" style="height: calc(450px - 8rem);">
                 <table class="table-auto w-[100%]">
                   <tbody>
@@ -435,9 +454,7 @@
                             </button>
                           </ng-template>
                         </td>
-                      </tr>
-                      
-                                                                   
+                      </tr>                    
                     </ng-container>
                     <ng-template #noMatch>
                       <tr class="h-9 text-gray-600 text-sm font-light">
@@ -450,12 +467,13 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
             <div class="m-10" *ngIf="assignedRole">
               <div class="flex justify-between items-center">
-                <p class=" text-2xl font-black">{{ assignedRole.role_name }}</p>
+                <p class="text-2xl font-black truncate max-w-[200px]">{{ assignedRole.role_name }}</p>
                 <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="openAssignPopup()" *ngIf="!isManageMode">Assign</button>
               </div>
+              
               <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(450px - 8rem);">
                 <table class="table-auto w-full">
                   <tbody>
@@ -480,15 +498,11 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">
-                  Access Rights &nbsp;
-                  <span class="text-lg text-blue-600" style="width: 24px; display: inline-block;" *ngIf="isManageMode">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                  </span>
-                  <span class="text-lg text-blue-600" style="width: 24px; display: inline-block;" *ngIf="!isManageMode">&nbsp;</span>
+                  Access Rights
                 </p>
               </div>
               <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(450px - 8rem);">
@@ -642,11 +656,12 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>                                                                 
+                </table>    
               </div>
             </div>
           </div>
         </div>
+        
         
 
         <!-- Popup Modal -->

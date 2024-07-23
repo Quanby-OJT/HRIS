@@ -132,6 +132,18 @@ popupEntriesRights: string = 'none';
   assignedEmployees: string[] = ['Kobe Bryant', 'Alice Guo', 'Carlo Sotto', 'Harry Roque'];
   showCheckboxes = false;
 
+  dropdownVisible = false;
+  selectedSortOption = 'A-Z';
+
+  toggleDropdown() {
+    this.dropdownVisible = !this.dropdownVisible;
+  }
+
+  selectOption(option: string) {
+    this.selectedSortOption = option;
+    this.dropdownVisible = false;
+  }
+
   addNewRole() {
     this.showCheckboxes = !this.showCheckboxes;
   }

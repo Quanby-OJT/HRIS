@@ -14,19 +14,30 @@
   }
 
   .gradient-background {
-    background: linear-gradient(252deg,rgb(175, 172, 255),rgb(33, 33, 254));
-    background-size: 120% 120%;
+    background: radial-gradient(circle at 25% 25%, rgb(203, 203, 255), transparent 50%),
+                radial-gradient(circle at 75% 75%, rgb(130, 130, 255), transparent 50%),
+                radial-gradient(circle at 25% 75%, rgb(0, 30, 255), transparent 50%),
+                radial-gradient(circle at 75% 25%, rgb(140, 140, 255), transparent 50%);
+    background-size: 200% 200%;
     animation: gradient-animation 5s ease infinite;
   }
   
   @keyframes gradient-animation {
     0% {
-      background-position: 0% 50%;
+      background-position: 0% 0%;
+    }
+    25% {
+      background-position: 50% 50%;
     }
     50% {
-      background-position: 100% 50%;
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 50% 50%;
     }
     100% {
-      background-position: 0% 50%;
+      background-position: 0% 0%;
     }
   }
+  
+  

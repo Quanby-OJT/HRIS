@@ -144,27 +144,7 @@
 <!-- Users active tab -->
 <div *ngIf="activeTab === 'users'" class="flex flex-col">
   <section id="user-list" class="flex flex-col h-full">
-    <div class="mb-4 flex flex-col md:flex-row md:justify-between md:items-center">
-      <input type="text" [(ngModel)]="searchTerm" (input)="searchTable()" placeholder="Search Employees..." class="w-full md:w-1/2 p-2 border rounded-lg mb-2 md:mb-0">
-      <div class="flex space-x-4">
-        <!-- Delete button only displayed when in editing mode -->
-        <button *ngIf="isEditing" class="bg-red-500 text-white px-4 py-2 rounded-lg" (click)="deleteUsers()">
-          Delete
-        </button>
-        <!-- Manage User button -->
-        <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
-            class="text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out" (click)="toggleEditMode()">
-          {{ isEditing ? 'Stop Managing' : 'Manage User' }}
-        </button>
-        <!-- New Employee button, disabled when isEditing is true -->
-        <button (click)="toggleModal()"
-          [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
-          [disabled]="isEditing"
-          class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
-          font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button">+ New Employee</button>
-      </div>
-    </div>
+    
 
 <!-- Adding New Employee -->
   <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"
@@ -285,8 +265,37 @@
         </div>
       </div>
 
+      <div class="rounded-xl shadow-lg bg-white">
+        <!-- Row with search input and buttons -->
+        <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+          <input type="text" [(ngModel)]="searchTerm" (input)="searchTable()" placeholder="Search Employees..." class="w-full md:w-1/2 p-2 border rounded-full mb-2 md:mb-0 outline-blue-400">
+          <div class="flex items-center space-x-4">
+            <!-- Delete button only displayed when in editing mode -->
+            <button *ngIf="isEditing" class="bg-red-500 text-white px-4 py-2 rounded-lg" (click)="deleteUsers()">
+              Delete
+            </button>
+            <!-- Manage User button -->
+            <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
+                class="text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out" (click)="toggleEditMode()">
+              {{ isEditing ? 'Stop Managing' : 'Manage User' }}
+            </button>
+            <!-- New Employee button, disabled when isEditing is true -->
+            <button (click)="toggleModal()"
+              [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
+              [disabled]="isEditing"
+              class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
+              font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              type="button">+ New Employee</button>
+
+              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+              <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+          </div>
+        </div>
+
+
 <!-- Users active tab -->
-      <div *ngIf="filteredUsers.length > 0" class="rounded-lg shadow-lg bg-transparent">
+      <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
         <table class="w-full md:min-w-full border-collapse rounded-lg overflow-hidden">
           <thead>
             <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
@@ -359,14 +368,9 @@
           </tbody>
         </table>
       </div>      
+      </div>
       </section>
 
-<!-- Pagination for Editing Users tab -->
-      <div class="flex justify-between items-center mt-4">
-        <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
-        <span class="text-gray-600">Page {{ currentPage }} of {{ totalPages }}</span>
-        <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
-      </div>
     </div>
 
 <!-- Roles Active tab -->

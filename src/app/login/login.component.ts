@@ -104,4 +104,15 @@ export class LoginComponent {
     // For example, you could use Angular's Router to navigate to a specific route
     this.displayCustomPopup();
   }
+
+  onMouseMove(event: MouseEvent): void {
+    const x = event.clientX / window.innerWidth * 100;
+    const y = event.clientY / window.innerHeight * 100;
+
+    const gradientBackground = document.querySelector('.gradient-background') as HTMLElement;
+    gradientBackground.style.background = `radial-gradient(circle at ${x}% ${y}%, rgb(233, 233, 255), transparent 50%),
+                                           radial-gradient(circle at 75% 75%, rgb(33, 33, 254), transparent 50%),
+                                           radial-gradient(circle at 25% 75%, rgb(233, 233, 255), transparent 50%),
+                                           radial-gradient(circle at 75% 25%, rgb(33, 33, 254), transparent 50%)`;
+  }
 }

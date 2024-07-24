@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
 import { environment } from '../environments/environment';
 
 interface Workflow {
@@ -19,7 +20,7 @@ interface Workflow {
 @Component({
   selector: 'app-workflow',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SidebarNavigationModule],
   templateUrl: './workflow-approval.component.html',
   styleUrls: ['./workflow-approval.component.css'],
 })

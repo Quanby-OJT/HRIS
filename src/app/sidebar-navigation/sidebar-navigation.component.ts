@@ -18,20 +18,18 @@ export class SidebarNavigationComponent {
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Employee Management', route: '/user-management' },
     { name: 'System Management', route: '/system-management' },
-    { name: 'Payroll', route: '/payroll' },
-    { name: 'Performance', route: '/performance' },
-    { name: 'Recruitment', route: '/recruitment' },
-    { name: 'Reports', route: '/reports' }
+    { name: 'Audit Trail', route: '/audit-trail' },
+    { name: 'DTR', route: '/dtr' },
+    { name: 'Workflow Approval', route: '/workflow-approval' }
   ];
 
   private routeIconMap: { [key: string]: string } = {
     '/dashboard': 'dashboard',
     '/user-management': 'group',
     '/system-management': 'settings',
-    '/payroll': 'attach_money',
-    '/performance': 'trending_up',
-    '/recruitment': 'person_add',
-    '/reports': 'assessment'
+    '/audit-trail': 'attach_money',
+    '/dtr': 'trending_up',
+    '/workflow-approval': 'person_add'
   };
 
   constructor(

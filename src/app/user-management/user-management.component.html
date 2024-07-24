@@ -24,7 +24,7 @@
   <section id="ticket-list" class="flex flex-col h-full">
   <!-- Table for support tickets -->
     <div class="overflow-x-auto shadow-lg bg-white">
-      <div class="flex flex-col md:flex-row md:justify-between items-center p-4">
+      <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
         <!-- Search Input -->
         <div class="relative w-[20%]">
           <input 
@@ -250,16 +250,6 @@
                           </select>
                         </div>
                         <div>
-                          <label for="department" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Department*</label>
-                          <select id="department" [(ngModel)]="employee.department" name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                            <option value="" disabled selected>Select a department</option>
-                            <option value="IT">IT</option>
-                            <option value="Human Resources">Human Resources</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Marketing">Marketing</option>
-                          </select>
-                        </div>
-                        <div>
                           <label for="type" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Type*</label>
                           <select id="type" [(ngModel)]="employee.type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                             <option value="" disabled selected>Select a type</option>
@@ -336,7 +326,6 @@
               <th class="py-3 px-6 text-left font-thin text-lg">Name</th>
               <th class="py-3 px-6 text-left font-thin text-lg">Email</th> 
               <th class="py-3 px-6 text-left font-thin text-lg">Password</th>
-              <th class="py-3 px-6 text-left font-thin text-lg">Department</th>
               <th class="py-3 px-6 text-left font-thin text-lg">Role</th>
               <th class="py-3 px-6 text-left font-thin text-lg">Status</th>
               <th class="py-3 px-6 text-center font-thin text-lg">Access</th>
@@ -361,7 +350,6 @@
               <td class="py-3 px-6 text-left">
                 <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
               </td>
-              <td class="py-3 px-6 text-left">{{ user.department }}</td>
               <td class="py-3 px-6 text-left">{{ user.position }}<br>{{ getContractType(user.position) }}</td>
               <td class="py-3 px-6 text-left">
                 <span [ngClass]="{
@@ -409,7 +397,7 @@
     <div *ngIf="activeTab === 'roles'">
       <section id="user-list">
         <div class="rounded-xl shadow-lg bg-white">
-        <div class="flex justify-between items-stretch space-x-4 p-4">
+          <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
           <div class="relative w-[20%]">
             <input 
               type="text" 

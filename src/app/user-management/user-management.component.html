@@ -124,9 +124,9 @@
         }">{{ selectedTicket?.status }}</span>
       </p>
       <div class="mt-2">
-        <p><strong>Description:</strong></p>
-        <div class="max-h-40 overflow-y-auto border border-gray-200 rounded p-2">
-          {{ selectedTicket?.description }}
+        <p class="font-semibold text-gray-700">Description:</p>
+        <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
+            {{ selectedTicket?.description }}
         </div>
       </div>
       <div class="mt-4">

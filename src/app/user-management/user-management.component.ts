@@ -169,6 +169,24 @@ popupEntriesRights: string = 'none';
 
   selectedCount: number = 0;
 
+  sortDirection: 'none' | 'asc' | 'desc' = 'none';
+
+  onSortChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.sortDirection = selectElement.value as 'none' | 'asc' | 'desc';
+    this.sortedRoles();
+  }
+
+  sortedRoles() {
+    return this.roles.sort((a, b) => {
+      if (this.sortDirection === 'asc') {
+        return a.role_name.localeCompare(b.role_name);
+      } else {
+        return b.role_name.localeCompare(a.role_name);
+      }
+    });
+  }
+
   deselectAllCheckboxes(): void {
     this.selectedUserIds.clear();
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');

@@ -417,7 +417,7 @@
             
             <div class="flex items-center space-x-4">
               <div class="relative">
-                <select class="border px-4 py-2 rounded appearance-none pr-10">
+                <select class="border px-4 py-2 rounded appearance-none pr-10" (change)="onSortChange($event)">
                   <option value="none">Default</option>
                   <option value="asc">Sort A-Z</option>
                   <option value="desc">Sort Z-A</option>

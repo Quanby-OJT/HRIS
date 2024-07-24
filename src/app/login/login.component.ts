@@ -1,4 +1,4 @@
-import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -103,5 +103,14 @@ export class LoginComponent {
     // Implement the logic to navigate to the ticket submission page
     // For example, you could use Angular's Router to navigate to a specific route
     this.displayCustomPopup();
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    const x = event.clientX / window.innerWidth * 100;
+    const y = event.clientY / window.innerHeight * 100;
+
+    const cursorGradient = document.querySelector('.cursor-gradient') as HTMLElement;
+    cursorGradient.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255, 255, 255, 0.5), transparent 30%)`;
   }
 }

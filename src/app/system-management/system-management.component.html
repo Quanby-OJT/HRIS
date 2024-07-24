@@ -124,6 +124,9 @@
             <button *ngIf="isManageMode" (click)="deleteSelectedParameters()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
             <button (click)="toggleManageMode()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition duration-300">Manage</button>
             <button (click)="openPopup()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">+ New Parameter</button>
+            <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+              <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
           </div>
         </div>
 

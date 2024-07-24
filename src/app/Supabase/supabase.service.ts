@@ -17,8 +17,8 @@ interface AuditLogEntry {
   action: string;
   affected_page: string;
   parameter: string;
-  old_value: string;
-  new_value: string;
+  old_parameter: string;
+  new_parameter: string;
   ip_address: string;
   date?: string;
   email?: string;
@@ -235,8 +235,8 @@ export class SupabaseService {
         action: 'Create',
         affected_page: 'Employee Management',
         parameter: 'New employee created',
-        old_value: '',  // No old value for a new employee
-        new_value: JSON.stringify(profileData[0]),
+        old_parameter: '',  // No old value for a new employee
+        new_parameter: JSON.stringify(profileData[0]),
         ip_address: await this.getUserIpAddress(),
         date: new Date().toISOString(),
         email: await this.getCurrentUserEmail()
@@ -701,8 +701,8 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       action: 'Update',
       affected_page: 'Employee Management',
       parameter: 'Employee updated',
-      old_value: oldParameterValue,
-      new_value: newParameterValue,
+      old_parameter: oldParameterValue,
+      new_parameter: newParameterValue,
       ip_address: await this.getUserIpAddress(),
       date: new Date().toISOString(),
       email: await this.getCurrentUserEmail()

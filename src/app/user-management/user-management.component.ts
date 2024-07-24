@@ -48,8 +48,8 @@ interface AuditLogEntry {
   action: string;
   affected_page: string;
   parameter: string;
-  old_value: string;
-  new_value: string;
+  old_parameter: string;
+  new_parameter: string;
   ip_address: string;
   date: string;
 }
@@ -729,8 +729,8 @@ cancelEdit() {
         action: 'UPDATE_EMPLOYEE',
         affected_page: 'User Management',
         parameter: 'Employee Update',
-        old_value: JSON.stringify(originalEmployee),
-        new_value: JSON.stringify(updatedUser),
+        old_parameter: JSON.stringify(originalEmployee),
+        new_parameter: JSON.stringify(updatedUser),
         ip_address: await this.getClientIpAddress(), // Implement this method to get the client's IP
         date: new Date().toISOString()
       };

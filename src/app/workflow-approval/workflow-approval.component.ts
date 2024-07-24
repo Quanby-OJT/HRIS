@@ -9,11 +9,11 @@ interface Workflow {
   id: number;
   status: string;
   submitted_for: string;
-  submitted_for_role: string;
+  submitted_for_id: any;
   reviewer: string;
   request: string;
   requested_by: string;
-  requested_by_role: string;
+  reviewer_id: any;
 }
 
 @Component({
@@ -38,6 +38,10 @@ export class WorkflowComponent implements OnInit {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
+  trackById(index: number, workflow: Workflow): number {
+    return workflow.id;
+  }
+
   async ngOnInit() {
     await this.fetchWorkflows();
   }
@@ -45,9 +49,8 @@ export class WorkflowComponent implements OnInit {
   async fetchWorkflows() {
     const { data, error } = await this.supabase
       .from('workflow')
-      .select('*')
-      
-  
+      .select('id, status, submitted_for, submitted_for_id, reviewer, request, requested_by, reviewer_id');
+
     if (error) {
       console.error('Error fetching workflows:', error);
     } else {
@@ -55,19 +58,16 @@ export class WorkflowComponent implements OnInit {
         id: item.id,
         status: item.status,
         submitted_for: item.submitted_for,
-        submitted_for_role: item.submitted_for_role,
+        submitted_for_id: item.submitted_for_id,
         reviewer: item.reviewer,
         request: item.request,
         requested_by: item.requested_by,
-        requested_by_role: item.requested_by_role
+        reviewer_id: item.reviewer_id,
       })) || [];
       this.filterWorkflows();
     }
-  
-  
   }
 
-  // pagination control
   filterWorkflows() {
     this.filteredWorkflows = this.workflows.filter(workflow => {
       const matchesStatus = !this.selectedStatus || workflow.status === this.selectedStatus;
@@ -89,7 +89,6 @@ export class WorkflowComponent implements OnInit {
     this.totalPages = Math.ceil(this.filteredWorkflows.length / this.itemsPerPage);
   }
 
-// functionality for the previous button
   async previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -97,7 +96,6 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  // funtionality for the next page button
   async nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
@@ -105,33 +103,30 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  // navigation functions
   goHome() {
     this.router.navigate(['/system-management']);
   }
 
-  onStatusChange() { // Reset to first page when filter changes
+  onStatusChange() {
     this.fetchWorkflows();
   }
 
-  onSearchChange() { // Reset to first page when search changes
+  onSearchChange() {
     this.fetchWorkflows();
   }
 
-  // The View function
   viewWorkflowDetails(workflowId: number) {
     console.log('View details for workflow:', workflowId);
     // Implement navigation to workflow details page if needed
   }
-// the approve function
+
   approveWorkflow(workflowId: number) {
     console.log('Approve workflow:', workflowId);
     // Implement approval logic
   }
 
-  // The reject function
   rejectWorkflow(workflowId: number) {
     console.log('Reject workflow:', workflowId);
     // Implement rejection logic
-  }
+  } 
 }

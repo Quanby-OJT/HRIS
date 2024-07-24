@@ -41,7 +41,7 @@ export class SystemManagementComponent implements OnInit {
   isError = false;
   selectedParameter: Parameter | null = null;
   currentPage = 1;
-  itemsPerPage = 8;
+  itemsPerPage = 7;
   totalPages = 1;
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}

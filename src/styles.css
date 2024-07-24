@@ -12,12 +12,32 @@
 }
 
 body {
-    background-color: white; /* Light gray background color */
+    background-color: #F8F9FE; /* Light gray background color */
     background-size: cover;
     background-position: center;
     margin: 0;
     padding: 0;
     font-family: 'SF Pro Display', sans-serif;
+    overflow: hidden;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+  }
+  
+  .custom-scrollbar {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: 5x;  /* Firefox */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(183, 183, 183);
+    border-radius: 50px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   

@@ -5,7 +5,7 @@
 
 
     <!-- Main componenet -->
-<div class="bg-white min-h-screen">
+<div class="min-h-screen">
   <main class="p-6">
 
     <div class="mb-6">
@@ -303,7 +303,7 @@
 
 <!-- Users active tab -->
       <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
-        <table class="w-full md:min-w-full border-collapse rounded-lg overflow-hidden">
+        <table class="w-full md:min-w-full border-collapse overflow-hidden">
           <thead>
             <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
               <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
@@ -383,19 +383,20 @@
 <!-- Roles Active tab -->
     <div *ngIf="activeTab === 'roles'">
       <section id="user-list">
-        <div class="flex justify-between items-stretch mb-6 h-9 space-x-4 mr-2">
+        <div class="rounded-xl shadow-lg bg-white">
+        <div class="flex justify-between items-stretch space-x-4 p-4">
           <input type="text" [(ngModel)]="searchRoleTerm" placeholder="Search Roles..." class="w-[10%] h-full p-2 border rounded-lg">
           <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
           <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
           <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
           <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
-          <button class="text-white rounded h-full w-[10%] whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
+          <button class="text-white rounded px-4 py-2 whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
             {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
           </button>
         </div>
         
-        <div class="flex justify-between">
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
+        <div class="flex space-x-4">
+          <div class="flex-1 h-[450px] rounded-tr-xl border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">Roles</p>
@@ -453,7 +454,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] rounded-tl-xl rounded-tr-xl mx-2 border bg-white border-gray-300">
             <div class="m-10" *ngIf="assignedRole">
               <div class="flex justify-between items-center">
                 <p class=" text-2xl font-black">{{ assignedRole.role_name }}</p>
@@ -483,7 +484,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] rounded-tl-xl mx-2 border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">
@@ -873,6 +874,7 @@
                 <button class="border border-gray-500 text-gray-500 px-4 py-2 rounded hover:bg-gray-100 flex-grow" (click)="closeDeleteAssigneePopup()">Cancel</button>
               </div>
             </div>
+          </div>
           </div>
         </div>        
         

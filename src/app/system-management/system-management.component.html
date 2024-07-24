@@ -1,11 +1,11 @@
 <div class="flex">
   <app-sidebar-navigation></app-sidebar-navigation>
   <div class="flex-grow">
-    <div class="flex flex-col items-center px-9 pt-5 pb-4 w-full max-md:px-5 max-md:max-w-full">
+    <div class="flex flex-col items-center px-2 pt-5 pb-4 w-full max-md:px-5 max-md:max-w-full">
       <div *ngIf="message" [class]="isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'" class="p-4 rounded-md mb-4 w-full max-w-[960px]">
         {{ message }}
       </div>
-      <div *ngIf="!showTable" class="flex flex-col p-4 mb-96 w-full max-w-[960px] max-md:mb-10 max-md:max-w-full">
+      <div *ngIf="!showTable" class="flex flex-col p-4 mb-64 w-full max-w-[960px] max-md:mb-10 max-md:max-w-full">
         <div class="self-start text-3xl font-bold text-neutral-900 max-md:max-w-full">System Management</div>
         <div class="self-start mt-3 text-sm leading-5 text-slate-500 max-md:max-w-full">Configure system settings and manage your organization's data</div>
         <div class="mt-11 text-2xl font-bold leading-7 text-neutral-900 max-md:mt-10 max-md:max-w-full">Quick Actions</div>

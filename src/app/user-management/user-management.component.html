@@ -391,7 +391,16 @@
       <section id="user-list">
         <div class="rounded-xl shadow-lg bg-white">
         <div class="flex justify-between items-stretch space-x-4 p-4">
-          <input type="text" [(ngModel)]="searchRoleTerm" placeholder="Search Roles..." class="w-[10%] h-full p-2 border rounded-lg">
+          <div class="relative w-[20%]">
+            <input 
+              type="text" 
+              [(ngModel)]="searchRoleTerm" 
+              placeholder="Search Roles..." 
+              class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
+            />
+            <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+          </div>
+          
           <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
           <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
           <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   

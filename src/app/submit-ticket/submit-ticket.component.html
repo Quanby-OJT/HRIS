@@ -15,14 +15,16 @@
         <input type="email" id="email" name="email" [(ngModel)]="ticket.email" class="form-control w-full h-9 border-none bg-[#E9ECF1] rounded-lg px-3 outline-none" required>
       </div>
       
-      <div class="form-group mb-4">
+      <div class="form-group mb-4 relative">
         <label for="title" class="block mb-1">Title</label>
-        <select id="title" name="title" [(ngModel)]="ticket.title" class="form-control w-full h-9 border-none bg-[#E9ECF1] rounded-lg px-3 outline-none" required>
-          <option value="">Select an option</option>
-          <option value="forgot-email-password">Forgot email/password</option>
-          <option value="technical-issues">Technical issues</option>
-          <option value="report-employee">Report an Employee</option>
-          <option value="others">Others</option>
+        <select id="title" name="title" [(ngModel)]="ticket.title" class="form-control w-full h-9 border-none bg-[#E9ECF1] rounded-lg px-3 outline-none appearance-none" required>
+          <!-- Default placeholder option -->
+          <option value="" disabled selected>Select an Option</option>
+          <!-- Actual options -->
+          <option value="Forgot Email & Password">Forgot email/password</option>
+          <option value="Technical Issues">Technical issues</option>
+          <option value="Report Employee">Report an Employee</option>
+          <option value="Others">Others</option>
         </select>
       </div>
       

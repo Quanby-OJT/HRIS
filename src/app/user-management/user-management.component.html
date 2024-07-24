@@ -64,7 +64,7 @@
           </div>
         </div>
       </div>        
-      <div class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
+      <div class="overflow-x-auto overflow-y-auto max-h-[28rem] custom-scrollbar">
     <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg table-fixed bg-white">
       <thead class="bg-[#E9ECF1] text-gray-700 leading-normal">
         <tr class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
@@ -319,7 +319,7 @@
 
 
 <!-- Users active tab -->
-      <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
+      <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-[28rem] custom-scrollbar">
         <table class="table-fixed w-full md:min-w-full border-collapse overflow-hidden">
           <thead>
             <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
@@ -419,8 +419,8 @@
           </button>
         </div>
         
-        <div class="flex space-x-4">
-          <div class="flex-1 h-[450px] rounded-tr-xl border bg-white border-gray-300">
+        <div class="flex space-x-4 max-h-[28rem] rounded-xl">
+          <div class="flex-1 h-full rounded-tr-xl border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">Roles</p>
@@ -478,7 +478,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] rounded-tl-xl rounded-tr-xl mx-2 border bg-white border-gray-300">
+          <div class="flex-1 h-full rounded-tl-xl rounded-tr-xl mx-2 border bg-white border-gray-300">
             <div class="m-10" *ngIf="assignedRole">
               <div class="flex justify-between items-center">
                 <p class=" text-2xl font-black">{{ assignedRole.role_name }}</p>
@@ -508,7 +508,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] rounded-tl-xl mx-2 border bg-white border-gray-300">
+          <div class="flex-1 h-full rounded-tl-xl mx-2 border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">

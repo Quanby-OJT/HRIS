@@ -22,90 +22,103 @@
 <!-- Support tickets -->
 <div *ngIf="activeTab === 'support tickets'">
   <section id="ticket-list" class="flex flex-col h-full">
-    <div class="mb-4 flex flex-col md:flex-row justify-between items-center">
-      <div class="w-full md:w-1/2 mb-4 md:mb-0">
-        <input type="text" [(ngModel)]="searchTicketTerm" (input)="searchTicketTable()" placeholder="Search Tickets..." class="w-full p-2 border rounded">
-      </div>
-      <div class="flex items-center">
-        <div class="relative ml-4">
-          <select class="bg-blue-500 hover:bg-blue-600 text-white py-2 pl-3 pr-10 rounded appearance-none" [(ngModel)]="filterOption" (change)="filterTickets()">
-            <option value="all">All</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="urgent">Urgent</option>
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 1 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-            </svg>
+  <!-- Table for support tickets -->
+    <div class="overflow-x-auto shadow-lg bg-white">
+      <div class="flex flex-col md:flex-row md:justify-between items-center p-4">
+        <!-- Search Input -->
+        <input type="text"[(ngModel)]="searchTicketTerm"(input)="searchTicketTable()"placeholder="Search Tickets..."class="w-full md:w-1/2 p-2 border rounded-full mb-2 md:mb-0 outline-blue-400">
+        <!-- Filter Dropdown, Delete Button, and Pagination Controls -->
+        <div class="flex items-center space-x-4">
+          <!-- Filter Dropdown -->
+          <div class="relative">
+            <select class="bg-blue-500 hover:bg-blue-600 text-white py-2 pl-3 pr-10 rounded appearance-none"[(ngModel)]="filterOption"(change)="filterTickets()">
+              <option value="all">All</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+              <!-- Dropdown Arrow Icon -->
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 1 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Delete Button -->
+          <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"(click)="deleteSelectedTickets()">Delete</button>
+          <!-- Pagination Controls -->
+          <div class="flex items-center space-x-2">
+            <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketPrevPage()"[disabled]="ticket_currentPage === 1">&lt;</button>
+            <span class="text-gray-600 text-center">{{ ticket_currentPage }} of {{ ticket_totalPages }}</span>
+            <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketNextPage()"[disabled]="ticket_currentPage === ticket_totalPages">&gt;</button>
           </div>
         </div>
-        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded ml-4" (click)="deleteSelectedTickets()">Delete</button>
-      </div>
+      </div>        
+    <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg bg-white">
+      <thead class="bg-[#E9ECF1] text-gray-700 leading-normal">
+        <tr class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
+          <th scope="col" class="p-4"><input type="checkbox" (click)="toggleAllTickets()"></th>
+          <th scope="col" class="px-6 py-3">Ticket ID</th>
+          <th scope="col" class="px-6 py-3">Title</th>
+          <th scope="col" class="px-6 py-3">Email</th>
+          <th scope="col" class="px-6 py-3">Description</th>
+          <th scope="col" class="px-6 py-3">Status</th>
+          <th scope="col" class="px-6 py-3">Date Created</th>
+          <th scope="col" class="px-6 py-3">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"(click)="openTicketDetails(ticket)">
+          <!-- Checkbox -->
+          <td class="p-4">
+            <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()"></td>
+          <!-- Ticket ID -->
+          <td class="px-6 py-3">{{ ticket.id }}</td>
+          <!-- Ticket Title -->
+          <td class="px-6 py-3 font-semibold">{{ ticket.title }}</td>
+          <!-- Ticket Email -->
+          <td class="px-6 py-3 text-left">{{ ticket.email }}</td>
+          <!-- Ticket Description -->
+          <td class="px-6 py-3 text-left overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
+          <!-- Ticket Status -->
+          <td class="px-6 py-3">
+            <span class="bg-green-200 py-1 px-3 rounded-full text-xs">
+              <span [ngClass]="{
+                'text-green-700': ticket.status === 'Open',
+                'text-blue-700': ticket.status === 'In Progress',
+                'text-red-700': ticket.status === 'Closed'
+              }">{{ ticket.status }}</span>
+            </span>
+          </td>
+          <!-- Ticket Date -->
+          <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
+          <!-- Ticket Priority -->
+          <td class="px-6 py-3"><div (click)="$event.stopPropagation()">
+            <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"[(ngModel)]="ticket.priority"(change)="updateTicketPriority(ticket, $event)">
+                <option value="Low" [ngValue]="'Low'" style="font-weight: 600; color: green;">Low</option>
+                <option value="Medium" [ngValue]="'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
+                <option value="High" [ngValue]="'High'" style="font-weight: 600; color: orange;">High</option>
+                <option value="Urgent" [ngValue]="'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+      </tbody>      
+      </table>
     </div>
-      
-<!-- Table for support tickets -->
-<div class="overflow-x-auto">
-  <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg bg-white">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-300 dark:text-black">
-      <tr>
-        <th scope="col" class="p-4"><input type="checkbox" (click)="toggleAllTickets()"></th>
-        <th scope="col" class="px-6 py-3">Ticket ID</th>
-        <th scope="col" class="px-6 py-3">Title</th>
-        <th scope="col" class="px-6 py-3">Email</th>
-        <th scope="col" class="px-6 py-3">Description</th>
-        <th scope="col" class="px-6 py-3">Status</th>
-        <th scope="col" class="px-6 py-3">Date Created</th>
-        <th scope="col" class="px-6 py-3">Priority</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100" (click)="openTicketDetails(ticket)">
-        <td class="p-4">
-          <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()">
-        </td>
-        <td class="px-6 py-3">{{ ticket.id }}</td>
-        <td class="px-6 py-3 font-semibold">{{ ticket.title }}</td>
-        <td class="px-6 py-3 flex justify-start">{{ ticket.email }}</td>
-        <td class="px-6 py-3 overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
-        <td class="px-6 py-3">
-          <span class="bg-green-200 py-1 px-3 rounded-full text-xs">
-            <span [ngClass]="{
-              'text-green-700': ticket.status === 'Open',
-              'text-blue-700': ticket.status === 'In Progress',
-              'text-red-700': ticket.status === 'Closed'
-            }">{{ ticket.status }}</span>
-          </span>
-        </td>        
-        <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
-        <td class="px-6 py-3">
-          <div (click)="$event.stopPropagation()">
-            <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"
-                    [(ngModel)]="ticket.priority" 
-                    (change)="updateTicketPriority(ticket, $event)">
-              <option value="Low" [selected]="ticket.priority === 'Low'" style="font-weight: 600; color: green;">Low</option>
-              <option value="Medium" [selected]="ticket.priority === 'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
-              <option value="High" [selected]="ticket.priority === 'High'" style="font-weight: 600; color: orange;">High</option>
-              <option value="Urgent" [selected]="ticket.priority === 'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
-            </select>
-          </div>               
-        </td>          
-      </tr>
-    </tbody>
-  </table>
+  </section>
 </div>
 
-</section>
+<!-- Paginations for tickets
 
-<!-- Paginations for tickets -->
     <div class="flex justify-between items-center mt-4">
         <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="ticketPrevPage()" [disabled]="ticket_currentPage === 1">Previous</button>
         <span class="text-gray-600">Page {{ ticket_currentPage }} of {{ ticket_totalPages }}</span>
         <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="ticketNextPage()" [disabled]="ticket_currentPage === totalPages">Next</button>
       </div>
-   </div>
-    
+   </div> -->
+   
 <!-- Ticket Details Modal -->
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
   <div class="bg-white rounded-lg p-4 max-w-md w-full">
@@ -296,7 +309,7 @@
 
 <!-- Users active tab -->
       <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
-        <table class="w-full md:min-w-full border-collapse overflow-hidden">
+        <table class="table-fixed w-full md:min-w-full border-collapse overflow-hidden">
           <thead>
             <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
               <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
@@ -324,8 +337,8 @@
                 </div>
               </td>
               
-              <td class="py-3 px-6 text-left">{{ user.name }}</td>
-              <td class="py-3 px-6 text-left">{{ user.email }}</td>
+              <td class="py-3 px-6 text-left truncate">{{ user.name }}</td>
+              <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
               <td class="py-3 px-6 text-left">
                 <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
               </td>
@@ -376,19 +389,20 @@
 <!-- Roles Active tab -->
     <div *ngIf="activeTab === 'roles'">
       <section id="user-list">
-        <div class="flex justify-between items-stretch mb-6 h-9 space-x-4 mr-2">
+        <div class="rounded-xl shadow-lg bg-white">
+        <div class="flex justify-between items-stretch space-x-4 p-4">
           <input type="text" [(ngModel)]="searchRoleTerm" placeholder="Search Roles..." class="w-[10%] h-full p-2 border rounded-lg">
           <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
           <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
           <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
           <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
-          <button class="text-white rounded h-full w-[10%] whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
+          <button class="text-white rounded px-4 py-2 whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
             {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
           </button>
         </div>
         
-        <div class="flex justify-between">
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl border border-gray-300">
+        <div class="flex space-x-4">
+          <div class="flex-1 h-[450px] rounded-tr-xl border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">Roles</p>
@@ -446,7 +460,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] rounded-tl-xl rounded-tr-xl mx-2 border bg-white border-gray-300">
             <div class="m-10" *ngIf="assignedRole">
               <div class="flex justify-between items-center">
                 <p class=" text-2xl font-black">{{ assignedRole.role_name }}</p>
@@ -476,7 +490,7 @@
             </div>
           </div>
           
-          <div class="flex-1 h-[450px] shadow-xl rounded-xl mx-2 border border-gray-300">
+          <div class="flex-1 h-[450px] rounded-tl-xl mx-2 border bg-white border-gray-300">
             <div class="m-10">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-black">
@@ -866,6 +880,7 @@
                 <button class="border border-gray-500 text-gray-500 px-4 py-2 rounded hover:bg-gray-100 flex-grow" (click)="closeDeleteAssigneePopup()">Cancel</button>
               </div>
             </div>
+          </div>
           </div>
         </div>        
         

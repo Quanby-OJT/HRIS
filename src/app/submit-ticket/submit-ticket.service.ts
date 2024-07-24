@@ -19,6 +19,10 @@ export class TicketService {
       'Prefer': 'return=minimal'
     });
 
+    ticket = {
+      title: ''
+    };
+
     return this.http.post(
       `${this.supabaseUrl}/ticket`,
       ticket,

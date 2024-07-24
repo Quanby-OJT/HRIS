@@ -17,8 +17,8 @@ interface AuditLogEntry {
   action: string;
   affected_page: string;
   parameter: string;
-  old_value: string;
-  new_value: string;
+  old_parameter: string;
+  new_parameter: string;
   ip_address: string;
   date?: string;
   email?: string;
@@ -223,8 +223,8 @@ export class SupabaseService {
       action: 'Create',
       affected_page: 'Employee Management',
       parameter: 'New employee created',
-      old_value: '',  // No old value for a new employee
-      new_value: JSON.stringify(profileData[0]),
+      old_parameter: '',  // No old value for a new employee
+      new_parameter: JSON.stringify(profileData[0]),
       ip_address: await this.getUserIpAddress(),
       date: new Date().toISOString(),
       email: await this.getCurrentUserEmail()
@@ -709,8 +709,6 @@ isValidEmail(email: string): boolean {
   return regex.test(email);
 }
 async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
-  // ... (previous code remains the same)
-
   try {
     // Step 1: Get the old employee data before update
     const { data: oldEmployeeData, error: oldDataError } = await this.supabase
@@ -754,7 +752,13 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     // ... (role update code remains the same)
 
     // Step 4: Create an audit log entry with old and new parameters
-    const oldParameterValue = JSON.stringify({
+    const formatParameter = (param: any) => {
+      return Object.entries(param)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+    };
+
+    const oldParameterValue = formatParameter({
       first_name: oldEmployeeData.first_name,
       mid_name: oldEmployeeData.mid_name,
       surname: oldEmployeeData.surname,
@@ -765,7 +769,7 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       photo_url: oldEmployeeData.photo_url,
     });
 
-    const newParameterValue = JSON.stringify({
+    const newParameterValue = formatParameter({
       first_name: updatedData[0].first_name,
       mid_name: updatedData[0].mid_name,
       surname: updatedData[0].surname,
@@ -781,8 +785,8 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       action: 'Update',
       affected_page: 'Employee Management',
       parameter: 'Employee updated',
-      old_value: oldParameterValue,
-      new_value: newParameterValue,
+      old_parameter: oldParameterValue,
+      new_parameter: newParameterValue,
       ip_address: await this.getUserIpAddress(),
       date: new Date().toISOString(),
       email: await this.getCurrentUserEmail()

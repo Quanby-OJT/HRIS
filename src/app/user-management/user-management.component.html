@@ -40,22 +40,17 @@
         <div class="flex items-center space-x-4">
           <!-- Filter Dropdown -->
           <div class="relative">
-            <select class="bg-blue-500 hover:bg-blue-600 text-white py-2 pl-3 pr-10 rounded appearance-none"[(ngModel)]="filterOption"(change)="filterTickets()">
+            <select class=" text-black border px-4 py-2 rounded appearance-none pr-10"[(ngModel)]="filterOption"(change)="filterTickets()">
               <option value="all">All</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
               <option value="urgent">Urgent</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-              <!-- Dropdown Arrow Icon -->
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 1 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-              </svg>
-            </div>
+            <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
           <!-- Delete Button -->
-          <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"(click)="deleteSelectedTickets()">Delete</button>
+          <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"(click)="deleteSelectedTickets()">Delete</button>
           <!-- Pagination Controls -->
           <div class="flex items-center space-x-2">
             <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketPrevPage()"[disabled]="ticket_currentPage === 1">&lt;</button>
@@ -132,10 +127,10 @@
    
 <!-- Ticket Details Modal -->
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
-  <div class="bg-white rounded-lg p-4 max-w-md w-full">
+  <div class="bg-white rounded p-4 max-w-md w-full">
     <div class="flex justify-between items-center border-b pb-2">
       <h2 class="text-xl font-semibold">Ticket Details</h2>
-      <button class="text-white hover:text-gray-700 bg-red-400 rounded-lg py-2 px-2" (click)="closeModal()">X</button>
+      <button class="text-white hover:text-gray-700 bg-red-400 rounded py-2 px-2" (click)="closeModal()">X</button>
     </div>
     <div class="mt-4">
       <p><strong>Title:</strong> {{ selectedTicket?.title }}</p>
@@ -149,13 +144,13 @@
       </p>
       <div class="mt-2">
         <p class="font-semibold text-gray-700">Description:</p>
-        <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
+        <div class="border border-gray-300 rounded p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
             {{ selectedTicket?.description }}
         </div>
       </div>
       <div class="mt-4">
         <p><strong>Admin Reply:</strong></p>
-        <textarea [(ngModel)]="replyText" class="w-full p-2 border rounded-lg" placeholder="Type your reply here..."></textarea>
+        <textarea [(ngModel)]="replyText" class="w-full p-2 border rounded" placeholder="Type your reply here..."></textarea>
       </div>
     </div>
     <div class="mt-4 flex justify-end">
@@ -174,10 +169,10 @@
   <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"
     (click)="toggleModal()">
       <div class="relative p-4 w-full max-w-4xl" (click)="$event.stopPropagation()">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative bg-white rounded shadow dark:bg-gray-700">
           <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white"> {{ isEditing ? 'Update Employee' : 'Create New Employee' }}</h3>
-            <button type="button" (click)="toggleModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+            <button type="button" (click)="toggleModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
               </svg>
@@ -188,7 +183,7 @@
               <form class="space-y-4" (ngSubmit)="onSubmit()">
                 <div class="grid grid-cols-4 gap-4">
                   <div class="md:col-span-1 col-span-4 flex flex-col items-center">
-                    <img [src]="photoPreviewUrl" alt="Employee Photo" class="w-48 h-48 object-cover rounded-lg mb-2 mt-3">
+                    <img [src]="photoPreviewUrl" alt="Employee Photo" class="w-48 h-48 object-cover rounded mb-2 mt-3">
                     <p *ngIf="showFileTypeAlert" class="text-red-600 text-sm mb-2">Please select a PNG file.</p>
                     <p *ngIf="showFileSizeAlert" class="text-red-600 text-sm mb-2">The photo you selected exceeds 2MB. Please try again.</p>
                     <input type="file" id="photoInput" accept="image/png,image/jpeg" class="hidden" (change)="onPhotoChange($event)">
@@ -198,7 +193,7 @@
                     <div class="grid grid-cols-2 gap-4">
                       <div class="flex flex-col">
                         <label for="email" class="mb-1 text-sm font-medium text-gray-900 dark:text-white">Email*</label>
-                        <input type="email" id="email" [(ngModel)]="employee.email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" required>
+                        <input type="email" id="email" [(ngModel)]="employee.email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" required>
                       </div>
                       <div class="flex flex-col">
                         <label for="password" class="mb-1 text-sm font-medium text-gray-900 dark:text-white">Password*</label>
@@ -208,7 +203,7 @@
                             id="password" 
                             [(ngModel)]="employee.password" 
                             name="password" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" 
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" 
                             required
                           >
                           <button 
@@ -230,15 +225,15 @@
                     <div class="grid grid-cols-3 gap-4">
                       <div>
                         <label for="firstname" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name*</label>
-                        <input type="text" id="firstname" [(ngModel)]="employee.firstname" name="firstname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                        <input type="text" id="firstname" [(ngModel)]="employee.firstname" name="firstname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                       </div>
                       <div>
                         <label for="midname" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                        <input type="text" id="midname" [(ngModel)]="employee.midname" name="midname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <input type="text" id="midname" [(ngModel)]="employee.midname" name="midname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                       </div>
                       <div>
                         <label for="surname" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last Name*</label>
-                        <input type="text" id="surname" [(ngModel)]="employee.surname" name="surname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                        <input type="text" id="surname" [(ngModel)]="employee.surname" name="surname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                       </div>
                     </div>
                     <div>
@@ -246,14 +241,14 @@
                       <div class="grid grid-cols-3 gap-4">
                         <div>
                           <label for="position" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Position*</label>
-                          <select id="position" [(ngModel)]="employee.position" name="position" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                          <select id="position" [(ngModel)]="employee.position" name="position" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                             <option value="" disabled selected>Select a position</option>
                             <option *ngFor="let role of roles" [value]="role.role_name">{{ role.role_name }}</option>
                           </select>
                         </div>
                         <div>
                           <label for="type" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Type*</label>
-                          <select id="type" [(ngModel)]="employee.type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                          <select id="type" [(ngModel)]="employee.type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                             <option value="" disabled selected>Select a type</option>
                             <option value="Full-Time">Full-time</option>
                             <option value="Part-Time">Part-time</option>
@@ -266,10 +261,10 @@
                   </div>
                 </div>
                 <div class="flex justify-end space-x-2 mt-6">
-                  <button type="button" (click)="toggleModal()" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600 transition duration-300">
+                  <button type="button" (click)="toggleModal()" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600 transition duration-300">
                     Cancel
                   </button>
-                  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-300">
+                  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-300">
                     {{ isEditing ? 'Update' : 'Create' }}
                   </button>
                 </div>
@@ -296,26 +291,21 @@
           <div class="flex items-center space-x-4">
             <!--Filter Feature-->
             <div class="relative">
-              <select class="bg-white hover:bg-gray-200 text-black border border-neutral-300 py-2 pl-3 pr-10 rounded-lg appearance-none"
-                      (change)="onSortOptionChange($event)">
+              <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
                 <option value="none">Default</option>
                 <option value="asc">Sort A-Z</option>
                 <option value="desc">Sort Z-A</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-black">
-                <!-- Dropdown Arrow Icon -->
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 1 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-                </svg>
-              </div>
+              <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             </div>
+            
             <!-- Delete button only displayed when in editing mode -->
-            <button *ngIf="isEditing" class="bg-red-500 text-white px-4 py-2 rounded-lg" (click)="deleteUsers()">
+            <button *ngIf="isEditing" class="bg-red-500 text-white px-4 pr-8 py-2 rounded" (click)="deleteUsers()">
               Delete
             </button>
             <!-- Manage User button -->
             <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
-                class="text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out" (click)="toggleEditMode()">
+                class="text-white px-4 py-2 rounded transition duration-300 ease-in-out" (click)="toggleEditMode()">
               {{ isEditing ? 'Stop Managing' : 'Manage User' }}
             </button>
             <!-- New Employee button, disabled when isEditing is true -->
@@ -323,7 +313,7 @@
               [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
               [disabled]="isEditing"
               class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
-              font-medium rounded-lg text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              font-medium rounded text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">+ New Employee</button>
 
               <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
@@ -415,24 +405,36 @@
       <section id="user-list">
         <div class="rounded-xl shadow-lg bg-white">
           <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
-          <div class="relative w-[20%]">
-            <input 
-              type="text" 
-              [(ngModel)]="searchRoleTerm" 
-              placeholder="Search Roles..." 
-              class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
-            />
-            <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+            <div class="relative w-[20%]">
+              <input 
+                type="text" 
+                [(ngModel)]="searchRoleTerm" 
+                placeholder="Search Roles..." 
+                class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
+              />
+              <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+              <div class="relative">
+                <select class="border px-4 py-2 rounded appearance-none pr-10">
+                  <option value="none">Default</option>
+                  <option value="asc">Sort A-Z</option>
+                  <option value="desc">Sort Z-A</option>
+                </select>
+                <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              </div>
+              <button class="text-white rounded px-4 py-2 whitespace-nowrap w-full text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
+                {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
+              </button>
+            </div>
+          
+            <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
+            <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
+            <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
+            <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
           </div>
           
-          <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
-          <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
-          <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
-          <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded-lg bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
-          <button class="text-white rounded px-4 py-2 whitespace-nowrap text-center" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
-            {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
-          </button>
-        </div>
         
         <div class="flex space-x-4 max-h-[28rem] rounded-xl">
           <div class="flex-1 h-full rounded-tr-xl border bg-white border-gray-300">
@@ -442,11 +444,11 @@
                 <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="openRolePopup()" *ngIf="!isManageMode">Add Role</button>
               </div>
               <div class="custom-scrollbar overflow-y-auto overflow-x-hidden" style="height: calc(450px - 8rem);">
-                <table class="table-auto w-[100%]">
+                <table class="table-auto w-[100%] mt-4">
                   <tbody>
                     <ng-container *ngIf="searchroletab.length > 0; else noMatch">
                       <tr class="hover:bg-gray-100 h-9 text-gray-600 text-sm font-light border-b" *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}">
-                        <td class =" w-full" [ngClass]="{'bg-gray-100': clickedRoleId === role.role_id}" (click)="onRoleClick(role)" (click)="selectRoleForEditing(role)">
+                        <td class="w-full" [ngClass]="{'bg-gray-100': clickedRoleId === role.role_id}" (click)="onRoleClick(role)" (click)="selectRoleForEditing(role)">
                           <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
                             <input [(ngModel)]="role.role_name" class="border rounded outline-none" />
                           </ng-container>
@@ -479,8 +481,6 @@
                           </ng-template>
                         </td>
                       </tr>
-                      
-                                                                   
                     </ng-container>
                     <ng-template #noMatch>
                       <tr class="h-9 text-gray-600 text-sm font-light">
@@ -694,7 +694,7 @@
 
         <!-- Popup Modal -->
         <div *ngIf="showRolePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div class="bg-white p-6 rounded-lg shadow-lg w-[30%] h-[80%]">
+          <div class="bg-white p-6 rounded shadow-lg w-[30%] h-[80%]">
             <p class="text-2xl font-black mb-4">Add Role</p>
             <input type="text" id="role" [(ngModel)]="newRole" placeholder="Enter role name" class="border p-2 mb-4 w-full"/>
             
@@ -862,13 +862,13 @@
         
 
         <div *ngIf="showAssignPopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div class="w-[25%] h-[70%] shadow-xl rounded-lg bg-white flex flex-col">
+          <div class="w-[25%] h-[70%] shadow-xl rounded bg-white flex flex-col">
             <div class="flex flex-col h-full p-6">
               <div class="flex justify-start flex-col mb-3">
                 <p class="text-2xl font-black">
                   Assign for <span class="text-blue-600">{{ assignedRole.role_name }}</span>
                 </p>
-                <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border rounded-lg">
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border rounded">
               </div>
               <p *ngIf="selectedUserIds.size > 0" class="text-gray-400 text-sm">
                 <button type="button" class="focus:outline-none text-red-700" (click)="deselectAllCheckboxes()">Deselect All</button>
@@ -902,7 +902,7 @@
         </div>
 
         <div *ngIf="showDeleteAssigneePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div class="w-[20%] shadow-xl rounded-lg bg-white flex flex-col">
+          <div class="w-[20%] shadow-xl rounded bg-white flex flex-col">
             <div class="flex flex-col h-full p-4 md:p-6 justify-between">
               <div class="flex flex-col justify-center items-center mb-2">
                 <p class="text-xl md:text-2xl font-black text-center">Delete Assignee</p>
@@ -927,7 +927,7 @@
       <div *ngIf="showManagePopup" 
           class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
           (click)="closePopupOutside($event)">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full" (click)="$event.stopPropagation()">
+        <div class="bg-white rounded p-8 max-w-md w-full" (click)="$event.stopPropagation()">
           <h2 class="text-2xl font-bold mb-4">Manage Roles and Departments</h2>
           <div class="space-y-4">
             <button (click)="toggleAddPopup()" class="w-full px-4 py-2 bg-blue-500 text-white rounded">Add Role</button>
@@ -940,14 +940,14 @@
   
 <!-- Manage Access Rights Popup -->
       <div *ngIf="showAccessRightsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full">
+        <div class="bg-white rounded p-8 max-w-md w-full">
           <h2 class="text-2xl font-bold mb-4">Manage Access Rights</h2>
           <!-- Add access rights management UI here -->
-          <div class="bg-white shadow-lg rounded-lg p-4">
+          <div class="bg-white shadow-lg rounded p-4">
             <div class="flex mb-4">
               <div class="w-1/2 pl-2"> <!--Select Department Snippet Starts Here-->
                 <label class="block mb-2 text-gray-700">Select Department</label>
-                <select class="w-full p-2 border rounded-lg">
+                <select class="w-full p-2 border rounded">
                   <option>Select Department</option>
                   <!-- Add more options as needed -->
                 </select>

@@ -1,7 +1,7 @@
 <div class="flex">
   <app-sidebar-navigation></app-sidebar-navigation>
   <div class="flex-grow">
-    <div class="flex flex-col items-center px-16 pt-5 pb-4 w-full bg-white max-md:px-5 max-md:max-w-full">
+    <div class="flex flex-col items-center px-9 pt-5 pb-4 w-full bg-white max-md:px-5 max-md:max-w-full">
       <div *ngIf="message" [class]="isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'" class="p-4 rounded-md mb-4 w-full max-w-[960px]">
         {{ message }}
       </div>
@@ -98,7 +98,7 @@
       </div>
 
       <!-- Display Table -->
-      <div *ngIf="showTable" class="flex flex-col w-full bg-white pt-8 px-6">
+      <div *ngIf="showTable" class="flex flex-col w-full bg-white px-6">
         <div class="flex flex-col justify-between mb-6 h-full">
           <div class="flex flex-col">
             <p class="text-3xl font-bold text-neutral-900">Parameters</p>
@@ -109,26 +109,26 @@
           </div> -->
         </div>
         
-        
-        <!-- Search input -->
-        <div class="mb-6">
-          <div class="flex items-center space-x-4">
-            <div class="relative flex-grow">
-              <input type="text" placeholder="Search parameters" class="w-full py-3 px-4 pr-10 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" [(ngModel)]="searchTerm" (keyup)="applySearch()">
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                </svg>
-              </div>
+              
+      <!-- Search input -->
+      <div class="mb-6">
+        <div class="flex items-center space-x-4">
+          <div class="relative flex-grow">
+            <input type="text" placeholder="Search parameters" class="w-full py-3 px-4 pr-10 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" [(ngModel)]="searchTerm" (keyup)="applySearch()">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+              </svg>
             </div>
-            <button *ngIf="isManageMode" (click)="deleteSelectedParameters()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
-            <button (click)="toggleManageMode()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition duration-300">Manage</button>
-            <button (click)="openPopup()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">+ New Parameter</button>
-            <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
-              <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
-              <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
           </div>
+          <button *ngIf="isManageMode" (click)="deleteSelectedParameters()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
+          <button (click)="toggleManageMode()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition duration-300">Manage</button>
+          <button (click)="openPopup()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">+ New Parameter</button>
+          <button class="text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+          <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+          <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
         </div>
+      </div>
 
       <!-- Table displaying parameters -->
       <div class="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -167,16 +167,7 @@
         <div *ngIf="!paginatedParameters || paginatedParameters.length === 0" class="p-4 text-center text-gray-500">
           No parameters found.
         </div>
-      </div>   
-        <div class="flex justify-between items-center mt-4">
-          <div class="flex"> <!-- This div ensures the buttons are aligned to the left -->
-            <button (click)="prevPage()" [disabled]="currentPage === 1" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">Previous</button>
-          </div>
-          <div>Page {{ currentPage }} of {{ totalPages }}</div> <!-- This div centers the page number text -->
-            <div class="flex"> <!-- This div ensures the buttons are aligned to the right -->
-              <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">Next</button>
-            </div>
-        </div>       
+      </div>        
       </div>
     </div>
   </div>

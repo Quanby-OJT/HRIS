@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit {
   paginatedUsers: User[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
   totalPages: number = 1;
   activeTab: string = 'users';
   showManagePopup = false;

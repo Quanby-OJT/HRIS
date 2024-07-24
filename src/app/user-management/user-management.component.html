@@ -68,51 +68,57 @@
           <th scope="col" class="px-6 py-3">Priority</th>
         </tr>
       </thead>
-    <tbody>   
-        <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100" (click)="openTicketDetails(ticket)">
+      <tbody>
+        <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"(click)="openTicketDetails(ticket)">
+          <!-- Checkbox -->
           <td class="p-4">
-            <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()">
-          </td>
+            <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()"></td>
+          <!-- Ticket ID -->
           <td class="px-6 py-3">{{ ticket.id }}</td>
+          <!-- Ticket Title -->
           <td class="px-6 py-3 font-semibold">{{ ticket.title }}</td>
-          <td class="px-6 py-3 flex justify-start">{{ ticket.email }}</td>
-          <td class="px-6 py-3 overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
+          <!-- Ticket Email -->
+          <td class="px-6 py-3 text-left">{{ ticket.email }}</td>
+          <!-- Ticket Description -->
+          <td class="px-6 py-3 text-left overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
+          <!-- Ticket Status -->
           <td class="px-6 py-3">
             <span class="bg-green-200 py-1 px-3 rounded-full text-xs">
               <span [ngClass]="{
-              'text-green-700': ticket.status === 'Open',
-              'text-blue-700': ticket.status === 'In Progress',
-              'text-red-700': ticket.status === 'Closed'
+                'text-green-700': ticket.status === 'Open',
+                'text-blue-700': ticket.status === 'In Progress',
+                'text-red-700': ticket.status === 'Closed'
               }">{{ ticket.status }}</span>
             </span>
-          </td>        
-            <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
-            <td class="px-6 py-3">
-              <div (click)="$event.stopPropagation()">
-                <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"
-                    [(ngModel)]="ticket.priority" 
-                    (change)="updateTicketPriority(ticket, $event)">
-                  <option value="Low" [selected]="ticket.priority === 'Low'" style="font-weight: 600; color: green;">Low</option>
-                  <option value="Medium" [selected]="ticket.priority === 'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
-                  <option value="High" [selected]="ticket.priority === 'High'" style="font-weight: 600; color: orange;">High</option>
-                  <option value="Urgent" [selected]="ticket.priority === 'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
-                </select>
-              </div>               
-            </td>          
-          </tr>
-        </tbody>
+          </td>
+          <!-- Ticket Date -->
+          <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
+          <!-- Ticket Priority -->
+          <td class="px-6 py-3"><div (click)="$event.stopPropagation()">
+            <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"[(ngModel)]="ticket.priority"(change)="updateTicketPriority(ticket, $event)">
+                <option value="Low" [ngValue]="'Low'" style="font-weight: 600; color: green;">Low</option>
+                <option value="Medium" [ngValue]="'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
+                <option value="High" [ngValue]="'High'" style="font-weight: 600; color: orange;">High</option>
+                <option value="Urgent" [ngValue]="'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+      </tbody>      
       </table>
     </div>
-</section>
+  </section>
 </div>
+
 <!-- Paginations for tickets
+
     <div class="flex justify-between items-center mt-4">
         <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="ticketPrevPage()" [disabled]="ticket_currentPage === 1">Previous</button>
         <span class="text-gray-600">Page {{ ticket_currentPage }} of {{ ticket_totalPages }}</span>
         <button class="bg-gray-500 text-white px-4 py-2 rounded" (click)="ticketNextPage()" [disabled]="ticket_currentPage === totalPages">Next</button>
       </div>
    </div> -->
-    
+   
 <!-- Ticket Details Modal -->
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
   <div class="bg-white rounded-lg p-4 max-w-md w-full">

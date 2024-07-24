@@ -24,11 +24,11 @@
   <section id="ticket-list" class="flex flex-col h-full">
     <div class="mb-4 flex flex-col md:flex-row justify-between items-center">
       <div class="w-full md:w-1/2 mb-4 md:mb-0">
-        <input type="text" [(ngModel)]="searchTicketTerm" (input)="searchTicketTable()" placeholder="Search Tickets..." class="w-full p-2 border rounded-lg">
+        <input type="text" [(ngModel)]="searchTicketTerm" (input)="searchTicketTable()" placeholder="Search Tickets..." class="w-full p-2 border rounded">
       </div>
       <div class="flex items-center">
         <div class="relative ml-4">
-          <select class="bg-blue-500 hover:bg-blue-600 text-white py-2 pl-3 pr-10 rounded-lg appearance-none" [(ngModel)]="filterOption" (change)="filterTickets()">
+          <select class="bg-blue-500 hover:bg-blue-600 text-white py-2 pl-3 pr-10 rounded appearance-none" [(ngModel)]="filterOption" (change)="filterTickets()">
             <option value="all">All</option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -41,13 +41,13 @@
             </svg>
           </div>
         </div>
-        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg ml-4" (click)="deleteSelectedTickets()">Delete</button>
+        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded ml-4" (click)="deleteSelectedTickets()">Delete</button>
       </div>
     </div>
       
 <!-- Table for support tickets -->
 <div class="overflow-x-auto">
-  <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded-lg shadow-lg bg-white">
+  <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg bg-white">
     <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-300 dark:text-black">
       <tr>
         <th scope="col" class="p-4"><input type="checkbox" (click)="toggleAllTickets()"></th>
@@ -81,7 +81,7 @@
         <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
         <td class="px-6 py-3">
           <div (click)="$event.stopPropagation()">
-            <select class="py-2 pl-3 pr-10 rounded-lg font-bold shadow-md"
+            <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"
                     [(ngModel)]="ticket.priority" 
                     (change)="updateTicketPriority(ticket, $event)">
               <option value="Low" [selected]="ticket.priority === 'Low'" style="font-weight: 600; color: green;">Low</option>
@@ -902,7 +902,7 @@
               </div> <!--Select Department Snippet ENDS Here-->
               <div class="w-1/2 pr-2"> <!--Role Snippet Starts Here-->
                 <label class="block mb-2 text-gray-700">Role</label>
-                <select class="w-full p-2 border rounded-lg">
+                <select class="w-full p-2 border rounded">
                   <option>Select Role</option>
                   <!-- Add more options as needed -->
                 </select>

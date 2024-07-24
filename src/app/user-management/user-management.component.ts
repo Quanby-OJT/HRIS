@@ -6,7 +6,7 @@ import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigat
 
 interface AccessRights {
   [key: string]: boolean;
-}
+} 
 
 interface User {
   profile: string;
@@ -1125,9 +1125,6 @@ cancelEdit() {
   
     // Update pagination
     this.updatePagination();
-  
-    // Optionally refresh the page
-    // window.location.reload();
   }
   
   
@@ -1248,12 +1245,7 @@ nextPage() {
       ticket.email.toLowerCase().includes(searchTerm)
     );
     this.ticketUpdatePagination();
-  }
-
-  refreshTable() {
-    // Fetch the latest tickets
-    this.loadTickets();
-  }
+  } 
 
 // Method to toggle selection of all tickets
 toggleAllTickets() {

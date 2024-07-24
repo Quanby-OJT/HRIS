@@ -41,8 +41,7 @@
             </svg>
           </div>
         </div>
-        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg ml-4" (click)="deleteSelectedTickets()">Delete</button>
-        <button class="bg-green-600 hover:bg-green-600 text-white py-2 px-4 rounded-lg ml-4" (click)="refreshTable()">Refresh</button>
+        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg ml-4" (click)="deleteSelectedTickets()">Delete</button> 
       </div>
     </div>
       
@@ -125,9 +124,9 @@
         }">{{ selectedTicket?.status }}</span>
       </p>
       <div class="mt-2">
-        <p><strong>Description:</strong></p>
-        <div class="max-h-40 overflow-y-auto border border-gray-200 rounded p-2">
-          {{ selectedTicket?.description }}
+        <p class="font-semibold text-gray-700">Description:</p>
+        <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
+            {{ selectedTicket?.description }}
         </div>
       </div>
       <div class="mt-4">

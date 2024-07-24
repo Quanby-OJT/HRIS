@@ -309,7 +309,7 @@
 
 <!-- Users active tab -->
       <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
-        <table class="w-full md:min-w-full border-collapse overflow-hidden">
+        <table class="table-fixed w-full md:min-w-full border-collapse overflow-hidden">
           <thead>
             <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
               <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
@@ -337,8 +337,8 @@
                 </div>
               </td>
               
-              <td class="py-3 px-6 text-left">{{ user.name }}</td>
-              <td class="py-3 px-6 text-left">{{ user.email }}</td>
+              <td class="py-3 px-6 text-left truncate">{{ user.name }}</td>
+              <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
               <td class="py-3 px-6 text-left">
                 <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
               </td>

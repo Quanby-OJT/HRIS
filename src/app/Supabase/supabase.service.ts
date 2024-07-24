@@ -1176,7 +1176,23 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
     } catch (error) {
       console.error('Error fetching attendances from Supabase:', error);
       throw error;
+  
     }
+  }
+  async getAttendancesByDate(date: string): Promise<any[]> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const { data, error } = await this.supabase
+      .from('DTR')
+      .select('*')
+      .gte('clock_in', startOfDay.toISOString())
+      .lt('clock_in', endOfDay.toISOString());
+
+    if (error) throw error;
+    return data || [];
   }
 
   async insertDTRRecord(status: string, name: string) {

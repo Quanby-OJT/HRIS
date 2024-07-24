@@ -1,4 +1,4 @@
-import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -105,14 +105,12 @@ export class LoginComponent {
     this.displayCustomPopup();
   }
 
+  @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
     const x = event.clientX / window.innerWidth * 100;
     const y = event.clientY / window.innerHeight * 100;
 
-    const gradientBackground = document.querySelector('.gradient-background') as HTMLElement;
-    gradientBackground.style.background = `radial-gradient(circle at ${x}% ${y}%, rgb(233, 233, 255), transparent 50%),
-                                           radial-gradient(circle at 75% 75%, rgb(33, 33, 254), transparent 50%),
-                                           radial-gradient(circle at 25% 75%, rgb(233, 233, 255), transparent 50%),
-                                           radial-gradient(circle at 75% 25%, rgb(33, 33, 254), transparent 50%)`;
+    const cursorGradient = document.querySelector('.cursor-gradient') as HTMLElement;
+    cursorGradient.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255, 255, 255, 0.5), transparent 30%)`;
   }
 }

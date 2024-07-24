@@ -99,14 +99,17 @@
 
       <!-- Display Table -->
       <div *ngIf="showTable" class="flex flex-col w-full bg-white pt-8 px-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font text-neutral-900">Parameters</h2>
-          <div class="flex">
-            <button (click)="closeTable()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 ml-4">Back</button>
+        <div class="flex flex-col justify-between mb-6 h-full">
+          <div class="flex flex-col">
+            <p class="text-3xl font-bold text-neutral-900">Parameters</p>
+            <p class="pb-5 text-slate-500 text-sm">Configure System Parameters</p>
           </div>
+          <!-- <div class="flex mt-auto">
+            <button (click)="closeTable()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 ml-4">Back</button>
+          </div> -->
         </div>
         
-        <p class="text-sm text-gray-500 mb-6">View parameters made into your data</p>
+        
         <!-- Search input -->
         <div class="mb-6">
           <div class="flex items-center space-x-4">
@@ -119,7 +122,8 @@
               </div>
             </div>
             <button *ngIf="isManageMode" (click)="deleteSelectedParameters()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
-            <button (click)="toggleManageMode()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Manage</button>
+            <button (click)="toggleManageMode()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition duration-300">Manage</button>
+            <button (click)="openPopup()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">+ New Parameter</button>
           </div>
         </div>
 

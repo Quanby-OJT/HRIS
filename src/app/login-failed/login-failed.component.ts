@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { TicketService } from './ticket.service';
@@ -20,12 +20,13 @@ export class LoginFailedComponent {
   };
   ticketSubmitted = false;
   submitError = '';
+  submitSuccess = '';
 
   constructor(private ticketService: TicketService) {}
 
-  onSubmit() {
-    if (!this.ticket.email.trim() || !this.ticket.title.trim() || !this.ticket.description.trim()) {
-      this.submitError = 'Please fill in all fields.';
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      this.submitError = 'Please fill in all fields correctly.';
       return;
     }
 
@@ -34,11 +35,13 @@ export class LoginFailedComponent {
         console.log('Ticket submitted successfully:', response);
         this.ticketSubmitted = true;
         this.submitError = '';
+        this.submitSuccess = 'Thank you for submitting your ticket. We will get back to you soon.';
         this.resetForm();
       },
       error => {
         console.error('Error submitting ticket:', error);
         this.submitError = 'An error occurred while submitting the ticket. Please try again.';
+        this.submitSuccess = '';
       }
     );
   }
@@ -49,11 +52,5 @@ export class LoginFailedComponent {
       email: '',
       description: ''
     };
-  }
-
-  createLoginFailedTicket(email: string) {
-    this.ticket.email = email;
-    this.ticket.description = `User with email ${email} failed to login.`;
-    this.onSubmit();
   }
 }

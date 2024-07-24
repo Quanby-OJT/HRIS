@@ -19,6 +19,7 @@ interface User {
   status: string;
   access: boolean;
   selected?: boolean;
+  dateAdded?: Date;
 }
 
 interface Employee {
@@ -905,6 +906,8 @@ cancelEdit() {
     this.loadEmployeeNames();
     this.loadRoles();
     this.filteredRoles = this.roles;
+    this.filterOption = 'none';
+    this.filteredUsers = [...this.users];
 
   } 
 
@@ -972,7 +975,7 @@ cancelEdit() {
       if (!data || data.length === 0) {
         console.warn('No employee data received');
         this.users = [];
-        this.filteredUsers = [];
+        this.filteredUsers = [...this.users];
         this.updatePagination();
         return;
       }
@@ -1030,9 +1033,7 @@ cancelEdit() {
       console.error('Unexpected error while fetching employees:', error);
       // Here you might want to set some error state or show a user-facing error message
     }
-  }
-
-  
+  }  
 
   searchTable() {
     this.filteredUsers = this.users.filter(user =>
@@ -1446,6 +1447,28 @@ async replyTicket(): Promise<void> {
   } else {
     console.log('No ticket selected to reply.');
   }
+}
+
+// Functions for Sorting alphabetically, ascending and descending order
+
+sortUsers(sortOption: string): void {
+  if (sortOption === 'none') {
+    // Default sort: most recently added users
+    this.filteredUsers = [...this.users].sort((a, b) => (b.dateAdded || new Date()).getTime() - (a.dateAdded || new Date()).getTime());
+  } else if (sortOption === 'asc') {
+    // Sort alphabetically ascending
+    this.filteredUsers = [...this.users].sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortOption === 'desc') {
+    // Sort alphabetically descending
+    this.filteredUsers = [...this.users].sort((a, b) => b.name.localeCompare(a.name));
+  }
+  this.updatePagination();
+}
+
+onSortOptionChange(event: Event): void {
+  const target = event.target as HTMLSelectElement;
+  const selectedOption = target.value as 'asc' | 'desc';
+  this.sortUsers(selectedOption);
 }
 
 

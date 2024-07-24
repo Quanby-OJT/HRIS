@@ -105,6 +105,7 @@ export class SystemManagementComponent implements OnInit {
   }
 
   openTable() {
+    console.log('openTable called');
     this.showTable = true;
     this.loadParameters();
   }

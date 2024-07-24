@@ -184,38 +184,42 @@ export class WorkflowApprovalUserComponent implements OnInit {
       alert('Error: Database connection not initialized');
       return;
     }
-
+  
     try {
       const { data: { user }, error: userError } = await this.supabase.auth.getUser();
       if (userError) throw new Error(`Authentication error: ${userError.message}`);
       if (!user) throw new Error('No authenticated user found');
-
+  
       let fileName = '';
       // Upload file to bucket
       if (this.selectedFile) {
         fileName = this.selectedFile.name;
         const filePath = `${user.email}/${fileName}`;
-
+  
         const { error: uploadError } = await this.supabase.storage
           .from('workflowproposals')
           .upload(filePath, this.selectedFile);
-
+  
         if (uploadError) throw uploadError;
       }
-
+  
       const workflowData = {
-        ...this.newWorkflow,
+        reviewer: this.newWorkflow.reviewer,
+        reviewer_id: this.newWorkflow.reviewer_id, // This now contains the position
+        submitted_for: this.newWorkflow.submitted_for,
+        submitted_for_id: this.newWorkflow.submitted_for_id, // This now contains the position
         requested_by: user.email,
         status: 'Pending',
-        request: fileName // Set the file name as the request
+        request: fileName,
+        requestType: this.newWorkflow.requestType
       };
-
+  
       const { data, error } = await this.supabase
         .from('workflow')
         .insert([workflowData]);
-
+  
       if (error) throw error;
-
+  
       this.closeUploadModal();
       await this.fetchUserWorkflows();
       this.updatePaginatedWorkflows();
@@ -281,14 +285,15 @@ export class WorkflowApprovalUserComponent implements OnInit {
 
   selectApprover(user: User) {
     this.newWorkflow.submitted_for = user.name;
-    this.filterReviewers(); // Re-filter reviewers when an approver is selected
+    this.newWorkflow.submitted_for_id = user.position; // Store position in submitted_for_id
+    this.filterReviewers();
   }
-
+  
   selectReviewer(user: User) {
     this.newWorkflow.reviewer = user.name;
-    this.filterApprovers(); // Re-filter approvers when a reviewer is selected
+    this.newWorkflow.reviewer_id = user.position; // Store position in reviewer_id
+    this.filterApprovers();
   }
-
   onFileSelected(event: Event) {
     const element = event.currentTarget as HTMLInputElement;
     const file = element.files ? element.files[0] : null;

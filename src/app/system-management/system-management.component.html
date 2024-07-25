@@ -11,16 +11,9 @@
     <!-- Search input and actions -->
     <div class="mb-6 bg-white rounded-xl shadow-lg pt-6 pb-2">
       <div class="flex items-center space-x-4 mx-4">
-        <div class="relative flex-grow">
-          <input type="text" placeholder="Search parameters" 
-                 class="w-full py-3 px-4 pr-10 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                 [(ngModel)]="searchTerm" 
-                 (keyup)="applySearch()">
-          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-            </svg>
-          </div>
+        <div class="relative w-full md:w-[20%] md:mr-auto">
+          <input type="text" [(ngModel)]="searchTerm" (input)="applySearch()" placeholder="Search Parameters..." class="w-full h-full p-2 pr-8 border rounded-full border-gray-300">
+          <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
         </div>
         <button *ngIf="isManageMode" (click)="openDeletePopup()" 
         class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">

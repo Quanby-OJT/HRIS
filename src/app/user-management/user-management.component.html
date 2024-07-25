@@ -137,6 +137,16 @@
                                 </select>
                               </div>
                               <div>
+                                <label for="department" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Department*</label>
+                                <select id="department" [(ngModel)]="employee.department" name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                  <option value="" disabled selected>Select a department</option>
+                                  <option value="IT">IT</option>
+                                  <option value="Human Resources">Human Resources</option>
+                                  <option value="Finance">Finance</option>
+                                  <option value="Marketing">Marketing</option>
+                                </select>
+                              </div>
+                              <div>
                                 <label for="type" class="block mb-1 text-sm font-medium text-black">Type*</label>
                                 <select id="type" [(ngModel)]="employee.type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                                   <option value="" disabled selected>Select a type</option>

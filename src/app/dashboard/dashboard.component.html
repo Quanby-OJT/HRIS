@@ -27,7 +27,7 @@
   <div class="flex p-10">
      <app-sidebar-navigation></app-sidebar-navigation>
     <div class="flex flex-col flex-grow gap-4 w-[80%]">
-      <div class="bg-blue-500 shadow-lg w-full h-56 rounded-lg p-5 flex items-center justify-between relative">
+      <div class="animated-gradient-bg shadow-lg w-full h-56 rounded-lg p-5 flex items-center justify-between relative">
         <div class="flex-1">
           <p class="text-white text-3xl">Welcome, <span class="font-bold">Lean Jedfrey</span>!</p>
           <p *ngIf="!hasTimedIn" class="text-lg text-white w-[55%] break-words mt-2">We’re excited to see you here today. Before you dive into your tasks, we’d like to remind you to <span class="font-bold">log your time</span> if you haven’t done so already.</p>
@@ -35,7 +35,8 @@
           <button *ngIf="!hasTimedIn" (click)="timeIn()" class="bg-white px-6 py-2 rounded text-blue-500 text-lg font-bold mt-4">Time In</button>
           <button *ngIf="hasTimedIn" (click)="timeOut()" class="bg-white px-6 py-2 rounded text-red-500 text-lg font-bold mt-4">Time Out</button>
         </div>
-        <img src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
+        <img *ngIf="!hasTimedIn" src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
+        <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
       </div>
       
       
@@ -54,8 +55,9 @@
     </div>
   
     <!-- Right pink container -->
-    <div class="shadow-lg bg-white w-[25%] h-[368px] ml-4 rounded-lg p-4 border border-gray-200">
+    <div class="shadow-lg bg-white w-[25%] h-[90%] ml-4 rounded-lg p-4 border border-gray-200">
       <!-- Navigation -->
+       <div class="bg-blue-50 p-4 rounded">
       <div class="flex items-center justify-between mb-4">
         <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
           &lt;
@@ -92,6 +94,25 @@
         <!-- Days of next month -->
         <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
       </div>
+    </div>
+    <p class="text-xl font-bold pt-4">Holidays</p>
+    <div class="flex items-center justify-between">
+      <p class="text-lg">Christmas day</p>
+      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
+    </div>
+    <div class="flex items-center justify-between -mt-3">
+      <p class="text-lg">New Year's Day</p>
+      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
+    </div>
+    <div class="flex items-center justify-between -mt-3">
+      <p class="text-lg">Sheesh Day</p>
+      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
+    </div>
+     <div class="flex items-center justify-between -mt-3">
+      <p class="text-lg">Wow</p>
+      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
+    </div>
+    
     </div>
     
     

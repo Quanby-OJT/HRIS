@@ -17,9 +17,9 @@
     width: 100%;
     height: 100%;
     position: relative;
-    background: radial-gradient(circle at 25% 25%, rgb(90, 95, 255), transparent 50%),
-                radial-gradient(circle at 25% 75%, rgb(0, 30, 255), transparent 50%),
-                radial-gradient(circle at 75% 25%, rgb(149, 149, 255), transparent 50%);
+    background: radial-gradient(circle at 25% 25%, rgb(90, 95, 255), transparent 70%),
+                radial-gradient(circle at 25% 75%, rgb(0, 30, 255), transparent 60%),
+                radial-gradient(circle at 75% 25%, rgb(134, 134, 255), transparent 70%);
     background-size: 200% 200%;
     animation: gradient-animation 10s ease infinite;
   }

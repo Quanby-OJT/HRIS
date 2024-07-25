@@ -3,16 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
-
-interface SidebarItem {
-  name: string;
-  route: string;
-}
-
-interface DashboardCard {
-  title: string;
-  value: number;
-}
+import { CalendarMonthViewDay } from 'angular-calendar';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,36 +14,47 @@ interface DashboardCard {
 })
 export class DashboardComponent implements OnInit {
   isExpanded = false;
-  userEmail: string = ''; // Add this line to declare userEmail
-
-  dashboardCards: DashboardCard[] = [
-    { title: 'Total Employees', value: 0 },
-    { title: 'DTR', value: 5 },
-    { title: 'New Applications', value: 8 }
-  ];
+  userEmail: string = ''; // Declare userEmail
+  totalEmployees: string = '0'; // Add this line to store total employees as a string
+  hasTimedIn: boolean = false; // Property to track if user has timed in
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
+  viewDate: Date = new Date();
+
+  dayClicked(day: CalendarMonthViewDay): void {
+    alert(`Clicked on ${day.date}`);
+  }
+
   async ngOnInit() {
     await this.fetchUserEmail();
-    this.fetchDashboardData();
+    await this.fetchDashboardData();
+    await this.checkTimeInStatus(); // Check if the user has timed in
   }
 
   async fetchDashboardData() {
     try {
       const response = await this.supabaseService.getEmployees();
       if (!response.error) {
-        const totalEmployees = response.data.length;
-        this.dashboardCards = [
-          { title: 'Total Employees', value: totalEmployees },
-          { title: 'DTR', value: 7 },
-          { title: 'New Applications', value: 10 }
-        ];
+        const totalEmployees = response.data.length.toString(); // Convert to string
+        this.totalEmployees = totalEmployees;
       } else {
         console.error('Error fetching employees:', response.error.message);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+    }
+  }
+
+  async checkTimeInStatus() {
+    try {
+      if (!this.userEmail) {
+        throw new Error('User email not available');
+      }
+      this.hasTimedIn = await this.supabaseService.hasTimedInToday(this.userEmail);
+    } catch (error) {
+      console.error('Error checking time in status:', error);
+      this.hasTimedIn = false; // Default to false if there's an error
     }
   }
 
@@ -107,22 +109,23 @@ export class DashboardComponent implements OnInit {
   async timeIn() {
     try {
       const name = this.userEmail;
-  
+
       if (!name) {
         throw new Error('User email not available');
       }
-  
+
       // Check if the user has already timed in today
       const hasTimedIn = await this.supabaseService.hasTimedInToday(name);
       if (hasTimedIn) {
         alert('You have already timed in today. You can only time in once per day.');
         return;
       }
-  
+
       const status = 'Time In';
       const result = await this.supabaseService.insertDTRRecord(status, name);
       console.log('Time In recorded successfully:', result);
       alert('Time In recorded successfully');
+      this.hasTimedIn = true; // Update the status after successful time in
     } catch (error) {
       console.error('Error recording Time In:', error);
       if (error instanceof Error) {
@@ -147,6 +150,7 @@ export class DashboardComponent implements OnInit {
       }
       console.log('Time Out recorded successfully:', result.data);
       alert('Time Out recorded successfully');
+      this.hasTimedIn = false; // Update the status after successful time out
     } catch (error) {
       console.error('Error recording Time Out:', error);
       if (error instanceof Error) {

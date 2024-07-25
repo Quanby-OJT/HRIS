@@ -1,27 +1,19 @@
 <div class="flex flex-col h-screen">
-  <!-- Header -->
-  <header class="bg-blue-600 text-white p-5 flex justify-between items-center">
-    <div class="text-xl font-bold"></div>
-    <a href="#" class="text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-    </a>
-  </header>
+
 
   <!-- Main content -->
-  <div class="flex flex-grow">
+  <!-- <div class="flex flex-grow">
     <app-sidebar-navigation></app-sidebar-navigation>
-    <div class="flex-grow">
+    <div class="flex-grow hidden">
       <!-- Main Content (unchanged) -->
-      <div class="flex-1 p-6">
+      <!-- <div class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-4">Welcome to the HRIS Dashboard</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div *ngFor="let card of dashboardCards" class="bg-white p-6 rounded-lg shadow-md">
+          <div *ngFor="let card of dashboardCards" class="bg-white p-6 rounded-lg-lg shadow-md">
             <h2 class="text-xl font-semibold mb-2">{{card.title}}</h2>
             <ng-container *ngIf="card.title === 'DTR'; else defaultContent">
-              <button (click)="timeIn()" class="bg-blue-500 text-white py-2 px-4 rounded">Time In</button>
-              <button (click)="timeOut()" class="bg-red-500 text-white py-2 px-4 rounded ml-2">Time Out</button>
+              <button (click)="timeIn()" class="bg-blue-500 text-white py-2 px-4 rounded-lg">Time In</button>
+              <button (click)="timeOut()" class="bg-red-500 text-white py-2 px-4 rounded-lg ml-2">Time Out</button>
             </ng-container>
             <ng-template #defaultContent>
               <p class="text-gray-700 text-lg">{{card.value}}</p>
@@ -30,5 +22,48 @@
         </div>
       </div>
     </div>
+  </div> --> 
+
+  <div class="flex p-10">
+     <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex flex-col flex-grow gap-4 w-[80%]">
+      <div class="bg-blue-500 shadow-lg w-full h-56 rounded-lg p-5 flex items-center justify-between relative">
+        <div class="flex-1">
+          <p class="text-white text-3xl">Welcome, <span class="font-bold">Lean Jedfrey</span>!</p>
+          <p *ngIf="!hasTimedIn" class="text-lg text-white w-[55%] break-words mt-2">We’re excited to see you here today. Before you dive into your tasks, we’d like to remind you to <span class="font-bold">log your time</span> if you haven’t done so already.</p>
+          <p *ngIf="hasTimedIn" class="text-lg text-white w-[50%] break-words mt-2">You’ve successfully clocked in and are all set for a productive workday. We’re excited to have you with us today!</p>
+          <button *ngIf="!hasTimedIn" (click)="timeIn()" class="bg-white px-6 py-2 rounded text-blue-500 text-lg font-bold mt-4">Time In</button>
+          <button *ngIf="hasTimedIn" (click)="timeOut()" class="bg-white px-6 py-2 rounded text-red-500 text-lg font-bold mt-4">Time Out</button>
+        </div>
+        <img src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
+      </div>
+      
+      
+      
+      
+  
+      <div class="flex w-full justify-between gap-4">
+        <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 p-5 rounded-lg">
+          <p class="font-bold text-xl text-gray-300">Total Employees</p>
+          <p class="font-bold text-2xl text-black">{{ totalEmployees }}</p>
+        </div>
+        <div class="flex-1 shadow-lg bg-white  h-32 rounded-lg"></div>
+        <div class="flex-1 shadow-lg bg-white  h-32 rounded-lg"></div>
+        <div class="flex-1 shadow-lg bg-white  h-32 rounded-lg"></div>
+      </div>
+    </div>
+  
+    <!-- Right pink container -->
+    <div class="shadow-lg bg-white w-[25%] h-[384px] ml-4 rounded-lg">
+      
+    </div>
   </div>
-</div>
+  
+  
+  
+  
+  
+  
+  
+  
+  

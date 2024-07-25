@@ -300,19 +300,19 @@
             <div *ngIf="filteredUsers.length > 0" class="overflow-x-auto overflow-y-auto max-h-[28rem] custom-scrollbar">
               <table class="table-fixed w-full md:min-w-full border-collapse overflow-hidden">
                 <thead>
-                  <tr class="bg-[#E9ECF1] text-gray-700 leading-normal">
+                  <tr class="bg-gray-100 text-gray-700 leading-normal">
                     <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
-                    <th class="py-3 px-6 text-left font-thin text-lg">Profile</th>
-                    <th class="py-3 px-6 text-left font-thin text-lg">Name</th>
-                    <th class="py-3 px-6 text-left font-thin text-lg">Email</th> 
-                    <th class="py-3 px-6 text-left font-thin text-lg">Password</th>
-                    <th class="py-3 px-6 text-left font-thin text-lg">Role</th>
-                    <th class="py-3 px-6 text-left font-thin text-lg">Status</th>
-                    <th class="py-3 px-6 text-center font-thin text-lg">Access</th>
-                    <th *ngIf="isEditing" class="py-3 px-6 text-center text-lg">Edit</th>
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">PROFILE</th>
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">PASSWORD</th>
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">ROLE</th>
+                    <th class="py-3 px-6 text-left font-medium text-gray-500">STATUS</th>
+                    <th class="py-3 px-6 text-center font-medium text-gray-500">ACCESS</th>
+                    <th *ngIf="isEditing" class="py-3 px-6 text-center text-lg">EDIT</th>
                   </tr>
                 </thead>
-                <tbody class="text-gray-600 text-sm font-light">
+                <tbody class="text-gray-500 text-sm font-light">
                   <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-100">
                     <td *ngIf="isEditing" class="py-3 px-6 text-center">
                       <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)">

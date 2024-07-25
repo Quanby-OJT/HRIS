@@ -263,7 +263,7 @@ export class WorkflowApprovalUserComponent implements OnInit {
     this.selectedFile = null;
   }
 
-  goHome() {
+  goBack() {
     this.router.navigate(['/system-management']);
   }
 

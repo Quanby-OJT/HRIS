@@ -104,7 +104,7 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  goHome() {
+  goBack() {
     this.router.navigate(['/system-management']);
   }
 

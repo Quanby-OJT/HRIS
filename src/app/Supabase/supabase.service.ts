@@ -766,7 +766,7 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       department: oldEmployeeData.department,
       position: oldEmployeeData.position,
       types: oldEmployeeData.types,
-      photo_url: oldEmployeeData.photo_url,
+      //photo_url: oldEmployeeData.photo_url,
     });
 
     const newParameterValue = formatParameter({
@@ -777,7 +777,7 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       department: updatedData[0].department,
       position: updatedData[0].position,
       types: updatedData[0].types,
-      photo_url: updatedData[0].photo_url,
+      //photo_url: updatedData[0].photo_url,
     });
 
     const auditLogData: AuditLogEntry = {

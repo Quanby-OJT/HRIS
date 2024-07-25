@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
-import { CalendarMonthViewDay } from 'angular-calendar';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,18 +17,74 @@ export class DashboardComponent implements OnInit {
   totalEmployees: string = '0'; // Add this line to store total employees as a string
   hasTimedIn: boolean = false; // Property to track if user has timed in
 
+  viewDate: Date = new Date();
+  currentDate: Date = new Date();
+  currentMonth: number = this.currentDate.getMonth();
+  currentYear: number = this.currentDate.getFullYear();
+  daysInMonth: number[] = [];
+  daysInPrevMonth: number[] = [];
+  daysInNextMonth: number[] = [];
+  firstDayOfMonth: number = 0;
+
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
-  viewDate: Date = new Date();
-
-  dayClicked(day: CalendarMonthViewDay): void {
-    alert(`Clicked on ${day.date}`);
-  }
-
+  
+    
   async ngOnInit() {
     await this.fetchUserEmail();
     await this.fetchDashboardData();
     await this.checkTimeInStatus(); // Check if the user has timed in
+    this.generateCalendar();
+  }
+
+
+  generateCalendar() {
+    this.daysInMonth = [];
+    this.daysInPrevMonth = [];
+    this.daysInNextMonth = [];
+
+    // Get the first day of the current month
+    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+    this.firstDayOfMonth = firstDay.getDay();
+
+    // Get the number of days in the current month
+    const totalDaysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+
+    // Get the number of days in the previous month
+    const daysInPrevMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+    
+    // Fill in the days of the previous month
+    for (let i = daysInPrevMonth - this.firstDayOfMonth + 1; i <= daysInPrevMonth; i++) {
+      this.daysInPrevMonth.push(i);
+    }
+
+    // Fill in the days of the current month
+    for (let i = 1; i <= totalDaysInMonth; i++) {
+      this.daysInMonth.push(i);
+    }
+
+    // Fill in the days of the next month
+    const totalDaysToFill = 42 - (this.daysInPrevMonth.length + totalDaysInMonth);
+    for (let i = 1; i <= totalDaysToFill; i++) {
+      this.daysInNextMonth.push(i);
+    }
+  }
+
+  changeMonth(offset: number) {
+    this.currentMonth += offset;
+    if (this.currentMonth > 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    } else if (this.currentMonth < 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    }
+    this.generateCalendar();
+  }
+
+  isToday(day: number, month: number, year: number): boolean {
+    const today = new Date();
+    return today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
   }
 
   async fetchDashboardData() {

@@ -54,9 +54,47 @@
     </div>
   
     <!-- Right pink container -->
-    <div class="shadow-lg bg-white w-[25%] h-[384px] ml-4 rounded-lg">
-      
+    <div class="shadow-lg bg-white w-[25%] h-[368px] ml-4 rounded-lg p-4 border border-gray-200">
+      <!-- Navigation -->
+      <div class="flex items-center justify-between mb-4">
+        <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+          &lt;
+        </button>
+        <span class="text-lg font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
+        <button (click)="changeMonth(1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+          &gt;
+        </button>
+      </div>
+    
+      <!-- Days of the week -->
+      <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
+        <div class="p-2">Sun</div>
+        <div class="p-2">Mon</div>
+        <div class="p-2">Tue</div>
+        <div class="p-2">Wed</div>
+        <div class="p-2">Thu</div>
+        <div class="p-2">Fri</div>
+        <div class="p-2">Sat</div>
+      </div>
+    
+      <!-- Calendar days -->
+      <div class="grid grid-cols-7 gap-1 text-center text-sm">
+        <!-- Days of previous month -->
+        <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
+    
+        <!-- Days of current month -->
+        <div *ngFor="let day of daysInMonth"
+             [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}"
+             class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out">
+          {{ day }}
+        </div>
+    
+        <!-- Days of next month -->
+        <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
+      </div>
     </div>
+    
+    
   </div>
   
   

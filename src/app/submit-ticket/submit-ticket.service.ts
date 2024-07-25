@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +17,37 @@ export class TicketService {
       'apikey': this.supabaseKey,
       'Authorization': `Bearer ${this.supabaseKey}`,
       'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
+      'Prefer': 'return=representation'
     });
 
-    ticket = {
-      title: ''
-    };
+    console.log('Submitting ticket to Supabase:', ticket);
+    console.log('Headers:', headers);
 
     return this.http.post(
       `${this.supabaseUrl}/ticket`,
       ticket,
-      { headers: headers }
+      { headers: headers, observe: 'response' }
+    ).pipe(
+      map(response => {
+        console.log('Full HTTP response:', response);
+        if (response.status === 201) {
+          return response.body;
+        } else {
+          console.error('Unexpected status code:', response.status);
+          return null;
+        }
+      }),
+      catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('HTTP error:', error);
+    if (error.error instanceof ErrorEvent) {
+      console.error('Client-side error:', error.error.message);
+    } else {
+      console.error(`Backend returned code ${error.status}, body was:`, error.error);
+    }
+    return throwError('Something went wrong; please try again later.');
   }
 }

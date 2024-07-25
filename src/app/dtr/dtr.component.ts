@@ -39,7 +39,7 @@ export class DtrComponent implements OnInit {
   public isError = false;
   public selectedAttendance: Attendance | null = null;
   public currentPage = 1;
-  public itemsPerPage = 20;
+  public itemsPerPage = 9;
   public totalPages = 1;
   public selectedDate: Date = new Date();
   public formattedDate: string = '';

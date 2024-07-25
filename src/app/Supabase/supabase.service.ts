@@ -544,19 +544,25 @@ export class SupabaseService {
       console.log('User deleted successfully:', response.data);
   
       // Create audit log
+      const formatParameter = (param: any) => {
+  return Object.entries(param)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n');
+    };
+
       const auditLogData = {
-        email: await this.getCurrentUserEmail(),
-        affected_page: 'Employee Management',
-        action: 'Delete',
-        parameter: 'Employee deleted',
-        old_parameter: JSON.stringify({
-          user_id: userProfile.user_id,
-          email: email,
-          first_name: userProfile.first_name,
-          surname: userProfile.surname
-        }),
-        new_parameter: null
-      };
+      email: await this.getCurrentUserEmail(),
+      affected_page: 'Employee Management',
+      action: 'Delete',
+      parameter: 'Employee deleted',
+      old_parameter: formatParameter({
+      //user_id: userProfile.user_id,
+      email: email,
+      first_name: userProfile.first_name,
+      surname: userProfile.surname
+      }),
+      new_parameter: 'N/A'
+    };
   
       console.log('Attempting to create audit log with data:', auditLogData);
   

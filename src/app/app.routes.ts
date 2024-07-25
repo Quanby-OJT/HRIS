@@ -10,6 +10,7 @@ import { DtrComponent } from './dtr/dtr.component';
 import { WorkflowComponent } from './workflow-approval/workflow-approval.component';
 import { WorkflowApprovalUserComponent } from './workflow-approval-user/workflow-approval-user.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
+import { SupportTicketComponent } from './support-ticket/support-ticket.component';
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 
 export const routes: Routes = [
@@ -24,5 +25,6 @@ export const routes: Routes = [
   { path: 'dtr', component: DtrComponent, canActivate: [authGuard] },
   { path: 'audit-trail', component: AuditTrailComponent, canActivate: [authGuard] },
   { path: 'workflow-approval', component: WorkflowComponent, canActivate: [authGuard] },
+  { path: 'support-ticket', component: SupportTicketComponent, canActivate: [authGuard] },
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
 ];

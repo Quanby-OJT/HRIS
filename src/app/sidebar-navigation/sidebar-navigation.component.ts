@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../Supabase/supabase.service';
+
 interface SidebarItem {
   name: string;
   route: string;
@@ -29,7 +30,8 @@ export class SidebarNavigationComponent {
     '/system-management': 'settings',
     '/audit-trail': 'attach_money',
     '/dtr': 'trending_up',
-    '/workflow-approval': 'person_add'
+    '/workflow-approval': 'person_add',
+    '/support-ticket': 'support'
   };
 
   constructor(

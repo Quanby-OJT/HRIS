@@ -751,54 +751,38 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     // Step 3: Update the user's role if the position has changed
     // ... (role update code remains the same)
 
-    // Step 4: Create an audit log entry with old and new parameters
-    const formatParameter = (param: any) => {
-      return Object.entries(param)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join('\n');
-    };
+    // Step 4: Create an audit log entry with only changed fields
+    const changedFields = this.getChangedFields(oldEmployeeData, updatedData[0]);
 
-    const oldParameterValue = formatParameter({
-      first_name: oldEmployeeData.first_name,
-      mid_name: oldEmployeeData.mid_name,
-      surname: oldEmployeeData.surname,
-      email: oldEmployeeData.email,
-      department: oldEmployeeData.department,
-      position: oldEmployeeData.position,
-      types: oldEmployeeData.types,
-      //photo_url: oldEmployeeData.photo_url,
-    });
+    if (Object.keys(changedFields).length > 0) {
+      const formatChanges = (changes: Record<string, { old: any, new: any }>, type: 'old' | 'new') => {
+        return Object.entries(changes)
+          .map(([key, value]) => `${key}: ${value[type]}`)
+          .join('\n');
+      };
 
-    const newParameterValue = formatParameter({
-      first_name: updatedData[0].first_name,
-      mid_name: updatedData[0].mid_name,
-      surname: updatedData[0].surname,
-      email: updatedData[0].email,
-      department: updatedData[0].department,
-      position: updatedData[0].position,
-      types: updatedData[0].types,
-      //photo_url: updatedData[0].photo_url,
-    });
+      const auditLogData: AuditLogEntry = {
+        user_id: await this.getCurrentUserId(),
+        action: 'Update',
+        affected_page: 'Employee Management',
+        parameter: 'Employee updated',
+        old_parameter: formatChanges(await changedFields, 'old'),
+        new_parameter: formatChanges(await changedFields, 'new'),
+        ip_address: await this.getUserIpAddress(),
+        date: new Date().toISOString(),
+        email: await this.getCurrentUserEmail()
+      };
 
-    const auditLogData: AuditLogEntry = {
-      user_id: await this.getCurrentUserId(),
-      action: 'Update',
-      affected_page: 'Employee Management',
-      parameter: 'Employee updated',
-      old_parameter: oldParameterValue,
-      new_parameter: newParameterValue,
-      ip_address: await this.getUserIpAddress(),
-      date: new Date().toISOString(),
-      email: await this.getCurrentUserEmail()
-    };
+      console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
 
-    console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
-
-    const auditLogResult = await this.createAuditLog(auditLogData);
-    if (!auditLogResult.success) {
-      console.error('Failed to create audit log:', auditLogResult.error);
+      const auditLogResult = await this.createAuditLog(auditLogData);
+      if (!auditLogResult.success) {
+        console.error('Failed to create audit log:', auditLogResult.error);
+      } else {
+        console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+      }
     } else {
-      console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+      console.log('No changes detected, skipping audit log creation');
     }
 
     // Step 5: Refresh the session
@@ -812,8 +796,15 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
   }
 }
   
-
-  
+async getChangedFields(oldData: any, newData: any): Promise<Record<string, { old: any, new: any }>> {
+  const changes: Record<string, { old: any, new: any }> = {};
+  for (const key in newData) {
+    if (oldData[key] !== newData[key]) {
+      changes[key] = { old: oldData[key], new: newData[key] };
+    }
+  }
+  return changes;
+}
   // Method to get the current user's email
   async getCurrentUserEmail(): Promise<string> {
     const { data, error } = await this.supabase.auth.getSession();

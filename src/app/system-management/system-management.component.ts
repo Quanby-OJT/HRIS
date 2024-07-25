@@ -13,6 +13,7 @@ interface Parameter {
   parameter_time?: string | null;
   parameter_time2?: string | null;
   selected?: boolean;
+  
 }
 
 @Component({
@@ -43,6 +44,8 @@ export class SystemManagementComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 7;
   totalPages = 1;
+  showDeletePopup = false;
+  parametersToDelete: Parameter[] = [];
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -266,6 +269,35 @@ export class SystemManagementComponent implements OnInit {
     } catch (error) {
       console.error('Error saving/updating parameter:', error);
       this.showMessage('Failed to save/update parameter', true);
+    }
+  }
+
+  openDeletePopup() {
+    this.parametersToDelete = this.filteredParameters.filter(param => param.selected);
+    if (this.parametersToDelete.length > 0) {
+      this.showDeletePopup = true;
+    } else {
+      this.showMessage('Please select at least one parameter to delete', true);
+    }
+  }
+
+  closeDeletePopup() {
+    this.showDeletePopup = false;
+    this.parametersToDelete = [];
+  }
+
+  async confirmDelete() {
+    try {
+      const deletions = this.parametersToDelete.map(param =>
+        this.supabaseService.deleteParameter(param.parameter_name)
+      );
+      await Promise.all(deletions);
+      await this.loadParameters();
+      this.showMessage('Parameters deleted successfully');
+      this.closeDeletePopup();
+    } catch (error) {
+      console.error('Error deleting parameters:', error);
+      this.showMessage('Failed to delete parameters', true);
     }
   }
   

@@ -11,107 +11,13 @@
       <div class="flex">
         <button (click)="setActiveTab('users')" [ngClass]="activeTab === 'users' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Users</button>
         <button (click)="setActiveTab('roles')" [ngClass]="activeTab === 'roles' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Roles</button>
-        <button (click)="setActiveTab('support tickets')" [ngClass]="activeTab === 'support tickets' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'">Support Tickets</button>
+       
       </div>
         </div>
     
 
-        <!-- Support tickets -->
-        <div *ngIf="activeTab === 'support tickets'">
-      <section id="ticket-list" class="flex flex-col h-full">
-      <!-- Table for support tickets -->
-        <div class="overflow-x-auto shadow-lg rounded-xl bg-white">
-          <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
-            <!-- Search Input -->
-            <div class="relative w-[20%]">
-              <input 
-                type="text" 
-                [(ngModel)]="searchTicketTerm" 
-                placeholder="Search Tickets..." 
-                (input)="searchTicketTable()"
-                class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
-              />
-              <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
-            </div>
-            <!-- Filter Dropdown, Delete Button, and Pagination Controls -->
-            <div class="flex items-center space-x-4">
-              <!-- Filter Dropdown -->
-              <div class="relative">
-                <select class=" text-black border px-4 py-2 rounded appearance-none pr-10"[(ngModel)]="filterOption"(change)="filterTickets()">
-                  <option value="all">All</option>
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                  <option value="urgent">Urgent</option>
-                </select>
-                <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-              </div>
-              <!-- Delete Button -->
-              <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"(click)="deleteSelectedTickets()">Delete</button>
-              <!-- Pagination Controls -->
-              <div class="flex items-center space-x-2">
-                <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketPrevPage()"[disabled]="ticket_currentPage === 1">&lt;</button>
-                <span class="text-gray-600 text-center">{{ ticket_currentPage }} of {{ ticket_totalPages }}</span>
-                <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketNextPage()"[disabled]="ticket_currentPage === ticket_totalPages">&gt;</button>
-              </div>
-            </div>
-          </div>        
-          <div class="overflow-x-auto overflow-y-auto max-h-[28rem] custom-scrollbar">
-        <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg table-fixed bg-white">
-          <thead class="bg-[#E9ECF1] text-gray-700 leading-normal">
-            <tr class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
-              <th scope="col" class="p-4"><input type="checkbox" (click)="toggleAllTickets()"></th>
-              <th scope="col" class="px-6 py-3">Ticket ID</th>
-              <th scope="col" class="px-6 py-3">Title</th>
-              <th scope="col" class="px-6 py-3">Email</th>
-              <th scope="col" class="px-6 py-3">Description</th>
-              <th scope="col" class="px-6 py-3">Status</th>
-              <th scope="col" class="px-6 py-3">Date Created</th>
-              <th scope="col" class="px-6 py-3">Priority</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"(click)="openTicketDetails(ticket)">
-              <!-- Checkbox -->
-              <td class="p-4">
-                <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()"></td>
-              <!-- Ticket ID -->
-              <td class="px-6 py-3">{{ ticket.id }}</td>
-              <!-- Ticket Title -->
-              <td class="px-6 py-3 font-semibold">{{ ticket.title }}</td>
-              <!-- Ticket Email -->
-              <td class="px-6 py-3 text-left">{{ ticket.email }}</td>
-              <!-- Ticket Description -->
-              <td class="px-6 py-3 text-left overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
-              <!-- Ticket Status -->
-              <td class="px-6 py-3">
-                <span class="bg-green-200 py-1 px-3 rounded-full text-xs">
-                  <span [ngClass]="{
-                    'text-green-700': ticket.status === 'Open',
-                    'text-blue-700': ticket.status === 'In Progress',
-                    'text-red-700': ticket.status === 'Closed'
-                  }">{{ ticket.status }}</span>
-                </span>
-              </td>
-              <!-- Ticket Date -->
-              <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
-              <!-- Ticket Priority -->
-              <td class="px-6 py-3"><div (click)="$event.stopPropagation()">
-                <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"[(ngModel)]="ticket.priority"(change)="updateTicketPriority(ticket, $event)">
-                    <option value="Low" [ngValue]="'Low'" style="font-weight: 600; color: green;">Low</option>
-                    <option value="Medium" [ngValue]="'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
-                    <option value="High" [ngValue]="'High'" style="font-weight: 600; color: orange;">High</option>
-                    <option value="Urgent" [ngValue]="'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </tbody>      
-          </table>
-          </div>
-        </div>
-      </section>
-        </div>
+        
+  
 
         <!-- Ticket Details Modal -->
         <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">

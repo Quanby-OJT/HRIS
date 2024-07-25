@@ -6,16 +6,42 @@
         <p class="text-sm text-gray-700 mb-4">
           You have failed to input your correct login credentials. If the problem persists, submit a ticket for further assistance.
         </p>
-        <form *ngIf="!ticketSubmitted" (ngSubmit)="onSubmit()" #ticketForm="ngForm" class="space-y-4">
-          <input type="email" [(ngModel)]="ticket.email" name="email" placeholder="Email" required class="w-full p-2 border border-gray-300 rounded bg-gray-100">
-          <textarea [(ngModel)]="ticket.description" name="description" placeholder="Description of the issue" rows="3" required class="w-full p-2 border border-gray-300 rounded bg-gray-100"></textarea>
-          <button type="submit" [disabled]="!ticketForm.form.valid || ticketForm.form.pristine" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-300 disabled:bg-blue-300">
+        <form *ngIf="!ticketSubmitted" (ngSubmit)="onSubmit(ticketForm)" #ticketForm="ngForm" class="space-y-4">
+          <div class="relative">
+            <input type="email" 
+                   [(ngModel)]="ticket.email" 
+                   name="email" 
+                   #emailInput="ngModel"
+                   placeholder="Email" 
+                   required 
+                   email
+                   class="w-full p-2 border border-gray-300 rounded bg-gray-100"
+                   [ngClass]="{'border-red-500': emailInput.invalid && (emailInput.dirty || emailInput.touched)}">
+            <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="text-red-500 text-xs mt-1">
+              <div *ngIf="emailInput.errors?.['required']">Email is required.</div>
+              <div *ngIf="emailInput.errors?.['email']">Please enter a valid email address.</div>
+            </div>
+          </div>
+          <textarea [(ngModel)]="ticket.description" 
+                    name="description" 
+                    #descriptionInput="ngModel"
+                    placeholder="Description of the issue" 
+                    rows="3" 
+                    required 
+                    class="w-full p-2 border border-gray-300 rounded bg-gray-100"
+                    [ngClass]="{'border-red-500': descriptionInput.invalid && (descriptionInput.dirty || descriptionInput.touched)}"></textarea>
+          <div *ngIf="descriptionInput.invalid && (descriptionInput.dirty || descriptionInput.touched)" class="text-red-500 text-xs mt-1">
+            <div *ngIf="descriptionInput.errors?.['required']">Description is required.</div>
+          </div>
+          <button type="submit" 
+                  [disabled]="!ticketForm.form.valid || ticketForm.form.pristine" 
+                  class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-300 disabled:bg-blue-300">
             Submit a Ticket
           </button>
         </form>
         
-        <div *ngIf="ticketSubmitted" class="text-green-600 font-semibold mt-4">
-          Thank you for submitting your ticket. We will get back to you soon.
+        <div *ngIf="submitSuccess" class="text-green-600 font-semibold mt-4">
+          {{ submitSuccess }}
         </div>
         <div *ngIf="submitError" class="text-red-600 font-semibold mt-4">
           {{ submitError }}
@@ -23,4 +49,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>  

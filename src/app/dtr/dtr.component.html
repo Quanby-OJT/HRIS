@@ -11,9 +11,9 @@
         </div>
 
         <p class="text-sm text-gray-500 mb-6">View parameters made into your data</p>
-        <!-- Search input -->
-        <div class="mb-6">
-            <div class="flex items-center space-x-4">
+        
+        <div class="mb-6 flex items-center space-x-4">
+            <div class="w-2/3 flex items-center space-x-4">
                 <div class="relative flex-grow">
                     <input type="text" placeholder="Search parameters" class="w-full py-3 px-4 pr-10 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" [(ngModel)]="searchTerm" (keyup)="applySearch()">
                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -22,11 +22,25 @@
                         </svg>
                     </div>
                 </div>
-                <button *ngIf="isManageMode" (click)="deleteSelectedAttendances()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
-                <button (click)="toggleManageMode()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Manage</button>
             </div>
+            <div class="w-1/3 relative">
+                <input 
+                    type="date" 
+                    [value]="selectedDate | date:'yyyy-MM-dd'"
+                    (change)="onDateChange($event)"
+                    class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent opacity-0 absolute inset-0 cursor-pointer"
+                >
+                <div class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 flex justify-between items-center">
+                    <span class="text-gray-500">{{ formattedDate }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+            <button *ngIf="isManageMode" (click)="deleteSelectedAttendances()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
+            <button (click)="toggleManageMode()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">{{ isManageMode ? 'Exit Manage' : 'Manage' }}</button>
         </div>
-  
+        
         <div class="overflow-x-auto bg-white shadow-md rounded-lg">
             <table class="w-full text-left border-collapse" *ngIf="paginatedAttendances && paginatedAttendances.length > 0">
                 <thead class="bg-gray-50">

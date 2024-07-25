@@ -166,99 +166,179 @@ export class SupabaseService {
   }
 
   async createEmployee(employee: any): Promise<{ data: any; error: any }> {
-    
     console.log('Creating employee:', JSON.stringify(employee, null, 2));
-      // Step 1: Sign up the user in Supabase Authentication
-    const { data: authData, error: authError } = await this.supabase.auth.signUp({
-      email: employee.email,
-      password: employee.password, // Ensure the password is hashed when storing in the profile table
-    });
 
-    if (authError) {
-      console.error('Error signing up user:', authError.message);
-      return { data: null, error: authError };
+    // Step 1: Insert the employee data into the 'profile' table
+    const { data: profileData, error: profileError } = await this.supabase
+      .from('profile')
+      .insert([{
+        email: employee.email,
+        first_name: employee.first_name,
+        mid_name: employee.mid_name,
+        surname: employee.surname,
+        password: employee.password, // Hash the password before storing
+        department: employee.department,
+        position: employee.position,
+        types: employee.types,
+        access: employee.access,
+        photo_url: employee.photo_url
+      }])
+      .select('user_id');
+
+    if (profileError) {
+      console.error('Error creating employee:', profileError.message);
+      return { data: null, error: profileError };
     }
-    if (authData?.user) {
-      // Step 2: Insert the employee data into the 'profile' table
-      const { data: profileData, error: profileError } = await this.supabase
-        .from('profile')
-        .insert([{
-          auth_user_id: authData.user.id,  // Reference to the auth user
-          email: employee.email,
-          first_name: employee.first_name,
-          mid_name: employee.mid_name,
-          surname: employee.surname,
-          password: employee.password, // Store the hashed password
-          department: employee.department,
-          position: employee.position,
-          types: employee.types,
-          access: employee.access,
-          photo_url: employee.photo_url
-        }])
-        .select('user_id');
-  
-      if (profileError) {
-        console.error('Error creating employee:', profileError.message);
-        return { data: null, error: profileError };
-      }
-  
-      const newUserId = profileData[0].user_id;
-      console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
-  
-      // Step 3: Fetch the corresponding role_id for the role_name
-      const { data: rolesData, error: rolesError } = await this.supabase
-        .from('roles')
-        .select('role_id')
-        .eq('role_name', employee.position)
-        .single();
-  
-      if (rolesError) {
-        console.error('Error fetching role_id:', rolesError.message);
-        return { data: null, error: rolesError };
-      }
-  
-      const roleId = rolesData.role_id;
-  
-      // Step 4: Assign role to the user and store role_name
-      const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
-  
-      if (assignRoleResponse.error) {
-        console.error('Error assigning role:', assignRoleResponse.error.message);
-        return { data: profileData[0], error: assignRoleResponse.error };
-      } else {
-        console.log('Role assigned successfully:', assignRoleResponse.data);
-      }
-  
-      // Step 5: Create an audit log entry
-      const auditLogData: AuditLogEntry = {
-        user_id: await this.getCurrentUserId(),
-        action: 'Create',
-        affected_page: 'Employee Management',
-        parameter: 'New employee created',
-        old_parameter: '',  // No old value for a new employee
-        new_parameter: JSON.stringify(profileData[0]),
-        ip_address: await this.getUserIpAddress(),
-        date: new Date().toISOString(),
-        email: await this.getCurrentUserEmail()
-      };
-  
-      console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
-  
-      const auditLogResult = await this.createAuditLog(auditLogData);
-      if (!auditLogResult.success) {
-        console.error('Failed to create audit log:', auditLogResult.error);
-      } else {
-        console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
-      }
-  
-      // Step 6: Refresh the session
-      await this.refreshSession();
-  
-      return { data: profileData[0], error: null };
+
+    const newUserId = profileData[0].user_id;
+    console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
+
+    // Step 2: Fetch the corresponding role_id for the role_name
+    const { data: rolesData, error: rolesError } = await this.supabase
+      .from('roles')
+      .select('role_id')
+      .eq('role_name', employee.position)
+      .single();
+
+    if (rolesError) {
+      console.error('Error fetching role_id:', rolesError.message);
+      return { data: null, error: rolesError };
     }
-  
-    return { data: null, error: new Error('Unexpected error occurred during employee creation.') };
+
+    const roleId = rolesData.role_id;
+
+    // Step 3: Assign role to the user and store role_name
+    const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
+
+    if (assignRoleResponse.error) {
+      console.error('Error assigning role:', assignRoleResponse.error.message);
+      return { data: profileData[0], error: assignRoleResponse.error };
+    } else {
+      console.log('Role assigned successfully:', assignRoleResponse.data);
+    }
+
+    // Step 4: Create an audit log entry
+    const auditLogData: AuditLogEntry = {
+      user_id: await this.getCurrentUserId(),
+      action: 'Create',
+      affected_page: 'Employee Management',
+      parameter: 'New employee created',
+      old_parameter: '',  // No old value for a new employee
+      new_parameter: JSON.stringify(profileData[0]),
+      ip_address: await this.getUserIpAddress(),
+      date: new Date().toISOString(),
+      email: await this.getCurrentUserEmail()
+    };
+
+    console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
+
+    const auditLogResult = await this.createAuditLog(auditLogData);
+    if (!auditLogResult.success) {
+      console.error('Failed to create audit log:', auditLogResult.error);
+    } else {
+      console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+    }
+
+    // Step 5: Refresh the session
+    await this.refreshSession();
+
+    return { data: profileData[0], error: null };
   }
+  
+  // async createEmployee(employee: any): Promise<{ data: any; error: any }> {
+    
+  //   console.log('Creating employee:', JSON.stringify(employee, null, 2));
+  //     // Step 1: Sign up the user in Supabase Authentication
+  //   const { data: authData, error: authError } = await this.supabase.auth.signUp({
+  //     email: employee.email,
+  //     password: employee.password, // Ensure the password is hashed when storing in the profile table
+  //   });
+
+  //   if (authError) {
+  //     console.error('Error signing up user:', authError.message);
+  //     return { data: null, error: authError };
+  //   }
+  //   if (authData?.user) {
+  //     // Step 2: Insert the employee data into the 'profile' table
+  //     const { data: profileData, error: profileError } = await this.supabase
+  //       .from('profile')
+  //       .insert([{
+  //         auth_user_id: authData.user.id,  // Reference to the auth user
+  //         email: employee.email,
+  //         first_name: employee.first_name,
+  //         mid_name: employee.mid_name,
+  //         surname: employee.surname,
+  //         password: employee.password, // Store the hashed password
+  //         department: employee.department,
+  //         position: employee.position,
+  //         types: employee.types,
+  //         access: employee.access,
+  //         photo_url: employee.photo_url
+  //       }])
+  //       .select('user_id');
+  
+  //     if (profileError) {
+  //       console.error('Error creating employee:', profileError.message);
+  //       return { data: null, error: profileError };
+  //     }
+  
+  //     const newUserId = profileData[0].user_id;
+  //     console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
+  
+  //     // Step 3: Fetch the corresponding role_id for the role_name
+  //     const { data: rolesData, error: rolesError } = await this.supabase
+  //       .from('roles')
+  //       .select('role_id')
+  //       .eq('role_name', employee.position)
+  //       .single();
+  
+  //     if (rolesError) {
+  //       console.error('Error fetching role_id:', rolesError.message);
+  //       return { data: null, error: rolesError };
+  //     }
+  
+  //     const roleId = rolesData.role_id;
+  
+  //     // Step 4: Assign role to the user and store role_name
+  //     const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
+  
+  //     if (assignRoleResponse.error) {
+  //       console.error('Error assigning role:', assignRoleResponse.error.message);
+  //       return { data: profileData[0], error: assignRoleResponse.error };
+  //     } else {
+  //       console.log('Role assigned successfully:', assignRoleResponse.data);
+  //     }
+  
+  //     // Step 5: Create an audit log entry
+  //     const auditLogData: AuditLogEntry = {
+  //       user_id: await this.getCurrentUserId(),
+  //       action: 'Create',
+  //       affected_page: 'Employee Management',
+  //       parameter: 'New employee created',
+  //       old_value: '',  // No old value for a new employee
+  //       new_value: JSON.stringify(profileData[0]),
+  //       ip_address: await this.getUserIpAddress(),
+  //       date: new Date().toISOString(),
+  //       email: await this.getCurrentUserEmail()
+  //     };
+  
+  //     console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
+  
+  //     const auditLogResult = await this.createAuditLog(auditLogData);
+  //     if (!auditLogResult.success) {
+  //       console.error('Failed to create audit log:', auditLogResult.error);
+  //     } else {
+  //       console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+  //     }
+  
+  //     // Step 6: Refresh the session
+  //     await this.refreshSession();
+  
+  //     return { data: profileData[0], error: null };
+  //   }
+  
+  //   return { data: null, error: new Error('Unexpected error occurred during employee creation.') };
+  // }
   
 
   //Writes in the "user_roles" table in Supabase. Relates a user_id to an assigned role_id
@@ -629,8 +709,6 @@ isValidEmail(email: string): boolean {
   return regex.test(email);
 }
 async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
-  // ... (previous code remains the same)
-
   try {
     // Step 1: Get the old employee data before update
     const { data: oldEmployeeData, error: oldDataError } = await this.supabase
@@ -674,7 +752,13 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     // ... (role update code remains the same)
 
     // Step 4: Create an audit log entry with old and new parameters
-    const oldParameterValue = JSON.stringify({
+    const formatParameter = (param: any) => {
+      return Object.entries(param)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+    };
+
+    const oldParameterValue = formatParameter({
       first_name: oldEmployeeData.first_name,
       mid_name: oldEmployeeData.mid_name,
       surname: oldEmployeeData.surname,
@@ -685,7 +769,7 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       photo_url: oldEmployeeData.photo_url,
     });
 
-    const newParameterValue = JSON.stringify({
+    const newParameterValue = formatParameter({
       first_name: updatedData[0].first_name,
       mid_name: updatedData[0].mid_name,
       surname: updatedData[0].surname,
@@ -1092,7 +1176,23 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
     } catch (error) {
       console.error('Error fetching attendances from Supabase:', error);
       throw error;
+  
     }
+  }
+  async getAttendancesByDate(date: string): Promise<any[]> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const { data, error } = await this.supabase
+      .from('DTR')
+      .select('*')
+      .gte('clock_in', startOfDay.toISOString())
+      .lt('clock_in', endOfDay.toISOString());
+
+    if (error) throw error;
+    return data || [];
   }
 
   async insertDTRRecord(status: string, name: string) {

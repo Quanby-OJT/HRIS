@@ -1107,15 +1107,19 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
 
 
 
-  //parameters
-  async getParameters() {
-    const { data, error } = await this.supabase
-      .from('parameters')
-      .select('*');
-    if (error) throw error;
-    console.log('Fetched data from Supabase:', data);
-    return data;
-  }
+// parameters
+async getParameters() {
+  const { data, error } = await this.supabase
+    .from('parameters')
+    .select('*');
+  if (error) throw error;
+  
+  // Sort the data by id in descending order (assuming higher id means newer)
+  const sortedData = data.sort((a, b) => b.id - a.id);
+  
+  console.log('Fetched and sorted data from Supabase:', sortedData);
+  return sortedData;
+}
   
   async createParameter(parameter: any) {
     const { data, error } = await this.supabase

@@ -150,6 +150,7 @@ export class SystemManagementComponent implements OnInit {
   async loadParameters() {
     try {
       const data = await this.supabaseService.getParameters();
+      // The data is already sorted by the Supabase query, so we don't need to sort it again
       this.parameters = data;
       this.filteredParameters = data;
       this.updatePagination();

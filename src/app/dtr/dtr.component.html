@@ -4,10 +4,9 @@
     <div *ngIf="showTable" class="flex flex-col w-full pt-8 px-6">
         <div class="flex justify-between items-start mb-6">
             <div class="flex flex-col">
-                <h2 class="text-2xl font text-neutral-900 mb-1">Today's Time-In Records</h2>
+                <p class="text-3xl font-bold text-neutral-900">Today's Time-In Records</p>
                 <p class="text-sm text-gray-500">Showing records for: {{ today | date:'mediumDate' }}</p>
             </div>
-            <button (click)="goToAuditTrail()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Back</button>
         </div>
 
         <div class="bg-white pt-4 rounded-xl shadow-lg">

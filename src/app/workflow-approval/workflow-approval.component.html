@@ -17,20 +17,22 @@
           <div class="rounded-xl shadow-lg bg-white">        
             <div class="flex flex-col md:flex-row md:justify-between items-center justify center p-4">
               <div class="relative w-[20%]">
-                <input type="text" [(ngModel)]="searchTerm" (input)="filterWorkflows()" placeholder="Search workflow..." class="bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 text-xs" class="w-full p-2 border rounded">
+                <input type="text" [(ngModel)]="searchTerm" (input)="filterWorkflows()" placeholder="Search workflow..." class="bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 text-xs" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300">
+                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
               </div>
-
-              <div class="relative flex items-center space-x-4">
-                <select [(ngModel)]="selectedStatus" (change)="filterWorkflows()" class="w-full justify-center items-start px-2 py-1 bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 text-xs">
+              <div class="flex items-center space-x-4">
+                <div class="relative">
+                <select [(ngModel)]="selectedStatus" (change)="filterWorkflows()" class="border px-4 py-2 rounded appearance-none pr-10">
                   <option value="">All</option>
                   <option value="Pending">Pending</option>
                   <option value="Approved">Approved</option>
                   <option value="Rejected">Rejected</option>
                 </select>
+                </div>            
+                <button (click)="previousPage()" [disabled]="currentPage === 1" class=" text-black p-1 bg-gray-100 rounded-md"><</button>
+                <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages" class=" text-black p-1 bg-gray-100 rounded-md">></button>
               </div>
-              <button (click)="previousPage()" [disabled]="currentPage === 1" class=" text-black p-1 bg-gray-100 rounded-md"><</button>
-              <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
-              <button (click)="nextPage()" [disabled]="currentPage === totalPages" class=" text-black p-1 bg-gray-100 rounded-md">></button>
             </div>
             <div *ngIf="filteredWorkflows.length > 0" class="overflow-x-auto overflow-y-auto max-h[28rem] custom-scrollbar">
               <table class="w-full">

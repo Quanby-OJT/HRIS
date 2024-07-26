@@ -126,7 +126,7 @@
       </div>
     </div>
     <p class="text-xl font-bold pt-4">Holidays This Month</p>
-    <div class="h-64 overflow-y-auto p-5 borde rounded-md custom-scrollbar">
+    <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
       <div *ngFor="let holiday of holidays" class="flex items-center justify-between mb-2">
         <p class="text-lg">{{ holiday.parameter_name }}</p>
         <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>

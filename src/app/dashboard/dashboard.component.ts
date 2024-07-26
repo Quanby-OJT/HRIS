@@ -254,6 +254,6 @@ export class DashboardComponent implements OnInit {
     } catch (error) {
       console.error('Error fetching holidays:', error);
     }
-  }
+  }  
   
 }

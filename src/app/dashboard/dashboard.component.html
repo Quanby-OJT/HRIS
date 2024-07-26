@@ -39,9 +39,7 @@
         <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
       </div>
       
-      
-      
-      
+           
   
       <div class="flex w-full justify-between gap-4">
         <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 p-5 rounded-lg relative">
@@ -128,12 +126,15 @@
       </div>
     </div>
     <p class="text-xl font-bold pt-4">Holidays This Month</p>
-<div *ngFor="let holiday of holidays" class="flex items-center justify-between">
-  <p class="text-lg">{{ holiday.parameter_name }}</p>
-  <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
-</div>
-<p *ngIf="holidays.length === 0" class="text-gray-500">No holidays this month</p>
+    <div class="h-64 overflow-y-auto p-5 borde rounded-md custom-scrollbar">
+      <div *ngFor="let holiday of holidays" class="flex items-center justify-between mb-2">
+        <p class="text-lg">{{ holiday.parameter_name }}</p>
+        <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
+      </div>
+      <p *ngIf="holidays.length === 0" class="text-gray-500">No holidays this month</p>
     </div>
+    
+      </div>
     
     
   </div>

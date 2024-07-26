@@ -48,12 +48,12 @@
                 <thead class="bg-gray-100">
                   <tr>
                     <th *ngIf="isManageMode" class="px-6 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[100px] text-center">Select</th>
-                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">Parameter Name</th>
-                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">Parameter Type</th>
-                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">Date</th>
-                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">Schedule AM</th>
-                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[100px]">Schedule PM</th>
-                    <th *ngIf="isManageMode" class="px-6 py-4 text-sm font-thin text-gray-600 tracking-wider">Actions</th>
+                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">PARAMETER NAME</th>
+                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">PARAMETER TYPE</th>
+                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">DATE</th>
+                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[200px]">SCHEDULE AM</th>
+                    <th class="px-8 py-4 text-sm font-thin text-gray-600 tracking-wider min-w-[100px]">SCHEDULE PM</th>
+                    <th *ngIf="isManageMode" class="px-6 py-4 text-sm font-thin text-gray-600 tracking-wider">ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -61,11 +61,11 @@
                     <td *ngIf="isManageMode" class="px-6 py-4 whitespace-nowrap text-center">
                       <input type="checkbox" [(ngModel)]="param.selected" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out">
                     </td>
-                    <td class="px-8 py-4 whitespace-nowrap">{{ param.parameter_name || 'N/A' }}</td>
-                    <td class="px-8 py-4 whitespace-nowrap">{{ param.parameter_type || 'N/A' }}</td>
-                    <td class="px-8 py-4 whitespace-nowrap">{{ param.parameter_date ? (param.parameter_date | date:'mediumDate') : '-' }}</td>
-                    <td class="px-8 py-4 whitespace-nowrap">{{ param.parameter_time || '-' }}</td>
-                    <td class="px-8 py-4 whitespace-nowrap">{{ param.parameter_time2 || '-' }}</td>
+                    <td class="px-8 py-4 whitespace-nowrap font-medium text-gray-600">{{ param.parameter_name || 'N/A' }}</td>
+                    <td class="px-8 py-4 whitespace-nowrap font-medium text-gray-500">{{ param.parameter_type || 'N/A' }}</td>
+                    <td class="px-8 py-4 whitespace-nowrap font-medium text-gray-500">{{ param.parameter_date ? (param.parameter_date | date:'mediumDate') : '-' }}</td>
+                    <td class="px-8 py-4 whitespace-nowrap font-medium text-gray-500">{{ param.parameter_time || '-' }}</td>
+                    <td class="px-8 py-4 whitespace-nowrap font-medium text-gray-500">{{ param.parameter_time2 || '-' }}</td>
                     <td *ngIf="isManageMode" class="px-6 py-4 whitespace-nowrap">
                       <button (click)="editParameter(param)" class="text-blue-600 hover:text-blue-800">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

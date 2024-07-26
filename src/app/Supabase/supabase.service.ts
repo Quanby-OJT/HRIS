@@ -1350,30 +1350,38 @@ async getParameters() {
     const { data, error } = await this.supabase
       .from('parameters')
       .select('*')
-      .eq('parameter_type', 'holiday')
+      .eq('parameter_type', 'Holiday')  // Ensure correct case
       .gte('parameter_date', firstDayOfYear)
       .lte('parameter_date', lastDayOfYear)
       .order('parameter_date', { ascending: true });
-    
+  
     if (error) {
       console.error('Error fetching holidays:', error);
       throw error;
     }
-    
+  
     console.log('Fetched holidays:', data);
     return data;
-  }
+  }  
 
-  async addTestHoliday(name: string, date: string) {
+  async addTestHoliday() {
+    const testName = 'Test Holiday';
+    const testDate = new Date().toISOString().split('T')[0]; // Today's date
     const { data, error } = await this.supabase
       .from('parameters')
       .insert([
-        { parameter_name: name, parameter_type: 'holiday', parameter_date: date }
+        { parameter_name: testName, parameter_type: 'Holiday', parameter_date: testDate }
       ]);
   
-    if (error) throw error;
+    if (error) {
+      console.error('Error adding test holiday:', error);
+      throw error;
+    }
+  
+    console.log('Test holiday added:', data);
     return data;
   }
   
 
+  
 }

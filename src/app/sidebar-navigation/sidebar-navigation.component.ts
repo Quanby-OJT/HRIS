@@ -28,10 +28,10 @@ export class SidebarNavigationComponent {
     '/dashboard': 'dashboard',
     '/user-management': 'group',
     '/system-management': 'settings',
-    '/audit-trail': 'attach_money',
-    '/dtr': 'trending_up',
+    '/audit-trail': 'history',
+    '/dtr': 'today',
     '/workflow-approval': 'person_add',
-    '/support-ticket': 'support'
+    '/support-ticket': 'contact_support'
   };
 
   constructor(

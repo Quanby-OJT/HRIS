@@ -1339,4 +1339,41 @@ async getParameters() {
       .select();
   }
 
+  //dashboard
+  async getHolidays() {
+    const now = new Date();
+    const firstDayOfYear = new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0];
+    const lastDayOfYear = new Date(now.getFullYear(), 11, 31).toISOString().split('T')[0];
+  
+    console.log('Fetching holidays from', firstDayOfYear, 'to', lastDayOfYear);
+  
+    const { data, error } = await this.supabase
+      .from('parameters')
+      .select('*')
+      .eq('parameter_type', 'holiday')
+      .gte('parameter_date', firstDayOfYear)
+      .lte('parameter_date', lastDayOfYear)
+      .order('parameter_date', { ascending: true });
+    
+    if (error) {
+      console.error('Error fetching holidays:', error);
+      throw error;
+    }
+    
+    console.log('Fetched holidays:', data);
+    return data;
+  }
+
+  async addTestHoliday(name: string, date: string) {
+    const { data, error } = await this.supabase
+      .from('parameters')
+      .insert([
+        { parameter_name: name, parameter_type: 'holiday', parameter_date: date }
+      ]);
+  
+    if (error) throw error;
+    return data;
+  }
+  
+
 }

@@ -25,6 +25,9 @@ export class DashboardComponent implements OnInit {
   daysInPrevMonth: number[] = [];
   daysInNextMonth: number[] = [];
   firstDayOfMonth: number = 0;
+  message = '';
+  isError = false;
+  holidays: any[] = [];
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -33,10 +36,10 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     await this.fetchUserEmail();
     await this.fetchDashboardData();
-    await this.checkTimeInStatus(); // Check if the user has timed in
+    await this.checkTimeInStatus();
+    await this.fetchHolidays(); // Make sure this line is present
     this.generateCalendar();
   }
-
 
   generateCalendar() {
     this.daysInMonth = [];
@@ -215,4 +218,42 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
+
+  async loadParameters() {
+    try {
+      const data = await this.supabaseService.getParameters();
+      // The data is already sorted by the Supabase query, so we don't need to sort it again
+      console.log('Parameters loaded successfully:', data);
+    } catch (error) {
+      console.error('Error loading parameters:', error);
+      this.showMessage('Failed to load parameters', true);
+    }
+  }  
+
+  showMessage(msg: string, isError: boolean = false) {
+    this.message = msg;
+    this.isError = isError;
+    setTimeout(() => {
+      this.message = '';
+      this.isError = false;
+    }, 3000);
+  }
+
+  async fetchHolidays() {
+    try {
+      const allHolidays = await this.supabaseService.getHolidays();
+      console.log('All fetched holidays:', allHolidays);
+  
+      const currentMonth = new Date().getMonth();
+      this.holidays = allHolidays.filter(holiday => {
+        const holidayDate = new Date(holiday.parameter_date);
+        return holidayDate.getMonth() === currentMonth;
+      });
+  
+      console.log('Holidays for current month:', this.holidays);
+    } catch (error) {
+      console.error('Error fetching holidays:', error);
+    }
+  }
+  
 }

@@ -95,24 +95,12 @@
         <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
       </div>
     </div>
-    <p class="text-xl font-bold pt-4">Holidays</p>
-    <div class="flex items-center justify-between">
-      <p class="text-lg">Christmas day</p>
-      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
-    </div>
-    <div class="flex items-center justify-between -mt-3">
-      <p class="text-lg">New Year's Day</p>
-      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
-    </div>
-    <div class="flex items-center justify-between -mt-3">
-      <p class="text-lg">Sheesh Day</p>
-      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
-    </div>
-     <div class="flex items-center justify-between -mt-3">
-      <p class="text-lg">Wow</p>
-      <p class="text-sm text-gray-400 ml-2">12/25/24</p>
-    </div>
-    
+    <p class="text-xl font-bold pt-4">Holidays This Month</p>
+<div *ngFor="let holiday of holidays" class="flex items-center justify-between">
+  <p class="text-lg">{{ holiday.parameter_name }}</p>
+  <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
+</div>
+<p *ngIf="holidays.length === 0" class="text-gray-500">No holidays this month</p>
     </div>
     
     

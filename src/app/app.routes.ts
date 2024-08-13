@@ -11,6 +11,7 @@ import { WorkflowComponent } from './workflow-approval/workflow-approval.compone
 import { WorkflowApprovalUserComponent } from './workflow-approval-user/workflow-approval-user.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { SupportTicketComponent } from './support-ticket/support-ticket.component';
+import { PimamComponent } from './pimam/pimam.component';
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 
 export const routes: Routes = [
@@ -27,4 +28,6 @@ export const routes: Routes = [
   { path: 'workflow-approval', component: WorkflowComponent, canActivate: [authGuard] },
   { path: 'support-ticket', component: SupportTicketComponent, canActivate: [authGuard] },
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
+  { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
+
 ];

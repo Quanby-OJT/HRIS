@@ -2,6 +2,7 @@
 /* ./src/styles.css */
 
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+@import "flowbite";
 
 @tailwind base;
 @tailwind components;
@@ -9,6 +10,10 @@
 
 *{
   font-family: 'SF Pro Display', sans-serif;
+}
+
+p {
+  margin: 0 !important;
 }
 
 body {

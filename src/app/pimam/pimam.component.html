@@ -1,0 +1,73 @@
+<div class="flex">
+    <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex-grow">
+        <div class="min-h-screen">
+            <main class="flex flex-col gap-6 p-6">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <p class="max-md:text-xl text-2xl font-bold">Personnel Information Management</p>
+                        <p class="max-md:text-lg">Manage HR Information</p>
+                    </div>
+                </div>
+                <div class="flex gap-5">
+                    <div class="flex flex-col gap-5">
+                        <div class="flex gap-3 items-center">
+                            <div class="relative w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                                <svg class="absolute w-18 h-18 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <div class="flex h-full w-full flex-col items-start justify-center">
+                                <p class="text-xl font-bold ">Aram Muncal</p>
+                                <p class="text-xl">Employee</p>
+                            </div>
+                        </div>
+                        <div id="datepicker-inline" inline-datepicker data-date=""></div>
+                    </div>
+                    <div class="flex flex-col w-full gap-5 ">
+                        <div class="flex w-full h-20 gap-5">
+                            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                                <p class="font-semibold text-md">Days Present</p>
+                                <div class="flex items-end justify-between">
+                                    <p id="total-program-count" class="text-3xl public-sans-font-bold">15</p> 
+                                </div>
+                            </div>
+                            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                                <p class="font-semibold text-md ">Days Absent</p>
+                                <div class="flex items-end justify-between">
+                                    <p id="total-program-count" class="text-3xl public-sans-font-bold">3</p> 
+                                </div>
+                            </div>
+                            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                                <p class="font-semibold text-md ">Total Leave Credits</p>
+                                <div class="flex items-end justify-between">
+                                    <p id="total-program-count" class="text-3xl public-sans-font-bold"></p> 
+                                </div>
+                            </div>
+                            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                                <p class="font-semibold text-md ">Days Tardy</p>
+                                <div class="flex items-end justify-between">
+                                    <p id="total-program-count" class="text-3xl public-sans-font-bold"></p> 
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="flex flex-col h-full bg-white rounded-lg shadow-md p-5 gap-6">
+                            <div class="flex flex-col gap-2">
+                                <p class="text-md">Days Present</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 83.33%"></div>
+                                </div>
+                                <p class="text-sm text-gray-700">15/18 days</p>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-md">Days Absent</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 16.67%"></div>
+                                </div>
+                                <p class="text-sm text-gray-700">3/18 days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>

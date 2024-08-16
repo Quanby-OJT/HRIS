@@ -73,7 +73,7 @@ export class TestBack2Component {
       return;
     }
   
-    // Create an object with the form data
+    // Format date of birth
     let formattedDateOfBirth;
     if (this.dateOfBirth instanceof Date) {
       formattedDateOfBirth = this.dateOfBirth.toISOString().split('T')[0];

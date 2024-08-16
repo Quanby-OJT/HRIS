@@ -19,7 +19,7 @@ export class TestBackComponent {
   spouseTelephone?: string = '';
 
   childrenNames: string = '';
-  childrenDOB?: Date;
+  childrenDOB?: string | Date;
 
   fatherSurname: string = '';
   fatherFirstName: string = '';
@@ -32,16 +32,23 @@ export class TestBackComponent {
 
   constructor(private supabaseService: SupabaseService) {}
 
-// Updated submitForm method to include maiden_name
+// Updated submitForm method to include maiden_name and proper date formatting
 async submitForm() {
   try {
-    const dob = this.childrenDOB ? new Date(this.childrenDOB) : undefined;
-    
+    // Convert the childrenDOB to a proper date format (YYYY-MM-DD)
+    let formattedChildrenDOB: string | undefined;
+    if (this.childrenDOB instanceof Date) {
+      formattedChildrenDOB = this.childrenDOB.toISOString().split('T')[0];
+    } else if (typeof this.childrenDOB === 'string' || typeof this.childrenDOB === 'number') {
+      const date = new Date(this.childrenDOB);
+      if (!isNaN(date.getTime())) {
+        formattedChildrenDOB = date.toISOString().split('T')[0];
+      }
+    }
 
     // Spouse's Information
     if (this.spouseSurname && this.spouseFirstName) {
       await this.supabaseService.insertFamilyBackground({
-        //employee_id: 'your_employee_id', // Replace with actual employee_id if needed
         relationship_type: 'Spouse',
         surname: this.spouseSurname,
         first_name: this.spouseFirstName,
@@ -56,19 +63,17 @@ async submitForm() {
     // Children's Information
     if (this.childrenNames) {
       await this.supabaseService.insertFamilyBackground({
-        //employee_id: 'your_employee_id', // Replace with actual employee_id if needed
         relationship_type: 'Child',
         surname: this.childrenNames, // Assuming children's names are stored in 'surname'
         first_name: '', // Assuming children's names are full names in 'surname'
         middle_name: '',
-        date_of_birth: dob ? dob.toISOString().split('T')[0] : undefined // Convert to YYYY-MM-DD
+        date_of_birth: formattedChildrenDOB // Use formatted date if available
       });
     }
 
     // Father's Information
     if (this.fatherSurname && this.fatherFirstName) {
       await this.supabaseService.insertFamilyBackground({
-        //employee_id: 'your_employee_id', // Replace with actual employee_id if needed
         relationship_type: 'Father',
         surname: this.fatherSurname,
         first_name: this.fatherFirstName,
@@ -79,7 +84,6 @@ async submitForm() {
     // Mother's Information
     if (this.motherSurname && this.motherFirstName) {
       await this.supabaseService.insertFamilyBackground({
-        //employee_id: 'your_employee_id', // Replace with actual employee_id if needed
         relationship_type: 'Mother',
         maiden_name: this.motherMaidenName, // Include maiden_name
         surname: this.motherSurname,
@@ -95,5 +99,4 @@ async submitForm() {
   }
 }
 
-  
 }

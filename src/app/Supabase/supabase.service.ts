@@ -1400,5 +1400,14 @@ async getParameters() {
     }
     return response;
   }
+
+  async insertEducationalBackground(data: any) {
+    const { data: result, error } = await this.supabase
+      .from('educational_background')
+      .insert([data]);
+  
+    return { result, error };
+  }
+  
   
 }

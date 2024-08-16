@@ -1381,7 +1381,24 @@ async getParameters() {
     console.log('Test holiday added:', data);
     return data;
   }
-  
 
+  async insertFamilyBackground(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('family_background')
+      .insert(data);
+
+    return { data: insertedData, error };
+  }
+
+  async insertPersonalInformation(data: any) {
+    const { data: response, error } = await this.supabase
+      .from('personal_information') // replace with your table name
+      .insert([data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return response;
+  }
   
 }

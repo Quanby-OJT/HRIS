@@ -15,13 +15,15 @@ interface SidebarItem {
 export class SidebarNavigationComponent {
   isExpanded = false;
 
+  // sidebar buttons 
   sidebarItems: SidebarItem[] = [
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Employee Management', route: '/user-management' },
     { name: 'System Management', route: '/system-management' },
     { name: 'Audit Trail', route: '/audit-trail' },
     { name: 'DTR', route: '/dtr' },
-    { name: 'Workflow Approval', route: '/workflow-approval' }
+    { name: 'Workflow Approval', route: '/workflow-approval' },
+    {name: 'PDS', route: '/pds'}
   ];
 
   private routeIconMap: { [key: string]: string } = {

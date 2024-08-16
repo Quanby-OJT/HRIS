@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Import CommonModule
 
 @Component({
   selector: 'app-test-back2',
   standalone: true,
   templateUrl: './test-back2.component.html',
   styleUrls: ['./test-back2.component.css'],
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule] // Include CommonModule here
 })
 export class TestBack2Component {
   // Define form fields
@@ -29,9 +30,10 @@ export class TestBack2Component {
   tinNo: string = '';
   agencyEmployeeNo: string = '';
   citizenship: string = '';
-  dualCitizenshipCountry: string = '';
-  residentialAddress: string = '';
-  permanentAddress: string = '';
+  dualCitizenshipCountry: string = ''; // Added for dual citizenship country
+  dualCitizenshipDetails: string = ''; // Added for additional details of dual citizenship
+  residentialAddress: string = ''; // Assumes JSON as a string for simplicity
+  permanentAddress: string = ''; // Assumes JSON as a string for simplicity
   telephoneNo: string = '';
   mobileNo: string = '';
   emailAddress: string = '';
@@ -103,9 +105,10 @@ export class TestBack2Component {
       tin_no: this.tinNo,
       agency_employee_no: this.agencyEmployeeNo,
       citizenship: this.citizenship,
-      dual_citizenship_country: this.dualCitizenshipCountry,
-      residential_address: this.residentialAddress,
-      permanent_address: this.permanentAddress,
+      dual_citizenship_country: this.citizenship === 'Dual Citizenship' ? this.dualCitizenshipCountry : null, // Include only if applicable
+      dual_citizenship_details: this.citizenship === 'Dual Citizenship' ? this.dualCitizenshipDetails : null, // Include only if applicable
+      residential_address: this.residentialAddress, // Assumes JSON as a string
+      permanent_address: this.permanentAddress, // Assumes JSON as a string
       telephone_no: this.telephoneNo, 
       mobile_no: this.mobileNo,
       email_address: this.emailAddress,

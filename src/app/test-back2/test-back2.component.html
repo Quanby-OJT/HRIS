@@ -28,6 +28,13 @@
         h3 {
             color: #333;
         }
+        .address-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .address-group label {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -153,13 +160,22 @@
                     <option value="By Naturalization">By Naturalization</option>
                 </select>
             </div>
+            <!-- Dual Citizenship Details -->
+            <div class="form-group" *ngIf="citizenship === 'Dual Citizenship'">
+                <label for="dualCitizenshipCountry">Country of Dual Citizenship:</label>
+                <input type="text" id="dualCitizenshipCountry" [(ngModel)]="dualCitizenshipCountry" name="dualCitizenshipCountry">
+            </div>
+            <div class="form-group" *ngIf="citizenship === 'Dual Citizenship'">
+                <label for="dualCitizenshipDetails">Details of Dual Citizenship:</label>
+                <input type="text" id="dualCitizenshipDetails" [(ngModel)]="dualCitizenshipDetails" name="dualCitizenshipDetails">
+            </div>
         </div>
 
         <!-- Residential Address -->
         <div class="form-section">
             <h3>Residential Address</h3>
-            <div class="form-group">
-                <label for="residentialAddress">Residential Address:</label>
+            <div class="address-group">
+                <label for="residentialAddress">Address:</label>
                 <input type="text" id="residentialAddress" [(ngModel)]="residentialAddress" name="residentialAddress">
             </div>
         </div>
@@ -167,8 +183,8 @@
         <!-- Permanent Address -->
         <div class="form-section">
             <h3>Permanent Address</h3>
-            <div class="form-group">
-                <label for="permanentAddress">Permanent Address:</label>
+            <div class="address-group">
+                <label for="permanentAddress">Address:</label>
                 <input type="text" id="permanentAddress" [(ngModel)]="permanentAddress" name="permanentAddress">
             </div>
         </div>

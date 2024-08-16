@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
 
+// functions called for html
+
 interface AccessRights {
   [key: string]: boolean;
 }
@@ -33,8 +35,6 @@ interface Employee {
   photoUrl?: string; // Add a new property for photo URL
 }
 
-
-
 interface Ticket {
   id: number;
   title: string;
@@ -54,7 +54,6 @@ interface AuditLogEntry {
   ip_address: string;
   date: string;
 }
-
 
 @Component({
   selector: 'app-user-management',
@@ -97,14 +96,14 @@ export class UserManagementComponent implements OnInit {
   weeklyRights: string = 'none';
   entriesRights: string = 'none';
 
-popupUsersRights: string = 'none';
-popupRolesRights: string = 'none';
-popupSupportRights: string = 'none';
-popupParametersRights: string = 'none';
-popupDailyRights: string = 'none';
-popupMonthlyRights: string = 'none'; 
-popupWeeklyRights: string = 'none';
-popupEntriesRights: string = 'none';
+  popupUsersRights: string = 'none';
+  popupRolesRights: string = 'none';
+  popupSupportRights: string = 'none';
+  popupParametersRights: string = 'none';
+  popupDailyRights: string = 'none';
+  popupMonthlyRights: string = 'none'; 
+  popupWeeklyRights: string = 'none';
+  popupEntriesRights: string = 'none';
 
   newDepartment = '';
   departmentType = 'all';
@@ -116,7 +115,6 @@ popupEntriesRights: string = 'none';
   showFileSizeAlert = false;
   photoFile: File | null = null;
   
-
   // Functions for Support tickets tab
   paginatedTickets: Ticket[] = [];
   searchTicketTerm: string = '';

@@ -6,18 +6,13 @@
     <div class="min-h-screen">
       <main class="p-6">
         <div class="mb-6">
-      <p class="mb-2 text-3xl font-bold text-neutral-900">User Management<br></p>
-      <p class="mb-2 pb-5 text-slate-500 text-sm">Configure employee details and access rights</p>
-      <div class="flex">
-        <button (click)="setActiveTab('users')" [ngClass]="activeTab === 'users' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Users</button>
-        <button (click)="setActiveTab('roles')" [ngClass]="activeTab === 'roles' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Roles</button>
-       
-      </div>
+          <p class="mb-2 text-3xl font-bold text-neutral-900">User Management<br></p>
+          <p class="mb-2 pb-5 text-slate-500 text-sm">Configure employee details and access rights</p>
+          <div class="flex">
+            <button (click)="setActiveTab('users')" [ngClass]="activeTab === 'users' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Users</button>
+            <button (click)="setActiveTab('roles')" [ngClass]="activeTab === 'roles' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Roles</button>
+          </div>
         </div>
-    
-
-        
-  
 
         <!-- Ticket Details Modal -->
         <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">

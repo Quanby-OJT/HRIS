@@ -1,0 +1,255 @@
+<div class="flex bg-gray-200">
+    <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex flex-col border h-screen border-black w-full">
+        <!-- block 1 -->
+        <div class="flex h-1/5">
+            <!-- profile -->
+            <div class="flex w-1/4 border border-blue-500 gap-2">
+                <div class="flex w-1/3 items-center justify-center">
+                    <div>IMAGE</div>
+                </div>
+                <div class="flex flex-col w-2/3 items-center justify-center">                
+                    <div class="text-4xl">NAME</div>
+                    <div>POSITION</div>
+                </div>
+            </div>
+            <!-- pds -->
+            <div class="flex flex-col w-3/4 border border-green-500 items-center justify-center">
+                <div class="text-6xl">PERSONAL DATA SHEET</div>
+            </div>
+        </div>
+        <!-- block 2 -->
+        <div class="flex h-4/5">
+            <!-- navigation bar-->
+            <div class="flex flex-col w-1/4 border border-green-500">
+                <div class="w-full h-full border border-yellow-500 p-4">
+                    <ul>
+                        <li *ngFor="let item of navBarItems">
+                            <button class="nav-item text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white w-full" [routerLink]="item.route">{{ item.name }}</button>
+                        </li>
+                    </ul>
+                    <!-- <div class="flex flex-col gap-3 border border-pink-800 h-full">
+                        <div id="personalInfo" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">I. PERSONAL INFORMATION</div>
+                        <div id="familyBackground" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">II. FAMILY BACKGROUND</div>
+                        <div id="education" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">III. EDUCATION BACKGROUND</div>
+                        <div id="civilSecurity" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">IV. CIVIL SECURITY ELIGIBILITY</div>
+                        <div id="workExperience" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">V. WORK EXPERIENCE</div>
+                        <div id="voluntaryWork" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">VI. VOLUNTARY WORK</div>
+                        <div id="learningDevelopment" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">VII. LEARNING AND DEVELOPMENT INTERVENTIONS</div>
+                        <div id="otherInfo" type="button" class="text-xl border border-gray-500 rounded-lg cursor-pointer p-2 bg-white">VIII. OTHER INFORMATION</div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- PDS -->
+            <div class="w-3/4 border border-violet-500 overflow-y-scroll">
+                <div id="personalInfoInput" class="flex flex-col w-full p-4 gap-2">
+                    <!-- Names-->
+                    <div class="flex w-full h-auto border border-black gap-5">
+                        <!-- column 1 -->
+                        <div class="flex flex-col w-1/2 gap-2">
+                            <div class="flex flex-col w-full">
+                                <div>Surname</div>
+                                <input type="text" placeholder="Surname..." class="w-full h-full p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="flex flex-col w-full">
+                                <div>Firstname</div>
+                                <input type="text" placeholder="Firstname..." class="w-full h-full p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="flex flex-col w-full">
+                                <div>Middlename</div>
+                                <input type="text" placeholder="Middlename..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                        </div>
+                        <!-- column 2 -->
+                        <div class="flex flex-col w-1/2">
+                            <div>Name Extension (if applicable)</div>
+                            <input type="text" placeholder="Name Extension..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                        </div>
+                    </div>
+                    <!-- Personal Info -->
+                    <div class="flex flex-col border border-red-500 gap-5">
+                        <div class="flex w-full gap-5">
+                            <!-- column 1 -->
+                            <div class="flex flex-col w-1/2 gap-2">
+                                <!-- birthday date picker -->
+                                <div>Date of Birth</div>
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input datepicker id="birthday-date-picker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"  placeholder="Select date">
+                                </div>
+                                <!-- sex -->
+                                <div class="flex flex-col w-1/2 gap-2">
+                                    <div>Sex:</div>
+                                    <div class="flex items-center ml-8">
+                                        <div class="flex items-center me-4">
+                                            <input id="inline-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="inline-checkbox" class="ms-2 text-sm font-medium text-gray-900">Male</label>
+                                        </div>
+                                        <div class="flex items-center me-4">
+                                            <input id="inline-2-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="inline-2-checkbox" class="ms-2 text-sm font-medium text-gray-900">Female</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- column 2 -->
+                            <div class="flex flex-col w-1/2 gap-2">
+                                <!-- place of birth -->
+                                <div>Place of Birth</div>
+                                <input type="text" placeholder="Place of Birth..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <!-- civil status -->
+                                <!-- need adjustments, dropdown menu should stick with the div -->
+                                <div class="flex flex-col w-1/2 gap-2">
+                                    <div>Civil Status:</div>
+                                    <div class="flex flex-col">
+                                        <button id="dropdownButton" data-dropdown-toggle="dropdown" data-dropdown-placement="bottom-start"  class="bg-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between" type="button">Dropdown button <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+                                        <!-- Dropdown menu -->
+                                        <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 overflow-visible">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                            <li>
+                                                <a class="block px-4 py-2 hover:bg-gray-100">Single</a>
+                                            </li>
+                                            <li>
+                                                <a class="block px-4 py-2 hover:bg-gray-100">Married</a>
+                                            </li>
+                                            <li>
+                                                <a class="block px-4 py-2 hover:bg-gray-100">Widowed</a>
+                                            </li>
+                                            <li>
+                                                <a class="block px-4 py-2 hover:bg-gray-100">Separated</a>
+                                            </li>
+                                            <li>
+                                                <a class="block px-4 py-2 hover:bg-gray-100">Other/s</a>
+                                            </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 3 columns -->
+                        <div class="flex w-full gap-5">
+                            <div class="w-1/3">
+                                <div>Height (m)</div>
+                                <input type="text" placeholder="Height (m)..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>Weight (kg)</div>
+                                <input type="text" placeholder="Weight (kg)..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>Blood Type</div>
+                                <input type="text" placeholder="Blood Type..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                        </div>
+                        <div class="flex w-full gap-5">
+                            <div class="w-1/3">
+                                <div>GSIS ID NO.</div>
+                                <input type="text" placeholder="GSIS ID NO..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>PAG-IBIG ID NO.</div>
+                                <input type="text" placeholder="PAG-IBIG ID..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>PhilHealth ID NO.</div>
+                                <input type="text" placeholder="PhilHealth ID NO..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+            
+                        </div>
+                        <div class="flex w-full gap-5">
+                            <div class="w-1/3">
+                                <div>SSS NO.</div>
+                                <input type="text" placeholder="SSS NO..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>TIN NO.</div>
+                                <input type="text" placeholder="TIN NO..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                            <div class="w-1/3">
+                                <div>AGENCY EMPLOYEE NO.</div>
+                                <input type="text" placeholder="AGENCY EMPLOYEE NO..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- residental address -->
+                    <div class="flex flex-col gap-2 border border-green-500">
+                        <div>Residental Address</div>
+                        <div class="flex w-full gap-5">
+                            <div class="flex flex-col w-1/2 gap-2 items-center justify-center">
+                                <input type="text" placeholder="House/Block/Lot No..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>House/Block/Lot No.</div>
+                                <input type="text" placeholder="Subdivision/Village..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Subdivision/Village</div>
+                                <input type="text" placeholder="City/Municipality..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>City/Municipality</div>
+                            </div>
+                            <div class="flex flex-col w-1/2 gap-2 items-center justify-center">
+                                <input type="text" placeholder="Street.." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Street</div>
+                                <input type="text" placeholder="Barangay..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Barangay</div>
+                                <input type="text" placeholder="Province..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Province</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center">
+                            <input type="text" placeholder="Zip Code..." class="w-1/2 h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            <div class="text-center">Zip Code</div>
+                        </div>
+                    </div>
+                    <!-- permanent address -->
+                    <div class="flex flex-col gap-2">
+                        <div>Permanent Address</div>
+                        <div class="flex w-full gap-5">
+                            <div class="flex flex-col w-1/2 gap-2 items-center justify-center">
+                                <input type="text" placeholder="House/Block/Lot No..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>House/Block/Lot No.</div>
+                                <input type="text" placeholder="Subdivision/Village..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Subdivision/Village</div>
+                                <input type="text" placeholder="City/Municipality..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>City/Municipality</div>
+                            </div>
+                            <div class="flex flex-col w-1/2 gap-2 items-center justify-center">
+                                <input type="text" placeholder="Street.." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Street</div>
+                                <input type="text" placeholder="Barangay..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Barangay</div>
+                                <input type="text" placeholder="Province..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                                <div>Province</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center">
+                            <input type="text" placeholder="Zip Code..." class="w-1/2 h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                            <div class="text-center">Zip Code</div>
+                        </div>
+                    </div>
+                    <!-- contact info -->
+                    <div class="flex gap-5 w-full">
+                        <div class="flex flex-col gap-2 w-1/3">
+                            <div>Telephone No.</div>
+                            <input type="text" placeholder="Telephone No...." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                        </div>
+                        <div class="flex flex-col gap-2 w-1/3">
+                            <div>Mobile No.</div>
+                            <input type="text" placeholder="Mobile No...." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                        </div>
+                        <div class="flex flex-col gap-2 w-1/3">
+                            <div>E-mail Address (if any)</div>
+                            <input type="text" placeholder="E-mail Address (if any)..." class="w-full h-10 p-2 pr-8 border rounded-lg border-gray-300">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../path/to/flowbite/dist/flowbite.js"></script>
+</div>

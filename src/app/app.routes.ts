@@ -15,6 +15,8 @@ import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
 import { TestBack3Component } from './test-back3/test-back3.component';
+import {PDSComponent} from './pds/pds.component';
+import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -32,6 +34,7 @@ export const routes: Routes = [
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
-  { path: 'test-back3', component: TestBack3Component}
-  
+  { path: 'test-back3', component: TestBack3Component},
+  { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
+  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] }
 ];

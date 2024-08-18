@@ -1390,16 +1390,16 @@ async getParameters() {
     return { data: insertedData, error };
   }
 
-  async insertPersonalInformation(data: any) {
-    const { data: response, error } = await this.supabase
-      .from('personal_information') // replace with your table name
-      .insert([data]);
+  // async insertPersonalInformation(data: any) {
+  //   const { data: response, error } = await this.supabase
+  //     .from('personal_information') // replace with your table name
+  //     .insert([data]);
 
-    if (error) {
-      throw new Error(error.message);
-    }
-    return response;
-  }
+  //   if (error) {
+  //     throw new Error(error.message);
+  //   }
+  //   return response;
+  // }
 
   async insertEducationalBackground(data: any) {
     const { data: result, error } = await this.supabase
@@ -1409,5 +1409,16 @@ async getParameters() {
     return { result, error };
   }
   
-  
+  async insertPersonalInformation(formData: any) {
+    const { data, error } = await this.supabase
+      .from('personal_information')
+      .insert([formData]);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
 }

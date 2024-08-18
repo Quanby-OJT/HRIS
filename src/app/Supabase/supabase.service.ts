@@ -1382,6 +1382,16 @@ async getParameters() {
     return data;
   }
 
+
+  // PIMAM DASHBOARD
+  async getEmployeesTable(): Promise<any> {
+    const { data, error } = await this.supabase
+        .from('profile')
+        .select('*')
+    return data;
+  }
+
+
   async insertFamilyBackground(data: any) {
     const { data: insertedData, error } = await this.supabase
       .from('family_background')
@@ -1409,6 +1419,7 @@ async getParameters() {
     return { result, error };
   }
   
+
   async insertPersonalInformation(formData: any) {
     const { data, error } = await this.supabase
       .from('personal_information')

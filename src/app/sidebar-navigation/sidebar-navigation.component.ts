@@ -15,6 +15,7 @@ interface SidebarItem {
 export class SidebarNavigationComponent {
   isExpanded = false;
 
+  // sidebar buttons 
   sidebarItems: SidebarItem[] = [
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Employee Management', route: '/user-management' },
@@ -23,6 +24,8 @@ export class SidebarNavigationComponent {
     { name: 'DTR', route: '/dtr' },
     { name: 'Workflow Approval', route: '/workflow-approval' },
     { name: 'PIMAM', route: '/pimam' },
+    {name: 'PDS', route: '/pds'}
+
   ];
 
   private routeIconMap: { [key: string]: string } = {

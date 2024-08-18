@@ -1382,6 +1382,7 @@ async getParameters() {
     return data;
   }
 
+
   // PIMAM DASHBOARD
   async getEmployeesTable(): Promise<any> {
     const { data, error } = await this.supabase
@@ -1389,23 +1390,35 @@ async getParameters() {
         .select('*')
     return data;
   }
-  
-// try {
-//       const { data, error } = await this.supabase
-//         .from('DTR')
-//         .select('*')
-//         .order('id', { ascending: true });
 
-//       if (error) {
-//         throw error;
-//       }
 
-//       console.log('Fetched data from Supabase:', data);
-//       return data;
-//     } catch (error) {
-//       console.error('Error fetching attendances from Supabase:', error);
-//       throw error;
+  async insertFamilyBackground(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('family_background')
+      .insert(data);
+
+    return { data: insertedData, error };
+  }
+
+  async insertPersonalInformation(data: any) {
+    const { data: response, error } = await this.supabase
+      .from('personal_information') // replace with your table name
+      .insert([data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return response;
+  }
+
+  async insertEducationalBackground(data: any) {
+    const { data: result, error } = await this.supabase
+      .from('educational_background')
+      .insert([data]);
   
-//     }
+    return { result, error };
+  }
+  
+
   
 }

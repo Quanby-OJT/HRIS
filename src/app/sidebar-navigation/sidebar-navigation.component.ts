@@ -21,7 +21,8 @@ export class SidebarNavigationComponent {
     { name: 'System Management', route: '/system-management' },
     { name: 'Audit Trail', route: '/audit-trail' },
     { name: 'DTR', route: '/dtr' },
-    { name: 'Workflow Approval', route: '/workflow-approval' }
+    { name: 'Workflow Approval', route: '/workflow-approval' },
+    { name: 'PIMAM', route: '/pimam' },
   ];
 
   private routeIconMap: { [key: string]: string } = {

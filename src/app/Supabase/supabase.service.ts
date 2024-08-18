@@ -1381,7 +1381,31 @@ async getParameters() {
     console.log('Test holiday added:', data);
     return data;
   }
-  
 
+  // PIMAM DASHBOARD
+  async getEmployeesTable(): Promise<any> {
+    const { data, error } = await this.supabase
+        .from('profile')
+        .select('*')
+    return data;
+  }
+  
+// try {
+//       const { data, error } = await this.supabase
+//         .from('DTR')
+//         .select('*')
+//         .order('id', { ascending: true });
+
+//       if (error) {
+//         throw error;
+//       }
+
+//       console.log('Fetched data from Supabase:', data);
+//       return data;
+//     } catch (error) {
+//       console.error('Error fetching attendances from Supabase:', error);
+//       throw error;
+  
+//     }
   
 }

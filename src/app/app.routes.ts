@@ -11,6 +11,8 @@ import { WorkflowComponent } from './workflow-approval/workflow-approval.compone
 import { WorkflowApprovalUserComponent } from './workflow-approval-user/workflow-approval-user.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { SupportTicketComponent } from './support-ticket/support-ticket.component';
+import { PimamComponent } from './pimam/pimam.component';
+
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
@@ -32,9 +34,14 @@ export const routes: Routes = [
   { path: 'workflow-approval', component: WorkflowComponent, canActivate: [authGuard] },
   { path: 'support-ticket', component: SupportTicketComponent, canActivate: [authGuard] },
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
+
+  { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
+
+
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] }
+
 ];

@@ -12,13 +12,13 @@ import { WorkflowApprovalUserComponent } from './workflow-approval-user/workflow
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { SupportTicketComponent } from './support-ticket/support-ticket.component';
 import { PimamComponent } from './pimam/pimam.component';
-
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
 import { TestBack3Component } from './test-back3/test-back3.component';
 import {PDSComponent} from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
+import { CompensationRecordsComponent } from './compensation-records/compensation-records.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -36,6 +36,7 @@ export const routes: Routes = [
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
 
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
+  { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
 
 
   { path: 'test-back', component: TestBackComponent},

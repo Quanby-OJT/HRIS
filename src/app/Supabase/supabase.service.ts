@@ -1391,7 +1391,17 @@ async getParameters() {
     return data;
   }
 
+  // PDS READING
 
+  async getPersonalInfo(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('personal_information')
+      .select('*')
+    return data;
+  }
+  
+
+  // WRITING ACCESS STARTS HERE
   async insertFamilyBackground(data: any) {
     const { data: insertedData, error } = await this.supabase
       .from('family_background')

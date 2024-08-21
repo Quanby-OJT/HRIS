@@ -54,6 +54,7 @@ interface Employee {
 })
 export class PimamComponent implements OnInit{
   
+  
   public attendanceRecords: Attendance[] = [];
   public uniqueEmpAttendances: AttendanceRecords[] = [];
   public attendanceTodayData: AttendanceTodayData[] = [];

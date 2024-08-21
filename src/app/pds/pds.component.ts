@@ -1,8 +1,9 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, NgModule } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
-
+import { SupabaseService } from '../Supabase/supabase.service';
+import { CompensationRecordsComponent } from '../compensation-records/compensation-records.component';
 import 'flowbite';
 import { Datepicker } from 'flowbite';
 
@@ -11,15 +12,23 @@ interface SidebarItem {
   route: string;
 }
 
+
+
 @Component({
+  
   selector: 'app-pds',
   standalone: true,
-  imports: [RouterModule, SidebarNavigationModule, CommonModule],
+  imports: [RouterModule, SidebarNavigationModule, CommonModule, CompensationRecordsComponent],
   templateUrl: './pds.component.html',
   styleUrl: './pds.component.css'
 })
+
 export class PDSComponent implements AfterViewInit {
 
+  public activeView: string = "General Information";
+  public viewItems: string[] = ["General Information", "Employment Records", "Compensation Records", "DTR"];
+
+  constructor(private router: Router, private supabaseService: SupabaseService) {}
   ngAfterViewInit() {
     this.initializeDropdown();
     this.initializeDatepicker();
@@ -61,12 +70,13 @@ export class PDSComponent implements AfterViewInit {
     { name: 'Family Background', route: '/pds-family-background' }
   ];
 
-  constructor(
-    private router: Router
-  ) {}
 
   navigateTo = (route: string) => this.router.navigate([route]);
 
   // end of navigation bar set up
+
+  switchComponent(view: string) {
+    this.activeView = view;
+  }
 
 }

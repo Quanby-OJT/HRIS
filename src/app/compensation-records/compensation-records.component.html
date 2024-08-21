@@ -1,0 +1,160 @@
+
+    <div class="flex flex-col gap-5 w-full pt-8 px-6">
+        <div class="flex w-full h-20 gap-5">
+            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                <p class="font-semibold text-md">Base Salary</p>
+                <div class="flex items-end justify-between">
+                    <p id="total-program-count" class="text-3xl public-sans-font-bold">₱10,000</p> 
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                <p class="font-semibold text-md ">Total Allowances</p>
+                <div class="flex items-end justify-between">
+                    <p id="total-program-count" class="text-3xl public-sans-font-bold">₱0</p> 
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col w-1/4 px-4 py-3 bg-white rounded-lg shadow-md gap-1">
+                <p class="font-semibold text-md ">Total Benefits</p>
+                <div class="flex items-end justify-between">
+                    <p id="total-program-count" class="text-3xl public-sans-font-bold">₱-20,020</p> 
+                </div>
+            </div>
+        </div> 
+        <div class="flex gap-5 w-full">
+            <div class="flex flex-col w-1/2 rounded-lg shadow-md gap-1 bg-white">
+                <div class="flex items-center w-full rounded-t justify-between px-5 py-3">
+                    <p>Base Salary</p>
+                    <svg class="w-3 h-3 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                </div>
+                <div class="flex w-full justify-between px-5 py-3">
+                    <p>Total Allowances</p>
+                    <svg class="w-3 h-3 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                </div>
+                <div class="flex w-full rounded-b justify-between px-5 py-3">
+                    <p>Total Benefits</p>
+                    <svg class="w-3 h-3 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="w-1/2 rounded-lg shadow-md bg-white">
+                <apx-chart
+                    [series]="chartOptions.series"
+                    [chart]="chartOptions.chart"
+                    [labels]="chartOptions.labels"
+                    [responsive]="chartOptions.responsive"
+                    [plotOptions]="chartOptions.plotOptions"
+                ></apx-chart>
+            </div>
+            
+
+        </div>
+        <p class="text-xl font-semibold tracking-wider ">BREAKitDOWN yow</p>
+        <div class="overflow-x-auto">
+            <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                <table class="w-full text-left" >
+                    <thead class="bg-gray-100 z-10 sticky top-0">
+                        <tr>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Effective Date</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="cursor-pointer">
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+        <div class="w-full rounded-lg shadow-md bg-white">
+            <apx-chart
+                #lineChart
+                [series]="lineChartOptions.series"
+                [chart]="lineChartOptions.chart"
+                [xaxis]="lineChartOptions.xaxis"
+                [yaxis]="lineChartOptions.yaxis"
+                [dataLabels]="lineChartOptions.dataLabels"
+                [stroke]="lineChartOptions.stroke"
+                [legend]="lineChartOptions.legend"
+                [tooltip]="lineChartOptions.tooltip"
+                [grid]="lineChartOptions.grid"
+                [markers]="lineChartOptions.markers">
+            </apx-chart>
+        </div>
+        <p class="text-xl font-semibold tracking-wider mt-10">CONTRIBUTIONS/DEDUCTIONS</p>
+        <div class="overflow-x-auto">
+            <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                <table class="w-full text-left" >
+                    <thead class="bg-gray-100 z-10 sticky top-0">
+                        <tr>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Payslip Period</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Gross Pay</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Net Pay</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Deductions</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Bonus/Other Earnings</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="cursor-pointer">
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="text-xl font-semibold tracking-wider mt-10">PAYSLIPS</p>
+        <div class="overflow-x-auto">
+            <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                <table class="w-full text-left" >
+                    <thead class="bg-gray-100 z-10 sticky top-0">
+                        <tr>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="cursor-pointer">
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>

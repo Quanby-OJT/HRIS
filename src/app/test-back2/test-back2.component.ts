@@ -115,7 +115,7 @@ export class TestBack2Component {
     };
   
     // Call the Supabase service to insert data
-    this.supabaseService.insertPersonalInformation(formData)
+    this.supabaseService.insertPersonalInformationTest(formData)
       .then(response => {
         console.log('Data inserted successfully:', response);
       })

@@ -14,6 +14,7 @@ import { SupportTicketComponent } from './support-ticket/support-ticket.componen
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 import {PDSComponent} from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
+import { WorkExperienceComponent } from './work-experience/work-experience.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -31,5 +32,6 @@ export const routes: Routes = [
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
   
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
-  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] }
+  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
+  { path: 'work-experience', component: WorkExperienceComponent, canActivate: [authGuard]},
 ];

@@ -58,7 +58,8 @@ export class PDSComponent implements AfterViewInit {
 
   // navigation bar set up
   navBarItems: SidebarItem[] = [
-    { name: 'Family Background', route: '/pds-family-background' }
+    { name: 'Family Background', route: '/pds-family-background' },
+    { name: 'Work Experience', route: '/work-experience' }
   ];
 
   constructor(

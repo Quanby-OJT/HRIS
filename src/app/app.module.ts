@@ -32,7 +32,7 @@ export class DataService {
 
   getBackendData() {
     this.http.get('http://your-backend-url/api/data')
-     .subscribe(
+    .subscribe(
         (response: any) => {
           console.log(response);
         },

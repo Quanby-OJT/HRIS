@@ -1381,78 +1381,7 @@ async getParameters() {
     console.log('Test holiday added:', data);
     return data;
   }
-
-
-  // PIMAM DASHBOARD
-  async getEmployeesTable(): Promise<any> {
-    const { data, error } = await this.supabase
-        .from('profile')
-        .select('*')
-    return data;
-  }
-
-  // PDS READING
-
-  async getPersonalInfo(): Promise<any>{
-    const {data, error} = await this.supabase
-      .from('personal_information')
-      .select('*')
-    return data;
-  }
   
 
-  // WRITING ACCESS STARTS HERE
-  async insertFamilyBackground(data: any) {
-    const { data: insertedData, error } = await this.supabase
-      .from('family_background')
-      .insert(data);
-
-    return { data: insertedData, error };
-  }
-
-  // async insertPersonalInformation(data: any) {
-  //   const { data: response, error } = await this.supabase
-  //     .from('personal_information') // replace with your table name
-  //     .insert([data]);
-
-  //   if (error) {
-  //     throw new Error(error.message);
-  //   }
-  //   return response;
-  // }
-
-  async insertEducationalBackground(data: any) {
-    const { data: result, error } = await this.supabase
-      .from('educational_background')
-      .insert([data]);
   
-    return { result, error };
-  }
-
-  async insertPersonalInformation(formData: any) {
-    const { data, error } = await this.supabase
-      .from('personal_information_pds')
-      .insert([formData]);
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  }  
-
-  async insertPersonalInformationTest(formData: any) {
-    const { data, error } = await this.supabase
-      .from('personal_information')
-      .insert([formData]);
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  }  
-
-  
-
 }

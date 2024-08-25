@@ -8,10 +8,6 @@ import { LoginFailedComponent } from '../app/login-failed/login-failed.component
 import { SidebarNavigationComponent } from './sidebar-navigation/sidebar-navigation.component';
 import { AuditTrailComponent } from './audit-trail/audit-trail.component';
 import { WorkflowComponent } from './workflow-approval/workflow-approval.component';
-import { TestBackComponent } from './test-back/test-back.component';
-import { TestBack2Component } from './test-back2/test-back2.component';
-import { TestBack3Component } from './test-back3/test-back3.component';
-import { PDSComponent } from './pds/pds.component';
 
 @NgModule({
   imports: [
@@ -23,11 +19,7 @@ import { PDSComponent } from './pds/pds.component';
     LoginFailedComponent,
     AuditTrailComponent,
     SidebarNavigationComponent,
-    WorkflowComponent,
-    TestBackComponent,
-    TestBack2Component,
-    TestBack3Component,
-    PDSComponent
+    WorkflowComponent
   ],
 })
 export class AppModule { }

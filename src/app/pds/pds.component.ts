@@ -4,6 +4,9 @@ import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigat
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { CompensationRecordsComponent } from '../compensation-records/compensation-records.component';
+import { LeavesAttendanceRecordsComponent } from '../leaves-attendance-records/leaves-attendance-records.component';
+import 'flowbite';
+import { Datepicker } from 'flowbite';                                                                                                                                                                                                                     =======
 import { FormsModule } from '@angular/forms';
 
 interface SidebarItem {
@@ -14,6 +17,7 @@ interface SidebarItem {
 @Component({
   selector: 'app-pds',
   standalone: true,
+  imports: [RouterModule, SidebarNavigationModule, CommonModule, CompensationRecordsComponent, LeavesAttendanceRecordsComponent],
   imports: [RouterModule, SidebarNavigationModule, CommonModule, CompensationRecordsComponent, FormsModule],
   templateUrl: './pds.component.html',
   styleUrls: ['./pds.component.css'] // Fixed typo (styleUrl -> styleUrls)

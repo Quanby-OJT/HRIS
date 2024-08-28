@@ -1428,9 +1428,20 @@ async getParameters() {
   
     return { result, error };
   }
-  
 
   async insertPersonalInformation(formData: any) {
+    const { data, error } = await this.supabase
+      .from('personal_information_pds')
+      .insert([formData]);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }  
+
+  async insertPersonalInformationTest(formData: any) {
     const { data, error } = await this.supabase
       .from('personal_information')
       .insert([formData]);
@@ -1441,5 +1452,21 @@ async getParameters() {
 
     return data;
   }
+  
+
+
+
+async insertCivilServiceEligibility(tableName: string, formData: any) {
+
+  const { data, error } = await this.supabase
+    .from('civil_service_eligibility')
+    .insert([formData]);
+
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
 
 }

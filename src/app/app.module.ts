@@ -11,6 +11,8 @@ import { WorkflowComponent } from './workflow-approval/workflow-approval.compone
 import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
 import { TestBack3Component } from './test-back3/test-back3.component';
+import { TestBack4Component } from './test-back4/test-back4.component';
+
 import { PDSComponent } from './pds/pds.component';
 
 @NgModule({
@@ -27,6 +29,7 @@ import { PDSComponent } from './pds/pds.component';
     TestBackComponent,
     TestBack2Component,
     TestBack3Component,
+    TestBack4Component,
     PDSComponent
   ],
 })

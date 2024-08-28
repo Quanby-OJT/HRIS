@@ -16,6 +16,7 @@ import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
 import { TestBack3Component } from './test-back3/test-back3.component';
+import { TestBack4Component } from './test-back4/test-back4.component';
 import {PDSComponent} from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
 import { CompensationRecordsComponent } from './compensation-records/compensation-records.component';
@@ -42,6 +43,7 @@ export const routes: Routes = [
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},
+  { path: 'test-back4', component: TestBack4Component},
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] }
 

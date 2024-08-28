@@ -4,6 +4,7 @@ import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigat
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { CompensationRecordsComponent } from '../compensation-records/compensation-records.component';
+import { LeavesAttendanceRecordsComponent } from '../leaves-attendance-records/leaves-attendance-records.component';
 import 'flowbite';
 import { Datepicker } from 'flowbite';
 
@@ -18,7 +19,7 @@ interface SidebarItem {
   
   selector: 'app-pds',
   standalone: true,
-  imports: [RouterModule, SidebarNavigationModule, CommonModule, CompensationRecordsComponent],
+  imports: [RouterModule, SidebarNavigationModule, CommonModule, CompensationRecordsComponent, LeavesAttendanceRecordsComponent],
   templateUrl: './pds.component.html',
   styleUrl: './pds.component.css'
 })

@@ -1451,8 +1451,22 @@ async getParameters() {
     }
 
     return data;
-  }  
-
+  }
   
+
+
+
+async insertCivilServiceEligibility(tableName: string, formData: any) {
+
+  const { data, error } = await this.supabase
+    .from('civil_service_eligibility')
+    .insert([formData]);
+
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
 
 }

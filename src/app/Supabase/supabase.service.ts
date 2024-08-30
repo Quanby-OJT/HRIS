@@ -1399,7 +1399,17 @@ async getParameters() {
       .select('*')
     return data;
   }
-  
+
+  //COMPENSATION RECORDS PAGE QUERIES
+  async getEmployeeCompensationRecords(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('employee')
+      .select('compensation_benefits(*), employee_compensation(*)')
+    return {
+      compensation_benefits: data?.[0]['compensation_benefits'],
+      employee_compensation: data?.[0]['employee_compensation']
+    };
+  }
 
   // WRITING ACCESS STARTS HERE
   async insertFamilyBackground(data: any) {

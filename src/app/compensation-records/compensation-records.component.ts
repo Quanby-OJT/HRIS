@@ -1,6 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartComponent } from "ng-apexcharts";
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { RouterModule, Router } from '@angular/router';
+import { DecimalPipe, CommonModule  } from '@angular/common';
+import { SupabaseService } from '../Supabase/supabase.service';
 
 import {
   ApexNonAxisChartSeries,
@@ -40,21 +43,71 @@ export type LineChartOptions = {
   grid: ApexGrid;
   markers: ApexMarkers;
 };
+
+interface EmployeeCompensation {
+  employee_id: number;
+  base_salary: number;
+  allowances: number;
+  benefits: number;
+}
+
+interface EmployeeBenefits {
+  description: string;
+  amount: number;
+  effective_date: Date;
+  type: string;
+}
+
 @Component({
   selector: 'app-compensation-records',
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, DecimalPipe, CommonModule ],
   templateUrl: './compensation-records.component.html',
   styleUrl: './compensation-records.component.css'
 })
-export class CompensationRecordsComponent {
-  public chartOptions: ChartOptions;
+export class CompensationRecordsComponent implements OnInit{
+  public chartOptions: ChartOptions = {
+    series: [], 
+    chart: { type: 'pie' }, 
+    labels: [], 
+    responsive: [],
+    plotOptions: {}
+  };
   public lineChartOptions: LineChartOptions;
-  
+  public compensationTable: EmployeeCompensation[] = [];
+  public employeeBenefits: EmployeeBenefits[] = [];
 
-  constructor() {
+  ngOnInit(): void {
+    this.initializeData();
+  }
+
+  private async initializeData(): Promise<void> {
+    try {
+      await this.loadCompensationTable();
+      this.loadPieChart();
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  private async loadCompensationTable(): Promise<void> {
+    var compensationRecords: any = {
+      compensation_benefits: [],
+      employee_compensation: []
+    };
+
+    compensationRecords = await this.supabaseService.getEmployeeCompensationRecords();
+    this.compensationTable = compensationRecords.employee_compensation;
+    this.employeeBenefits = compensationRecords.compensation_benefits;
+
+    console.log("================");
+    console.log("this ", this.employeeBenefits);
+    console.log("================");
+  }
+
+  private loadPieChart(): void {
     this.chartOptions = {
-      series: [10000, 1000, 2000],
+      series: [this.compensationTable[0].base_salary, this.compensationTable[0].allowances, this.compensationTable[0].benefits],
       chart: {
         height: 150,
         width: 380,
@@ -89,7 +142,9 @@ export class CompensationRecordsComponent {
         offset: 0 // Center the data labels
       }
     } as ChartOptions;
+  }
 
+  constructor(private router: Router, private supabaseService: SupabaseService) {
     this.lineChartOptions = {
       series: [
         {
@@ -155,6 +210,5 @@ export class CompensationRecordsComponent {
         strokeWidth: 3
       }
     };
-    
   }
 }

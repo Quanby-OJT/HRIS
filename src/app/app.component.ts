@@ -1,9 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser  } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -28,4 +27,12 @@ export class AppComponent {
     const passwordField = document.getElementById('password') as HTMLInputElement;
     passwordField.type = this.passwordHidden ? 'password' : 'text';
   }
+
+  // constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  // ngOnInit(): void {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     initFlowbite();
+  //   }
+  // }
+
 }

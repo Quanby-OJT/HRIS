@@ -5,7 +5,6 @@ import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigatio
 import 'flowbite'; // Import Flowbite JS
 import { Datepicker, Modal } from 'flowbite';
 import { SupabaseService } from '../Supabase/supabase.service';
-import { initFlowbite } from 'flowbite';
 
 // TEMPORARY INTERFACE. SHOULD FOLLOW AND MOVE TO /models
 interface Attendance {
@@ -68,7 +67,6 @@ export class PimamComponent implements OnInit{
 
   ngOnInit(): void {
     this.initializeData();
-    initFlowbite();
   }
 
   private async initializeData(): Promise<void> {
@@ -150,12 +148,7 @@ export class PimamComponent implements OnInit{
   }
 
   personnelRowClicked(record: AttendanceRecords): void {
-    console.log('Personnel row clicked', record.name);
-    console.log(this.employees);
     this.selectedRecord = this.employees.find(empRecord => empRecord.email === record.name) || null;
-    
-
-
     // this.router.navigate(['/personnel', employee.email]);
   }
 

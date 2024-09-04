@@ -1404,11 +1404,20 @@ async getParameters() {
   async getEmployeeCompensationRecords(): Promise<any>{
     const {data, error} = await this.supabase
       .from('employee')
-      .select('compensation_benefits(*), employee_compensation(*)')
+      .select('compensation_benefits(*), employee_compensation(*), employee_deductions(*), employee_payslips(*)')
     return {
       compensation_benefits: data?.[0]['compensation_benefits'],
-      employee_compensation: data?.[0]['employee_compensation']
+      employee_compensation: data?.[0]['employee_compensation'],
+      employee_deductions: data?.[0]['employee_deductions'],
+      employee_payslips: data?.[0]['employee_payslips']
     };
+  }
+
+  async insertEmployeeCompensationRecord(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('compensation_benefits')
+      .insert(data);
+    return { data: insertedData, error };
   }
 
   // WRITING ACCESS STARTS HERE

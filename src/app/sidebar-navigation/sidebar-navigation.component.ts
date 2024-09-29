@@ -36,7 +36,10 @@ export class SidebarNavigationComponent {
     '/audit-trail': 'history',
     '/dtr': 'today',
     '/workflow-approval': 'person_add',
-    '/support-ticket': 'contact_support'
+    '/support-ticket': 'contact_support',
+    '/pimam': 'badge',
+    '/pds': 'account_circle',
+    '/loan-information': 'account_balance'
   };
 
   constructor(

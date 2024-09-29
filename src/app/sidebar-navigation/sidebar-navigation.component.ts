@@ -36,7 +36,8 @@ export class SidebarNavigationComponent {
     '/audit-trail': 'history',
     '/dtr': 'today',
     '/workflow-approval': 'person_add',
-    '/support-ticket': 'contact_support'
+    '/support-ticket': 'contact_support',
+    '/merits-and-violations' : 'list'
   };
 
   constructor(

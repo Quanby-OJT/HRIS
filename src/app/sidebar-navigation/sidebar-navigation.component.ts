@@ -24,7 +24,8 @@ export class SidebarNavigationComponent {
     { name: 'DTR', route: '/dtr' },
     { name: 'Workflow Approval', route: '/workflow-approval' },
     { name: 'PIMAM', route: '/pimam' },
-    {name: 'PDS', route: '/pds'}
+    { name: 'PDS', route: '/pds'},
+    { name: 'Merits and Violations', route: '/merits-and-violations'}
 
   ];
 

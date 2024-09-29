@@ -21,6 +21,8 @@ import {PDSComponent} from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
 import { CompensationRecordsComponent } from './compensation-records/compensation-records.component';
 
+import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -39,6 +41,7 @@ export const routes: Routes = [
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
   { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
 
+  { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
 
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},

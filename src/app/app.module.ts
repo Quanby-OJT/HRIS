@@ -15,6 +15,8 @@ import { TestBack4Component } from './test-back4/test-back4.component';
 
 import { PDSComponent } from './pds/pds.component';
 
+import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+
 @NgModule({
   imports: [
     HttpClientModule,
@@ -30,7 +32,8 @@ import { PDSComponent } from './pds/pds.component';
     TestBack2Component,
     TestBack3Component,
     TestBack4Component,
-    PDSComponent
+    PDSComponent,
+    MeritsAndViolationsComponent
   ],
 })
 export class AppModule { }

@@ -24,7 +24,8 @@ export class SidebarNavigationComponent {
     { name: 'DTR', route: '/dtr' },
     { name: 'Workflow Approval', route: '/workflow-approval' },
     { name: 'Personal Information Management', route: '/pimam' },
-    {name: 'Personal Data Sheet', route: '/pds'}
+    { name: 'Personal Data Sheet', route: '/pds'},
+    { name: 'Loan Information', route: '/loan-information'}
 
   ];
 

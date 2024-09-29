@@ -1,0 +1,66 @@
+<div class="flex">
+  <app-sidebar-navigation></app-sidebar-navigation>
+  <div class="flex flex-col w-full px-6 pt-6">
+    <!-- First Inner Div: Covering the entire width -->
+    <div class="flex flex-col w-full">
+      <p class="text-3xl font-bold text-neutral-900">Loan Information</p>
+      <p class="pb-5 text-slate-500 text-sm">Manage Loan Records</p>
+    </div>
+
+    <!-- Second Inner Div: Right under the first one -->
+    <div class="relative shadow-md sm:rounded-lg mt-6"> <!-- Added mt-6 for spacing -->
+      <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400 rounded-lg">
+        <thead class="text-xs text-white uppercase bg-blue-600 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Loan Name</th>
+                <th scope="col" class="px-6 py-3">Outstanding Balance</th>
+                <th scope="col" class="px-6 py-3">Total Paid</th>
+                <th scope="col" class="px-6 py-3">Last Payment</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Personal Loan
+                </th>
+                <td class="px-6 py-4">$5,000</td>
+                <td class="px-6 py-4">$2,000</td>
+                <td class="px-6 py-4">2024-09-15</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="bg-yellow-500 text-white text-center p-2 rounded-full dark:text-white">Pending</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">BDO Bank Loan</th>
+                <td class="px-6 py-4">$150,000</td>
+                <td class="px-6 py-4">$50,000</td>
+                <td class="px-6 py-4">2024-09-01</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="bg-green-500 text-white text-center p-2 rounded-full dark:text-white">Active</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Utang kay Jaycel</th>
+                <td class="px-6 py-4">$12,000</td>
+                <td class="px-6 py-4">$7,000</td>
+                <td class="px-6 py-4">2024-08-30</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="bg-red-500 text-white text-center p-2 rounded-full dark:text-white">Late</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

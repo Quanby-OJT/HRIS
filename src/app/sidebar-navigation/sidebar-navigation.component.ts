@@ -15,7 +15,7 @@ interface SidebarItem {
 export class SidebarNavigationComponent {
   isExpanded = false;
 
-  // sidebar buttons 
+  // sidebar buttons
   sidebarItems: SidebarItem[] = [
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Employee Management', route: '/user-management' },
@@ -23,8 +23,9 @@ export class SidebarNavigationComponent {
     { name: 'Audit Trail', route: '/audit-trail' },
     { name: 'DTR', route: '/dtr' },
     { name: 'Workflow Approval', route: '/workflow-approval' },
-    { name: 'PIMAM', route: '/pimam' },
-    { name: 'PDS', route: '/pds'},
+    { name: 'Personal Information Management', route: '/pimam' },
+    { name: 'Personal Data Sheet', route: '/pds'},
+    { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'}
 
   ];
@@ -37,7 +38,10 @@ export class SidebarNavigationComponent {
     '/dtr': 'today',
     '/workflow-approval': 'person_add',
     '/support-ticket': 'contact_support',
-    '/merits-and-violations' : 'list'
+    '/merits-and-violations' : 'list',
+    '/pimam': 'badge',
+    '/pds': 'account_circle',
+    '/loan-information': 'account_balance'
   };
 
   constructor(

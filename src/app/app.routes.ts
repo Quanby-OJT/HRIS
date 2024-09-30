@@ -17,9 +17,10 @@ import { TestBackComponent } from './test-back/test-back.component';
 import { TestBack2Component } from './test-back2/test-back2.component';
 import { TestBack3Component } from './test-back3/test-back3.component';
 import { TestBack4Component } from './test-back4/test-back4.component';
-import {PDSComponent} from './pds/pds.component';
+import { PDSComponent } from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
 import { CompensationRecordsComponent } from './compensation-records/compensation-records.component';
+import { LoanInformationComponent } from './loan-information/loan-information.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
 
@@ -48,6 +49,7 @@ export const routes: Routes = [
   { path: 'test-back3', component: TestBack3Component},
   { path: 'test-back4', component: TestBack4Component},
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
-  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] }
+  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
+  { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] }
 
 ];

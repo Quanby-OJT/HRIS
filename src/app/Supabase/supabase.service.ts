@@ -1515,6 +1515,14 @@ async getProfiles() {
   return { data, error }; // Return both data and error
 }
 
+async getRecords() {
+  const { data, error } = await this.supabase
+    .from('merits_and_violations')
+    .select('*');
+
+  return { data, error };
+}
+
 
 
 

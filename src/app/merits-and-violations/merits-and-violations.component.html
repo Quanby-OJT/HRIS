@@ -2,80 +2,137 @@
     <app-sidebar-navigation></app-sidebar-navigation>
     <div class="flex-grow">
         <div class="min-h-screen">
-            <main class="p-6">
+            <div class="p-6">
                 <div class="mb-6">
                     <p class="mb-2 text-3xl font-bold text-neutral-900">Merits and Violations<br></p>
                     <p class="mb-2 pb-5 text-slate-500 text-sm">Configure and view merits and violations of employees</p>
                     
-                    <form [formGroup]="meritsViolationsForm" (ngSubmit)="submitForm()">
-                        <div>
-                            <label for="violations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Violations:</label>
-                            <input id="violations" formControlName="violations" type="text" placeholder="Enter violations"
-                                class="bg-white border border-blue-800 text-black text-sm rounded-lg focus:ring-4 focus:ring-blue-300 block w-full p-2.5 dark:bg-blue-600 dark:border-blue-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-800" />
-                        </div>
-                    
-                        <div>
-                            <label for="merits" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Merits:</label>
-                            <input id="merits" formControlName="merits" type="text" placeholder="Enter merits"
-                                class="bg-white\ border border-blue-800 text-black text-sm rounded-lg focus:ring-4 focus:ring-blue-300 block w-full p-2.5 dark:bg-blue-600 dark:border-blue-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-800" />
-                        </div>
-                    
-                        <div>
-                            <label for="date_of_record_v" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Violation:</label>
-                            <input id="date_of_record_v" formControlName="date_of_record_v" type="date"
-                                class="bg-white\ border border-blue-800 text-black text-sm rounded-lg focus:ring-4 focus:ring-blue-300 block w-full p-2.5 dark:bg-blue-600 dark:border-blue-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-800" />
-                            <div *ngIf="meritsViolationsForm.get('date_of_record_v')?.invalid && meritsViolationsForm.get('date_of_record_v')?.touched">
-                                <small class="error text-red-500">Date of violation is required.</small>
+                    <div class="overflow-y-auto">
+                        <!--Upper Padding-->
+                        <div class="rounded-xl shadow-lg bg-white">
+                            <!-- Row with search input and buttons -->
+                            <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+                            <div class="relative w-[20%]">
+                                <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
+                                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
                             </div>
-                        </div>
-                    
-                        <div>
-                            <label for="date_of_record_m" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Merit:</label>
-                            <input id="date_of_record_m" formControlName="date_of_record_m" type="date"
-                                class="bg-white\ border border-blue-800 text-black text-sm rounded-lg focus:ring-4 focus:ring-blue-300 block w-full p-2.5 dark:bg-blue-600 dark:border-blue-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-800" />
-                            <div *ngIf="meritsViolationsForm.get('date_of_record_m')?.invalid && meritsViolationsForm.get('date_of_record_m')?.touched">
-                                <small class="error text-red-500">Date of merit is required.</small>
+                        
+                            <div class="flex items-center space-x-4">
+                                <!-- Filter Feature -->
+                                <div class="relative">
+                                <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
+                                    <option value="none">Default</option>
+                                    <option value="asc">Sort A-Z</option>
+                                    <option value="desc">Sort Z-A</option>
+                                </select>
+                                <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                        
+                        
+                                <!-- Pagination -->
+                                <button class="text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+                                <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+                                <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
                             </div>
-                        </div>
-                    
-                        <div>
-                            <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">User:</label>
-                            <select id="user_id" formControlName="user_id"
-                                class="bg-white\ border border-blue-800 text-black text-sm rounded-lg focus:ring-4 focus:ring-blue-300 block w-full p-2.5 dark:bg-blue-600 dark:border-blue-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-800">
-                                <option value="" disabled>Select a user</option>
-                                <option *ngFor="let profile of profiles" [value]="profile.user_id">{{ profile.first_name }} {{ profile.mid_name }} {{ profile.surname }}</option>
-                            </select>
-                            <div *ngIf="meritsViolationsForm.get('user_id')?.invalid && meritsViolationsForm.get('user_id')?.touched">
-                                <small class="error text-red-500">User selection is required.</small>
                             </div>
-                        </div>
-                    
-                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
-                    </form>
-                    
-
-                    
-                    <!-- <div class="overflow-x-auto">
-                        <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
-                            <table class="w-full text-left" >
-                                <thead class="bg-gray-100 z-10 sticky top-0">
-                                    <tr>
-                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Merits</th>
-                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Violations</th>
+                        
+                            <!-- Display the employee list -->
+                            <div *ngIf="!selectedProfile">
+                            <div *ngIf="filteredProfiles.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+                                <table class="table-fixed w-full">
+                                <thead>
+                                    <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
+                                    <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">MERITS</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">VIOLATIONS</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    
-
+                                <tbody class="text-gray-500 text-sm font-light">
+                                    <tr *ngFor="let user of paginatedProfiles; let i = index" class="border-b border-gray-200 hover:bg-gray-50" (click)="selectProfile(user)">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img [src]="user.photo_url" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>
+                                    <td class="py-3 px-6 text-left truncate">{{ user.first_name }} {{ user.surname }}</td>
+                                    <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
+                                    <td class="py-3 px-6 text-left truncate">{{ getMeritsCount(user.user_id) }}</td>
+                                    <td class="py-3 px-6 text-left truncate">{{ getViolationsCount(user.user_id) }}</td>
+                                    </tr>
                                 </tbody>
-                            </table>
-
+                                </table>
+                            </div>
+                            <div *ngIf="filteredProfiles.length === 0" class="py-3 px-6 text-center text-gray-500">
+                                <p>No employees found.</p>
+                            </div>
+                            </div>
+                        
+                            <!-- Display Selected Profile Merits and Violations -->
+                            <div *ngIf="selectedProfile" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Merits and Violations for {{ selectedProfile.first_name }} {{ selectedProfile.surname }}</h2>
+                        
+                            <ng-container *ngIf="getRecordsForProfile(selectedProfile.user_id).length > 0; else noRecords">
+                                <table class="table-fixed w-full">
+                                <thead>
+                                    <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">Violations</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">Merits</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">Date of Record (Violation)</th>
+                                    <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">Date of Record (Merit)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-500 text-sm font-light">
+                                    <tr *ngFor="let record of getRecordsForProfile(selectedProfile.user_id)" class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-6">{{ record.violations }}</td>
+                                    <td class="py-3 px-6">{{ record.merits }}</td>
+                                    <td class="py-3 px-6">{{ record.date_of_record_v | date }}</td>
+                                    <td class="py-3 px-6">{{ record.date_of_record_m | date }}</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </ng-container>
+                        
+                            <!-- Template for no records -->
+                            <ng-template #noRecords>
+                                <div class="py-3 px-6 text-center text-gray-500">
+                                <p>No merits or violations recorded for {{ selectedProfile.first_name }} {{ selectedProfile.surname }}.</p>
+                                </div>
+                            </ng-template>
+                        
+                            <div class="mt-4">
+                                <button (click)="showForm = true" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Merit or Violation</button>
+                                <button (click)="backToEmployeeList()" class="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Back</button>
+                            </div>
+                            </div>
                         </div>
-                    </div> -->
+  
+  
+                        
+                        <!-- Merit and Violation Form -->
+                        <div *ngIf="showForm" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar mt-4">
+                            <form [formGroup]="meritsViolationsForm" (ngSubmit)="submitForm()" class="space-y-4">
+                            <label for="violations" class="block text-gray-700">Violations:</label>
+                            <input id="violations" formControlName="violations" class="border rounded w-full px-3 py-2" placeholder="Enter violations">
+                            
+                            <label for="merits" class="block text-gray-700">Merits:</label>
+                            <input id="merits" formControlName="merits" class="border rounded w-full px-3 py-2" placeholder="Enter merits">
+                            
+                            <label for="date_of_record_v" class="block text-gray-700">Date of Record (Violation):</label>
+                            <input id="date_of_record_v" type="date" formControlName="date_of_record_v" class="border rounded w-full px-3 py-2">
+                            
+                            <label for="date_of_record_m" class="block text-gray-700">Date of Record (Merit):</label>
+                            <input id="date_of_record_m" type="date" formControlName="date_of_record_m" class="border rounded w-full px-3 py-2">
+                            
+                            <label for="user_id" class="block text-gray-700">User:</label>
+                            <select id="user_id" formControlName="user_id" class="border rounded w-full px-3 py-2">
+                                <option *ngFor="let profile of profiles" [value]="profile.user_id">{{ profile.first_name }} {{ profile.surname }}</option>
+                            </select>
+                        
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </main>
         </div>
     </div>
 </div>

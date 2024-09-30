@@ -1,0 +1,26 @@
+<div class="flex flex-row h-screen w-screen">
+  <app-sidebar-navigation></app-sidebar-navigation>
+  <!-- Left Main Column -->
+  <div class="w-[30%] h-auto flex flex-col items-center">
+    <!-- Profile Heading Div -->
+    <div class="bg-white border shadow-lg rounded-lg m-4 p-4 flex flex-row w-full justify-evenly">
+      <div class="flex flex-row justify-center border p-4 basis-2/5">
+        <img src="assets/user_icon.svg" class="h-36 w-auto" alt="Person Circle Icon">
+      </div>
+      <div class="flex flex-col border justify-center items-center text-center basis-3/5">
+        <span class="m-0 text-2xl">Username</span>
+        <span class="m-0 text-gray-600">Position</span>
+      </div>
+    </div>
+    <!-- Div For Section Headers -->
+    <div class="flex flex-col flex-grow border shadow-lg rounded-lg bg-white justify-evenly gap-4 items-center p-2 w-full">
+      <app-section-list></app-section-list>
+    </div>
+
+
+  </div>
+  <!-- Right Main Column -->
+  <div class="w-[70%] h-auto bg-white rounded-lg shadow-lg m-4 p-4 border">
+    50% Width
+  </div>
+</div>

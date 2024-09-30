@@ -23,6 +23,7 @@ import { CompensationRecordsComponent } from './compensation-records/compensatio
 import { LoanInformationComponent } from './loan-information/loan-information.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -50,6 +51,7 @@ export const routes: Routes = [
   { path: 'test-back4', component: TestBack4Component},
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
-  { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] }
+  { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
+  { path: 'personal-data-sheet', component: PersonalDataSheetComponent, canActivate: [authGuard] }
 
 ];

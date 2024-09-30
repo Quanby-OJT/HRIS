@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     RouterOutlet
   ]
-  
+
 })
 export class AppComponent {
   title = 'HRIS_login-page';

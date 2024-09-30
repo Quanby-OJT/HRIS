@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
+import { SupabaseService } from '../Supabase/supabase.service';
 
 interface SidebarItem {
   name: string;

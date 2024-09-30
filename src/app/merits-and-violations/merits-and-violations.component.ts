@@ -14,15 +14,15 @@ import { CommonModule } from '@angular/common';
 export class MeritsAndViolationsComponent implements OnInit {
   meritsViolationsForm: FormGroup;
   profiles: any[] = [];
-  filteredProfiles: any[] = []; // To hold the filtered profiles for search
-  selectedProfile: any; // To hold the selected profile
-  showForm: boolean = false; // To toggle the visibility of the form
-  records: any[] = []; // To hold merits and violations records
-  searchTerm: string = ''; // For search functionality
-  isEditing: boolean = false; // Manage mode
-  currentPage: number = 1; // For pagination
-  pageSize: number = 10; // Number of items per page
-  totalPages: number = 1; // Total number of pages
+  filteredProfiles: any[] = []; 
+  selectedProfile: any; 
+  showForm: boolean = false; 
+  records: any[] = []; 
+  searchTerm: string = ''; 
+  isEditing: boolean = false; 
+  currentPage: number = 1; 
+  pageSize: number = 10; 
+  totalPages: number = 1; 
   paginatedProfiles: any[] = [];
 
   constructor(private fb: FormBuilder, private supabaseService: SupabaseService) {
@@ -100,9 +100,9 @@ export class MeritsAndViolationsComponent implements OnInit {
   
         if (result) {
           console.log('Data inserted successfully:', result);
-          this.records.push(formValue); // Update records locally
-          this.showForm = false; // Hide the form after submission
-          this.meritsViolationsForm.reset(); // Reset the form fields
+          this.records.push(formValue); 
+          this.showForm = false; 
+          this.meritsViolationsForm.reset(); 
         } else {
           console.error('Failed to insert data. Result is undefined or false.');
         }
@@ -115,24 +115,21 @@ export class MeritsAndViolationsComponent implements OnInit {
   }
   
 
-  // Method to show the form
   addMeritOrViolation() {
     if (!this.selectedProfile) {
       console.warn('No profile selected. Please select a profile before adding a merit or violation.');
-      return; // Do not show the form if no profile is selected
+      return; 
     }
   
     this.showForm = true;
-    this.meritsViolationsForm.reset(); // Reset the form fields
-    this.meritsViolationsForm.patchValue({ user_id: this.selectedProfile.user_id }); // Pre-fill user_id if needed
+    this.meritsViolationsForm.reset(); 
+    this.meritsViolationsForm.patchValue({ user_id: this.selectedProfile.user_id }); 
   }
 
-  // Method to cancel and hide the form
   cancelForm() {
     this.showForm = false; 
   }
 
-  // Search method
   searchTable() {
     if (this.searchTerm.trim() === '') {
       this.filteredProfiles = this.profiles; 
@@ -147,7 +144,6 @@ export class MeritsAndViolationsComponent implements OnInit {
     this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
-  // Sort method - Updated to refresh pagination
   onSortOptionChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     if (value === 'asc') {
@@ -162,14 +158,12 @@ export class MeritsAndViolationsComponent implements OnInit {
     this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
-  // Pagination logic
   getPaginatedProfiles() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     return this.filteredProfiles.slice(startIndex, endIndex);
   }
 
-  // Pagination - Previous page
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -177,7 +171,6 @@ export class MeritsAndViolationsComponent implements OnInit {
     }
   }
 
-  // Pagination - Next page
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;

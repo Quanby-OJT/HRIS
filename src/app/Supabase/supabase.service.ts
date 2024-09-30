@@ -1473,8 +1473,6 @@ async getParameters() {
   }
   
 
-
-
 async insertCivilServiceEligibility(tableName: string, formData: any) {
 
   const { data, error } = await this.supabase
@@ -1487,12 +1485,14 @@ async insertCivilServiceEligibility(tableName: string, formData: any) {
   return data;
 }
 
+//MERITS AND VIOLATIONS
+
 async insertMeritOrViolation(record: {
   violations: string,
   merits: string,
   date_of_record_v: string | null,
   date_of_record_m: string | null,
-  user_id: number // Use user_id
+  user_id: number 
 }) {
   const { data, error } = await this.supabase
     .from('merits_and_violations')
@@ -1501,10 +1501,10 @@ async insertMeritOrViolation(record: {
       merits: record.merits,
       date_of_record_v: record.date_of_record_v,
       date_of_record_m: record.date_of_record_m,
-      user_id: record.user_id // Use user_id
+      user_id: record.user_id 
     }]);
 
-  return { data, error }; // Return both data and error
+  return { data, error }; 
 }
 
 async getProfiles() {
@@ -1512,7 +1512,7 @@ async getProfiles() {
     .from('profile')
     .select('*');
 
-  return { data, error }; // Return both data and error
+  return { data, error }; 
 }
 
 async getRecords() {

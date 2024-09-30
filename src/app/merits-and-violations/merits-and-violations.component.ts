@@ -48,7 +48,7 @@ export class MeritsAndViolationsComponent implements OnInit {
     // Fetch records for all profiles
     this.records = await this.fetchAllRecords();
     this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize); // Calculate total pages
-    this.paginatedProfiles = this.getPaginatedProfiles()
+    this.paginatedProfiles = this.getPaginatedProfiles(); // Initialize paginated profiles
   }
 
   async fetchAllRecords() {
@@ -103,6 +103,7 @@ export class MeritsAndViolationsComponent implements OnInit {
     }
   }
 
+  // Search method - Updated to refresh pagination
   searchTable() {
     if (this.searchTerm.trim() === '') {
       this.filteredProfiles = this.profiles; // Show all if no search term
@@ -114,8 +115,10 @@ export class MeritsAndViolationsComponent implements OnInit {
     }
     this.currentPage = 1; // Reset to first page after searching
     this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize);
+    this.paginatedProfiles = this.getPaginatedProfiles(); // Refresh paginated profiles
   }
 
+  // Sort method - Updated to refresh pagination
   onSortOptionChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     if (value === 'asc') {
@@ -127,23 +130,29 @@ export class MeritsAndViolationsComponent implements OnInit {
     }
     this.currentPage = 1; // Reset to first page after sorting
     this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize);
+    this.paginatedProfiles = this.getPaginatedProfiles(); // Refresh paginated profiles
   }
 
+  // Pagination logic
   getPaginatedProfiles() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     return this.filteredProfiles.slice(startIndex, endIndex);
   }
 
+  // Pagination - Previous page
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.paginatedProfiles = this.getPaginatedProfiles(); // Update the paginated profiles
     }
   }
 
+  // Pagination - Next page
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
+      this.paginatedProfiles = this.getPaginatedProfiles(); // Update the paginated profiles
     }
   }
 }

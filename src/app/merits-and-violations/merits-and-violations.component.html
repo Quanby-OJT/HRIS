@@ -69,7 +69,7 @@
                         
                             <!-- Display Selected Profile Merits and Violations -->
                             <div *ngIf="selectedProfile" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
-                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Merits and Violations for {{ selectedProfile.first_name }} {{ selectedProfile.surname }}</h2>
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2 mx-3">Merits and Violations for {{ selectedProfile.first_name }} {{ selectedProfile.surname }}</h2>
                         
                             <ng-container *ngIf="getRecordsForProfile(selectedProfile.user_id).length > 0; else noRecords">
                                 <table class="table-fixed w-full">

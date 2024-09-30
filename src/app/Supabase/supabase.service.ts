@@ -1487,5 +1487,35 @@ async insertCivilServiceEligibility(tableName: string, formData: any) {
   return data;
 }
 
+async insertMeritOrViolation(record: {
+  violations: string,
+  merits: string,
+  date_of_record_v: string | null,
+  date_of_record_m: string | null,
+  user_id: number // Use user_id
+}) {
+  const { data, error } = await this.supabase
+    .from('merits_and_violations')
+    .insert([{
+      violations: record.violations,
+      merits: record.merits,
+      date_of_record_v: record.date_of_record_v,
+      date_of_record_m: record.date_of_record_m,
+      user_id: record.user_id // Use user_id
+    }]);
+
+  return { data, error }; // Return both data and error
+}
+
+async getProfiles() {
+  const { data, error } = await this.supabase
+    .from('profile')
+    .select('*');
+
+  return { data, error }; // Return both data and error
+}
+
+
+
 
 }

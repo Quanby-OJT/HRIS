@@ -6,20 +6,68 @@
                 <div class="mb-6">
                     <p class="mb-2 text-3xl font-bold text-neutral-900">Merits and Violations<br></p>
                     <p class="mb-2 pb-5 text-slate-500 text-sm">Configure and view merits and violations of employees</p>
-                    <div class="flex">
-                      
-                        <!-- TODO: display table containing employees
-                        
-                        search employees -- filters a-z or z-a 
-                       cols - employees | merits | violations 
-                       rows - employee1 | merit1 | violation1
-                                        | desc   | desc
-                                        | date   | date
-                                        
-                        clicking employee displays all merits and violations of employee?
+                    
+                    <form [formGroup]="meritsViolationsForm" (ngSubmit)="submitForm()">
+                        <div>
+                            <label for="violations">Violations:</label>
+                            <input id="violations" formControlName="violations" type="text" />
+                        </div>
+                    
+                        <div>
+                            <label for="merits">Merits:</label>
+                            <input id="merits" formControlName="merits" type="text" />
+                        </div>
+                    
+                        <div>
+                            <label for="date_of_record_v">Date of Violation:</label>
+                            <input id="date_of_record_v" formControlName="date_of_record_v" type="date" />
+                            <div *ngIf="meritsViolationsForm.get('date_of_record_v')?.invalid && meritsViolationsForm.get('date_of_record_v')?.touched">
+                                <small class="error">Date of violation is required.</small>
+                            </div>
+                        </div>
+                    
+                        <div>
+                            <label for="date_of_record_m">Date of Merit:</label>
+                            <input id="date_of_record_m" formControlName="date_of_record_m" type="date" />
+                            <div *ngIf="meritsViolationsForm.get('date_of_record_m')?.invalid && meritsViolationsForm.get('date_of_record_m')?.touched">
+                                <small class="error">Date of merit is required.</small>
+                            </div>
+                        </div>
+                    
+                        <div>
+                            <label for="user_id">User:</label>
+                            <select id="user_id" formControlName="user_id">
+                                <option value="" disabled>Select a user</option>
+                                <option *ngFor="let profile of profiles" [value]="profile.user_id">{{ profile.first_name }} {{ profile.mid_name }} {{ profile.surname }}</option>
+                            </select>
+                            <div *ngIf="meritsViolationsForm.get('user_id')?.invalid && meritsViolationsForm.get('user_id')?.touched">
+                                <small class="error">User selection is required.</small>
+                            </div>
+                        </div>
+                    
+                        <button type="submit">Submit</button>
+                    </form>
 
-                                        -->
-                    </div>
+                    
+                    <!-- <div class="overflow-x-auto">
+                        <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                            <table class="w-full text-left" >
+                                <thead class="bg-gray-100 z-10 sticky top-0">
+                                    <tr>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Merits</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Violations</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div> -->
                 </div>
             </main>
         </div>

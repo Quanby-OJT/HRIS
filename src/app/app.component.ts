@@ -3,6 +3,8 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, PLATFORM_ID, Inject } from '
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule, isPlatformBrowser  } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { initFlowbite } from 'flowbite';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -28,6 +30,8 @@ export class AppComponent {
     passwordField.type = this.passwordHidden ? 'password' : 'text';
   }
 
+}
+
   // constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   // ngOnInit(): void {
   //   if (isPlatformBrowser(this.platformId)) {
@@ -35,4 +39,3 @@ export class AppComponent {
   //   }
   // }
 
-}

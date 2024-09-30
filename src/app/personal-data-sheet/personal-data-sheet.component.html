@@ -3,24 +3,75 @@
   <!-- Left Main Column -->
   <div class="w-[30%] h-auto flex flex-col items-center">
     <!-- Profile Heading Div -->
-    <div class="bg-white border shadow-lg rounded-lg m-4 p-4 flex flex-row w-full justify-evenly">
-      <div class="flex flex-row justify-center border p-4 basis-2/5">
-        <img src="assets/user_icon.svg" class="h-36 w-auto" alt="Person Circle Icon">
+    <div class="bg-white border shadow-lg rounded-lg m-4 mb-2 p-4 flex flex-row w-full justify-evenly basis-1/5">
+      <div class="flex flex-row justify-center basis-2/5">
+        <img src="assets/user_icon.svg" class="h-24 w-auto" alt="Person Circle Icon">
       </div>
-      <div class="flex flex-col border justify-center items-center text-center basis-3/5">
+      <div class="flex flex-col justify-center items-center text-center basis-3/5">
         <span class="m-0 text-2xl">Username</span>
         <span class="m-0 text-gray-600">Position</span>
       </div>
     </div>
     <!-- Div For Section Headers -->
-    <div class="flex flex-col flex-grow border shadow-lg rounded-lg bg-white justify-evenly gap-4 items-center p-2 w-full">
+    <div class="flex flex-col border shadow-lg rounded-lg bg-white justify-evenly gap-4 items-center mt-2 mb-4 p-0 w-full basis-4/5">
       <app-section-list></app-section-list>
     </div>
 
 
   </div>
   <!-- Right Main Column -->
-  <div class="w-[70%] h-auto bg-white rounded-lg shadow-lg m-4 p-4 border">
-    50% Width
+  <div class="w-[70%] h-auto bg-white rounded-lg shadow-lg m-4 p-6 border">
+
+    <div class="flex justify-between mb-1">
+      <span class="text-base font-medium text-blue-700 dark:text-white">Step 1/8</span>
+      <span class="text-sm font-medium text-blue-700 dark:text-white">12.5%</span>
+    </div>
+    <div class="flex flex-row w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+      <div class="bg-blue-600 h-2.5 rounded-full w-[12.5%]"></div>
+    </div>
+    <h1>Personal Information</h1>
+
+    <form>
+      <div class="grid gap-6 mb-6 md:grid-cols-2">
+          <div>
+              <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+              <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+          </div>
+          <div>
+              <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
+              <input type="text" id="middle_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+          </div>
+          <div>
+              <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+              <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+          </div>
+          <div>
+              <label for="name_ext" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name Extension (e.g. Sr., I)</label>
+              <input type="text" id="name_ext" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+          </div>
+          <div>
+            <label for="birthdate" class="block mb-2 text-sm font-medium text-gray-900">Date of Birth</label>
+            <div id="birthdate" class="card flex justify-content-center w-full">
+              <p-calendar [(ngModel)]="date" showClear="true" inputStyleClass="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" />
+            </div>
+          </div>
+          <div>
+              <label for="birthplace" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Place of Birth</label>
+              <input type="text" id="birthplace" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+          </div>
+          <div>
+            <label for="sex" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
+            <input type="text" id="sex" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+          </div>
+        <div>
+          <label for="civil_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Civil Status</label>
+          <input type="text" id="civil_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+        </div>
+        <div class="col-span-2 center place-self-center mt-12">
+          <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center self-center">Next</button>
+        </div>
+      </div>
+    </form>
+
   </div>
 </div>

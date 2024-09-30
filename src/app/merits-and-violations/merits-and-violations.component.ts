@@ -42,13 +42,13 @@ export class MeritsAndViolationsComponent implements OnInit {
       this.profiles = [];
     } else {
       this.profiles = profiles || [];
-      this.filteredProfiles = [...this.profiles]; // Initialize filtered profiles
+      this.filteredProfiles = [...this.profiles]; 
     }
 
     // Fetch records for all profiles
     this.records = await this.fetchAllRecords();
-    this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize); // Calculate total pages
-    this.paginatedProfiles = this.getPaginatedProfiles(); // Initialize paginated profiles
+    this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize); 
+    this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
   async fetchAllRecords() {
@@ -60,62 +60,91 @@ export class MeritsAndViolationsComponent implements OnInit {
     return records || [];
   }
 
-  // Method to select a profile
   selectProfile(profile: any) {
     this.selectedProfile = profile;
-    this.showForm = false; // Reset form visibility
+    this.showForm = false; 
   }
 
-  // Method to go back to the employee list
   backToEmployeeList() {
-    this.selectedProfile = null; // Reset selected profile
-    this.showForm = false; // Reset form visibility
+    this.selectedProfile = null; 
+    this.showForm = false; 
   }
 
-  // Method to get records for the selected profile
   getRecordsForProfile(user_id: number) {
     return this.records.filter(record => record.user_id === user_id);
   }
 
-  // Fetch merit count for a profile
   getMeritsCount(user_id: number) {
     return this.records.filter(record => record.user_id === user_id && record.merits).length;
   }
 
-  // Fetch violations count for a profile
   getViolationsCount(user_id: number) {
     return this.records.filter(record => record.user_id === user_id && record.violations).length;
   }
 
-  // Submit form for adding merits/violations
+  getViolationsForSelectedProfile() {
+    return this.getRecordsForProfile(this.selectedProfile.user_id).filter(record => record.violations);
+  }
+
+  getMeritsForSelectedProfile() {
+      return this.getRecordsForProfile(this.selectedProfile.user_id).filter(record => record.merits);
+  }
+
+
   async submitForm() {
     if (this.meritsViolationsForm.valid) {
       const formValue = { ...this.meritsViolationsForm.value, user_id: this.selectedProfile.user_id };
-      const result = await this.supabaseService.insertMeritOrViolation(formValue);
-
-      if (result) {
-        console.log('Data inserted successfully:', result);
-        this.records.push(formValue); // Update records locally
-        this.showForm = false; // Hide the form after submission
-      } else {
-        console.error('Failed to insert data');
+  
+      try {
+        const result = await this.supabaseService.insertMeritOrViolation(formValue);
+  
+        if (result) {
+          console.log('Data inserted successfully:', result);
+          this.records.push(formValue); // Update records locally
+          this.showForm = false; // Hide the form after submission
+          this.meritsViolationsForm.reset(); // Reset the form fields
+        } else {
+          console.error('Failed to insert data. Result is undefined or false.');
+        }
+      } catch (error) {
+        console.error('Error inserting data:', error);
       }
+    } else {
+      console.warn('Form is invalid:', this.meritsViolationsForm.errors);
     }
   }
+  
 
-  // Search method - Updated to refresh pagination
+  // Method to show the form
+  addMeritOrViolation() {
+    if (!this.selectedProfile) {
+      console.warn('No profile selected. Please select a profile before adding a merit or violation.');
+      return; // Do not show the form if no profile is selected
+    }
+  
+    this.showForm = true;
+    this.meritsViolationsForm.reset(); // Reset the form fields
+    this.meritsViolationsForm.patchValue({ user_id: this.selectedProfile.user_id }); // Pre-fill user_id if needed
+  }
+
+  // Method to cancel and hide the form
+  cancelForm() {
+    this.showForm = false; 
+  }
+
+  // Search method
   searchTable() {
     if (this.searchTerm.trim() === '') {
-      this.filteredProfiles = this.profiles; // Show all if no search term
+      this.filteredProfiles = this.profiles; 
     } else {
       this.filteredProfiles = this.profiles.filter(profile =>
         profile.first_name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         profile.surname.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
-    this.currentPage = 1; // Reset to first page after searching
+    this.currentPage = 1; 
     this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize);
-    this.paginatedProfiles = this.getPaginatedProfiles(); // Refresh paginated profiles
+    this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
   // Sort method - Updated to refresh pagination
@@ -126,11 +155,11 @@ export class MeritsAndViolationsComponent implements OnInit {
     } else if (value === 'desc') {
       this.filteredProfiles.sort((a, b) => b.first_name.localeCompare(a.first_name));
     } else {
-      this.filteredProfiles = [...this.profiles]; // Reset to default order
+      this.filteredProfiles = [...this.profiles]; 
     }
-    this.currentPage = 1; // Reset to first page after sorting
+    this.currentPage = 1; 
     this.totalPages = Math.ceil(this.filteredProfiles.length / this.pageSize);
-    this.paginatedProfiles = this.getPaginatedProfiles(); // Refresh paginated profiles
+    this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
   // Pagination logic
@@ -144,7 +173,7 @@ export class MeritsAndViolationsComponent implements OnInit {
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.paginatedProfiles = this.getPaginatedProfiles(); // Update the paginated profiles
+      this.paginatedProfiles = this.getPaginatedProfiles(); 
     }
   }
 
@@ -152,7 +181,7 @@ export class MeritsAndViolationsComponent implements OnInit {
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.paginatedProfiles = this.getPaginatedProfiles(); // Update the paginated profiles
+      this.paginatedProfiles = this.getPaginatedProfiles(); 
     }
   }
 }

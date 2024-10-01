@@ -1,0 +1,19 @@
+/* Styling the wrapper around the calendar */
+.custom-calendar .p-inputtext {
+  background-color: green; /* custom background */
+  color: #111827; /* custom text color */
+  font-size: 14px; /* font size */
+  border-radius: 0.5rem; /* rounded corners */
+  padding: 0.5rem; /* padding inside the input */
+}
+
+/* Styling the calendar popup */
+.custom-calendar .p-datepicker {
+  background-color: #ff0000;
+  border-color: #d1d5db;
+}
+
+/* Styling the calendar icons (like the date picker icon) */
+.custom-calendar .p-datepicker-trigger {
+  color: #6b7280;
+}

@@ -1,10 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 /* ./src/styles.css */
-
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 
 /* @tailwind base;
 @tailwind components;
@@ -32,19 +32,18 @@ body {
     width: 5px;
     height: 10px;
   }
-  
+
   .custom-scrollbar {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: 5x;  /* Firefox */
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgb(183, 183, 183);
     border-radius: 50px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  

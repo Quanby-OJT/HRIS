@@ -24,6 +24,9 @@ import { LoanInformationComponent } from './loan-information/loan-information.co
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
 import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
+import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -52,6 +55,9 @@ export const routes: Routes = [
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
   { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
-  { path: 'personal-data-sheet', component: PersonalDataSheetComponent, canActivate: [authGuard] }
+  { path: 'personal-data-sheet', component: PersonalDataSheetComponent, canActivate: [authGuard] },
+  { path: 'personal-data-sheet/personal-information', component: PersonalInformationComponent, canActivate: [authGuard] },
+  { path: 'personal-data-sheet/family-background', component: FamilyBackgroundComponent, canActivate: [authGuard] },
+  { path: 'personal-data-sheet/educational-background', component: EducationalBackgroundComponent, canActivate: [authGuard] }
 
 ];

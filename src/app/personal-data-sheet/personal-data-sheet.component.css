@@ -1,19 +1,71 @@
-/* Styling the wrapper around the calendar */
-.custom-calendar .p-inputtext {
-  background-color: green; /* custom background */
-  color: #111827; /* custom text color */
-  font-size: 14px; /* font size */
-  border-radius: 0.5rem; /* rounded corners */
-  padding: 0.5rem; /* padding inside the input */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
 }
 
-/* Styling the calendar popup */
-.custom-calendar .p-datepicker {
-  background-color: #ff0000;
-  border-color: #d1d5db;
+.slider {
+  display: flex;
+  /* aspect-ratio: 16/9; */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* box-shadow: 0 1.5rem 3rem -0.75rem; */
+  border-radius: 0.5rem;
+  padding: 1rem;
+  position: relative;
+  width: 100%;  /* Adjust based on your layout */
+  overflow: hidden;  /* Hide overflow */
 }
 
-/* Styling the calendar icons (like the date picker icon) */
-.custom-calendar .p-datepicker-trigger {
-  color: #6b7280;
+.slider ::ng-deep app-personal-information,
+.slider ::ng-deep app-family-background,
+.slider ::ng-deep app-educational-background {
+  flex: 1 0 100%;
+  scroll-snap-align: start;
+  object-fit: cover;
+  width: 100%;
+}
+
+.slider-nav {
+  display: flex;
+  column-gap: 1rem;
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.slider-nav a {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: blue;
+  opacity: 0.75;
+  transition: opacity ease 250ms;
+}
+
+.slider-nav a:hover {
+  opacity: 1;
+}
+
+
+.slider > ng-container {
+  position: absolute;
+  width: 100%;  /* Match the width of the slider */
+  transition: transform 0.5s ease-in-out; /* Transition for sliding effect */
+}
+
+.slide-in {
+  transform: translateX(0);  /* Current slide */
+}
+
+.slide-out {
+  transform: translateX(-100%); /* Slide out */
+}
+
+.slide-next {
+  transform: translateX(100%); /* Slide in from the right */
 }

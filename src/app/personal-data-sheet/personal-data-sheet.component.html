@@ -9,34 +9,42 @@
     </div>
     <!-- Div For Section Headers -->
     <div class="flex flex-col border shadow-lg rounded-lg bg-white justify-evenly gap-2 items-center mt-2 mb-4 p-2 w-full basis-4/5">
-      <div *ngFor="let section of sections" (click)="navigateTo(section.route)" class="flex flex-col justify-center items-start w-full h-full px-6 bg-white border rounded-lg hover:bg-gray-200">
+      <a *ngFor="let section of sections" routerLink="{{ section.route }}" routerLinkActive="active" class="flex flex-col justify-center items-start w-full h-full px-6 bg-white border rounded-lg hover:bg-gray-200">
         <span class="font-light tracking-tight text-gray-900 dark:text-white">{{ section.title }}</span>
-      </div>
+      </a>
     </div>
   </aside>
   <!-- Right Main Column -->
-  <section class="lg:w-[75%] bg-white rounded-lg shadow-lg m-4 p-6 border relative max-h-full overflow-hidden flex flex-col">
-    <div class="flex w-full justify-start">
-      <div class="flex flex-row justify-center items-center basis-1/5">
-        <img src="assets/user_icon.svg" class="h-24 w-auto" alt="Person Circle Icon">
+  <section class="lg:w-[75%] bg-white rounded-lg shadow-lg m-4 p-4 border relative max-h-full overflow-hidden flex flex-col">
+    <div class="flex flex-row">
+      <div class="flex w-full justify-center basis-2/5">
+        <div class="flex flex-row justify-center items-center basis-2/5 pb-2">
+          <img src="assets/user_icon.svg" class="h-24 w-auto" alt="Person Circle Icon">
+        </div>
+        <div class="flex flex-col justify-center items-center text-center basis-3/5">
+          <span class="m-0 p-0 text-2xl">Juan Dela Cruz</span>
+          <span class="m-0 p-0 text-sm text-gray-600">Janitor</span>
+        </div>
       </div>
-      <div class="flex flex-col justify-center items-center text-center basis-4/5">
-        <span class="m-0 text-2xl">Username</span>
-        <span class="m-0 text-gray-600">Position</span>
+      <div class="items-center basis-3/5">
+        <div class="flex justify-between my-4">
+          <span class="text-base font-medium text-blue-700 dark:text-white">Step {{ currentStep }}/8</span>
+          <span class="text-sm font-medium text-blue-700 dark:text-white">{{ progressBarWidth }}</span>
+        </div>
+        <div class="flex flex-row w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+          <div class="bg-blue-600 h-2.5 rounded-full" [ngStyle]="{'width': progressBarWidth, 'transition': 'width 0.5s ease-in-out'}"></div>
+        </div>
       </div>
     </div>
-    <div class="flex justify-between my-4">
-      <span class="text-base font-medium text-blue-700 dark:text-white">Step 1/8</span>
-      <span class="text-sm font-medium text-blue-700 dark:text-white">12.5%</span>
-    </div>
-    <div class="flex flex-row w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-      <div class="bg-blue-600 h-2.5 rounded-full w-[12.5%]"></div>
-    </div>
+    <hr>
     <!-- [@routeAnimations]="prepareRoute(outlet)" -->
-    <div class="content slider-wrapper max-h-full overflow-x-auto">
-      <!-- <router-outlet #outlet="outlet"></router-outlet> -->
-      <app-personal-information></app-personal-information>
+    <div class="mt-4 w-full h-full max-h-full flex flex-1 overflow-x-hidden overflow-y-auto">
+      <ng-container>
+        <router-outlet></router-outlet>
+      </ng-container>
     </div>
-
+    <div class="w-full flex justify-center pt-2">
+      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center self-center">Next</button>
+    </div>
   </section>
 </div>

@@ -27,6 +27,11 @@ import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-
 import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
 import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
 import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
+import { CivilServiceEligibilityComponent } from './personal-data-sheet/civil-service-eligibility/civil-service-eligibility.component';
+import { WorkExperienceComponent } from './personal-data-sheet/work-experience/work-experience.component';
+import { VoluntaryWorkComponent } from './personal-data-sheet/voluntary-work/voluntary-work.component';
+import { LearningAndDevelopmentInterventionsComponent } from './personal-data-sheet/learning-and-development-interventions/learning-and-development-interventions.component';
+import { OtherInformationComponent } from './personal-data-sheet/other-information/other-information.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -55,9 +60,15 @@ export const routes: Routes = [
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
   { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
-  { path: 'personal-data-sheet', component: PersonalDataSheetComponent, canActivate: [authGuard] },
-  { path: 'personal-data-sheet/personal-information', component: PersonalInformationComponent, canActivate: [authGuard] },
-  { path: 'personal-data-sheet/family-background', component: FamilyBackgroundComponent, canActivate: [authGuard] },
-  { path: 'personal-data-sheet/educational-background', component: EducationalBackgroundComponent, canActivate: [authGuard] }
-
+  { path: 'personal-data-sheet', component: PersonalDataSheetComponent, canActivate: [authGuard],
+    children: [
+      { path: 'personal-information', component: PersonalInformationComponent, canActivate: [authGuard] },
+      { path: 'family-background', component: FamilyBackgroundComponent, canActivate: [authGuard] },
+      { path: 'educational-background', component: EducationalBackgroundComponent, canActivate: [authGuard] },
+      { path: 'civil-service-eligibility', component: CivilServiceEligibilityComponent, canActivate: [authGuard] },
+      { path: 'work-experience', component: WorkExperienceComponent, canActivate: [authGuard] },
+      { path: 'voluntary-work', component: VoluntaryWorkComponent, canActivate: [authGuard] },
+      { path: 'learning-and-development-interventions', component: LearningAndDevelopmentInterventionsComponent, canActivate: [authGuard] },
+      { path: 'other-information', component: OtherInformationComponent, canActivate: [authGuard] }
+    ]},
 ];

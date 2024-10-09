@@ -1,92 +1,90 @@
-<h1 class="relative">Personal Information</h1>
-<form class="flex flex-col gap-y-4">
-  <!-- Main Grid Container -->
-  <fieldset class="border-t border-t-gray-300 p-4">
-    <legend class="px-4 bg-white text-lg">Basic Information</legend>
-    <div class="grid gap-3 sm:grid-cols-1 md:grid-cols-4 justify-center">
-      <div *ngFor="let field of inputFields | slice:0:11">
-        <div *ngIf="field.fieldName !== 'Date of Birth' && field.fieldName != 'Sex' && field.fieldName != 'Civil Status'">
-          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
-          <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
-        </div>
-        <div *ngIf="field.fieldName === 'Date of Birth'" class="flex flex-col">
-          <!-- Do something for Place of Birth -->
-          <label for="{{ field.fieldName }}" class=" w-full block mb-2 text-sm font-medium text-gray-900">{{ field.fieldName }}</label>
-          <div id="{{ field.fieldName }}" class="card flex justify-content-center w-full">
-            <p-calendar [(ngModel)]="date" showClear="true" inputStyleClass="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg m-0 w-full"
-            panelStyleClass="scale-75"/>
+<div class="w-full h full">
+  <h1 class="relative">Personal Information</h1>
+  <form class="flex flex-col gap-y-4">
+    <!-- Main Grid Container -->
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-lg">Basic Information</legend>
+      <div class="grid gap-3 sm:grid-cols-1 md:grid-cols-4 justify-center">
+        <div *ngFor="let field of basicInfoFields">
+          <div *ngIf="field.fieldName !== 'Date of Birth' && field.fieldName !== 'Sex' && field.fieldName !== 'Civil Status'">
+            <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
+            <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
           </div>
-        </div>
-        <div *ngIf="field.fieldName === 'Sex'">
-          <label for="sex" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-          <div class="flex items-center mb-4">
-            <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Male</label>
+          <div *ngIf="field.fieldName === 'Date of Birth'" class="flex flex-col">
+            <label for="{{ field.fieldName }}" class=" w-full block mb-2 text-sm font-medium text-gray-900">{{ field.fieldName }}</label>
+            <div id="{{ field.fieldName }}" class="card flex justify-content-center w-full">
+              <p-calendar [(ngModel)]="date" showClear="true" inputStyleClass="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg m-0 w-full"
+              panelStyleClass="scale-75"/>
+            </div>
           </div>
-          <div class="flex items-center">
-            <input checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-            <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
+          <div *ngIf="field.fieldName === 'Sex'">
+            <label for="sex" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.fieldName }}</label>
+            <div class="flex items-center mb-2">
+              <input checked id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+              <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Male</label>
+            </div>
+            <div class="flex items-center">
+              <input id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+              <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Female</label>
+            </div>
           </div>
-        </div>
-        <div *ngIf="field.fieldName === 'Civil Status'">
-          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.fieldName }}</label>
-          <div id="{{ field.fieldName }}" class="relative">
-            <button id="dropdownButton" type="button" class="bg-gray-50 border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full ms-auto text-center inline-flex items-center justify-between">
-              {{civil_status || 'Select Status'}}
-              <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-              </svg>
-            </button>
-            <!-- Dropdown menu -->
-            <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-full overflow-visible absolute">
-              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
-                <li *ngFor="let status of ['Single', 'Married', 'Widowed', 'Separated', 'Other/s']">
-                  <a class="block px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="selectStatus(status)">{{status}}</a>
-                </li>
-              </ul>
+          <div *ngIf="field.fieldName === 'Civil Status'">
+            <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.fieldName }}</label>
+            <div id="{{ field.fieldName }}" class="relative">
+              <button id="dropdownButton" type="button" class="bg-gray-50 border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full ms-auto text-center inline-flex items-center justify-between">
+                {{civil_status || 'Select Status'}}
+                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+              </button>
+              <!-- Dropdown menu -->
+              <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-full overflow-visible absolute">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
+                  <li *ngFor="let status of ['Single', 'Married', 'Widowed', 'Separated', 'Other/s']">
+                    <a class="block px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="selectStatus(status)">{{status}}</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </fieldset>
-  <fieldset class="border-t border-t-gray-300 p-4">
-    <legend class="px-4 bg-white text-lg">Contact Details</legend>
-    <div class="grid lg:grid-cols-3 gap-3">
-      <div *ngFor="let field of contactFields">
-        <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
-        <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+    </fieldset>
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-lg">Contact Details</legend>
+      <div class="grid lg:grid-cols-3 gap-3">
+        <div *ngFor="let field of contactFields">
+          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
+          <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+        </div>
       </div>
-    </div>
-  </fieldset>
-  <fieldset class="border-t border-t-gray-300 p-4">
-    <legend class="px-4 bg-white text-lg">Government-issued ID Nos.</legend>
-    <div class="grid lg:grid-cols-6 gap-3">
-      <div *ngFor="let field of inputFields | slice:11:18">
-        <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
-        <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+    </fieldset>
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-lg">Government-issued ID Nos.</legend>
+      <div class="grid lg:grid-cols-6 gap-3">
+        <div *ngFor="let field of govIdNoFields">
+          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
+          <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+        </div>
       </div>
-    </div>
-  </fieldset>
-  <fieldset class="border-t border-t-gray-300 p-4">
-    <legend class="px-4 bg-white text-lg">Residential Address Details</legend>
-    <div class="grid lg:grid-cols-4 gap-3">
-      <div *ngFor="let field of addressFields">
-        <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
-        <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+    </fieldset>
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-lg">Residential Address Details</legend>
+      <div class="grid lg:grid-cols-4 gap-3">
+        <div *ngFor="let field of addressFields">
+          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
+          <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+        </div>
       </div>
-    </div>
-  </fieldset>
-  <fieldset class="border-t border-t-gray-300 p-4">
-    <legend class="px-4 bg-white text-lg">Permanent Address Details</legend>
-    <div class="grid lg:grid-cols-4 gap-3">
-      <div *ngFor="let field of addressFields">
-        <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
-        <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+    </fieldset>
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-lg">Permanent Address Details</legend>
+      <div class="grid lg:grid-cols-4 gap-3">
+        <div *ngFor="let field of addressFields">
+          <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>
+          <input type="text" id="{{ field.fieldName }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+        </div>
       </div>
-    </div>
-  </fieldset>
-  <div class="w-full flex justify-center">
-    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center self-center">Next</button>
-  </div>
-</form>
+    </fieldset>
+  </form>
+</div>

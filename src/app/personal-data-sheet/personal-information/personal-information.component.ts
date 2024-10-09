@@ -16,7 +16,7 @@ export class PersonalInformationComponent {
 
   civil_status: string = '';
 
-  inputFields = [
+  basicInfoFields = [
     { fieldName: 'First Name'},
     { fieldName: 'Middle Name'},
     { fieldName: 'Last Name'},
@@ -27,7 +27,16 @@ export class PersonalInformationComponent {
     { fieldName: 'Civil Status'},
     { fieldName: 'Height'},
     { fieldName: 'Weight'},
-    { fieldName: 'Blood Type'},
+    { fieldName: 'Blood Type'}
+  ]
+
+  contactFields = [
+    { fieldName : 'Telephone No.'},
+    { fieldName : 'Mobile No.'},
+    { fieldName : 'Email Address'},
+  ]
+
+  govIdNoFields = [
     { fieldName: 'GSIS ID No.'},
     { fieldName: 'PAG-IBIG ID No.'},
     { fieldName: 'PhilHealth ID No.'},
@@ -46,11 +55,6 @@ export class PersonalInformationComponent {
     { fieldName : 'Zip Code'},
   ]
 
-  contactFields = [
-    { fieldName : 'Telephone No.'},
-    { fieldName : 'Mobile No.'},
-    { fieldName : 'Email Address'},
-  ]
 
 
   ngOnInit() {}

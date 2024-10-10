@@ -2,9 +2,9 @@
   <h1 class="relative">Personal Information</h1>
   <form class="flex flex-col gap-y-4">
     <!-- Main Grid Container -->
-    <fieldset class="border-t border-t-gray-300 p-4">
+    <fieldset class="border-t border-t-gray-300 p-4 min-w-full">
       <legend class="px-4 bg-white text-lg">Basic Information</legend>
-      <div class="grid gap-3 sm:grid-cols-1 md:grid-cols-4 justify-center">
+      <div class="grid gap-3 sm:grid-cols-1 md:grid-cols-4 justify-center w-full">
         <div *ngFor="let field of basicInfoFields">
           <div *ngIf="field.fieldName !== 'Date of Birth' && field.fieldName !== 'Sex' && field.fieldName !== 'Civil Status'">
             <label for="{{ field.fieldName }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.fieldName }} </label>

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -32,6 +32,7 @@ import { WorkExperienceComponent } from './personal-data-sheet/work-experience/w
 import { VoluntaryWorkComponent } from './personal-data-sheet/voluntary-work/voluntary-work.component';
 import { LearningAndDevelopmentInterventionsComponent } from './personal-data-sheet/learning-and-development-interventions/learning-and-development-interventions.component';
 import { OtherInformationComponent } from './personal-data-sheet/other-information/other-information.component';
+import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -72,3 +73,10 @@ export const routes: Routes = [
       { path: 'other-information', component: OtherInformationComponent, canActivate: [authGuard] }
     ]},
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+
+export class AppRoutingModule {}

@@ -2,21 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { Event, Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
-import { PersonalInformationComponent } from './personal-information/personal-information.component';
-import { FamilyBackgroundComponent } from './family-background/family-background.component';
-import { EducationalBackgroundComponent } from './educational-background/educational-background.component';
 import { filter } from 'rxjs';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-personal-data-sheet',
   standalone: true,
   imports: [RouterLinkActive, RouterOutlet,
     SidebarNavigationModule, CommonModule,
-    PersonalInformationComponent, FamilyBackgroundComponent,
-    EducationalBackgroundComponent, RouterLink],
+    RouterLink],
   templateUrl: './personal-data-sheet.component.html',
   styleUrl: './personal-data-sheet.component.css',
-  animations: []
+  animations: [
+    trigger('slideAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0 }), // Start off-screen
+        animate('300ms ease-in', style({ transform: 'translateX(0)', opacity: 1 })), // Slide in
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ transform: 'translateX(-100%)', opacity: 0 })), // Slide out
+      ]),
+    ]),
+  ],
 })
 export class PersonalDataSheetComponent {
   date: Date | undefined;
@@ -40,6 +47,11 @@ export class PersonalDataSheetComponent {
 
   currentStep : number = 0;
 
+  previousUrl : string = "";
+  currentUrl : string = "";
+  nextUrl : string = "";
+  currentRoute : string ='';
+
   ngOnInit(): void {
     this.router.events
       .pipe(
@@ -47,45 +59,46 @@ export class PersonalDataSheetComponent {
       )
       .subscribe((event: NavigationEnd) => {
         this.updateProgressBarWidth(event.urlAfterRedirects);
+        this.currentUrl = event.urlAfterRedirects;
+        this.currentRoute = this.router.url;
+        this.setPreviousUrl();
+        this.setNextUrl();
+        console.log("Previous URL:", this.previousUrl);
+        console.log("Current URL:", this.currentUrl);
+        console.log("Next URL:", this.nextUrl);
+        console.log("urlAfterRedirects:", event.urlAfterRedirects);
+        console.log(this.sections[2].route);
       });
   }
 
   updateProgressBarWidth(url: string): void {
-    switch (url) {
-      case '/personal-data-sheet/personal-information':
-        this.progressBarWidth = '12.5%';
-        break;
-      case '/personal-data-sheet/family-background':
-        this.progressBarWidth = '25%';
-        break;
-      case '/personal-data-sheet/educational-background':
-        this.progressBarWidth = '37.5%';
-        break;
-      case '/personal-data-sheet/civil-service-eligibility':
-        this.progressBarWidth = '50%';
-        break;
-      case '/personal-data-sheet/work-experience':
-        this.progressBarWidth = '62.5%';
-        break;
-      case '/personal-data-sheet/voluntary-work':
-        this.progressBarWidth = '75%';
-        break;
-      case '/personal-data-sheet/learning-and-development-interventions':
-        this.progressBarWidth = '87.5%';
-        break;
-      case '/personal-data-sheet/other-information':
-        this.progressBarWidth = '100%';
-        break;
-      default:
-        this.progressBarWidth = '0%'; // Default progress
-        break;
-    }
+    let currentUrlIndex : number = this.sections.findIndex(section => section.route === url);
+
+    this.progressBarWidth = (currentUrlIndex + 1) * 12.5 + '%';
+    console.log(this.progressBarWidth);
     this.currentStep = 8 * parseFloat(this.progressBarWidth.replace('%', '')) / 100;
-    console.log(this.progressBarWidth, this.currentStep);
   }
 
-  navigateTo = (route : string) => this.router.navigate([route]);
+  setNextUrl() {
+    // Find the index of the current section
+    const currentIndex = this.sections.findIndex(section => section.route === this.currentUrl);
 
+    // Navigate to the previous route if it exists
+    if (currentIndex !== -1 && currentIndex < this.sections.length - 1) {
+      this.nextUrl = this.sections[currentIndex + 1].route;
+      console.log("nextURL changed!")
+    }
+  }
+
+  setPreviousUrl() {
+    // Find the index of the current section
+    const currentIndex = this.sections.findIndex(section => section.route === this.currentUrl);
+
+    // Navigate to the next route if it exists
+    if (currentIndex >= 1 && currentIndex < this.sections.length) {
+      this.previousUrl = this.sections[currentIndex - 1].route;
+      console.log("previousURL changed!")
+    }
+  }
 }
-
 export class NgModule { }

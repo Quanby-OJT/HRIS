@@ -9,19 +9,21 @@
     </div>
     <!-- Div For Section Headers -->
     <div class="flex flex-col border shadow-lg rounded-lg bg-white justify-evenly gap-2 items-center mt-2 mb-4 p-2 w-full basis-4/5">
-      <a *ngFor="let section of sections" routerLink="{{ section.route }}" routerLinkActive="active" class="flex flex-col justify-center items-start w-full h-full px-6 bg-white border rounded-lg hover:bg-gray-200">
-        <span class="font-light tracking-tight text-gray-900 dark:text-white">{{ section.title }}</span>
+      <a *ngFor="let section of sections" routerLink="{{ section.route }}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+      [ngClass]="{'bg-blue-500 text-white cursor-default': section.route === currentUrl, 'bg-white text-gray-900 hover:bg-gray-200': section.route !== currentUrl}"
+      class="flex flex-col justify-center items-start w-full h-full px-6 border rounded-lg">
+        <span class="font-light tracking-tight">{{ section.title }}</span>
       </a>
     </div>
   </aside>
   <!-- Right Main Column -->
   <section class="lg:w-[75%] bg-white rounded-lg shadow-lg m-4 p-4 border relative max-h-full overflow-hidden flex flex-col">
     <div class="flex flex-row">
-      <div class="flex w-full justify-center basis-2/5">
-        <div class="flex flex-row justify-center items-center basis-2/5 pb-2">
-          <img src="assets/user_icon.svg" class="h-24 w-auto" alt="Person Circle Icon">
+      <div class="flex w-full justify-center basis-2/5 pb-4">
+        <div class="flex flex-row justify-end items-center basis-2/5 pr-3">
+          <img src="assets/user_icon.svg" class="h-20 w-auto" alt="Person Circle Icon">
         </div>
-        <div class="flex flex-col justify-center items-center text-center basis-3/5">
+        <div class="flex flex-col justify-center items-start text-center basis-3/5 pl-3">
           <span class="m-0 p-0 text-2xl">Juan Dela Cruz</span>
           <span class="m-0 p-0 text-sm text-gray-600">Janitor</span>
         </div>
@@ -39,12 +41,30 @@
     <hr>
     <!-- [@routeAnimations]="prepareRoute(outlet)" -->
     <div class="mt-4 w-full h-full max-h-full flex flex-1 overflow-x-hidden overflow-y-auto">
+      <!-- Form Pages Here -->
       <ng-container>
-        <router-outlet></router-outlet>
+        <router-outlet [@slideAnimation]></router-outlet>
       </ng-container>
     </div>
     <div class="w-full flex justify-center pt-2">
-      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center self-center">Next</button>
+      <!-- Previous Page Button -->
+      <button type="button" class="transform scale-x-[-1] text-white font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2"
+      [ngClass]="{'bg-gray-500 cursor-default' : currentUrl === sections[0].route, 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300' : currentUrl !== sections[0].route}"
+      [routerLink]="[previousUrl]" routerLinkActive="active">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+        <span class="sr-only">Icon description</span>
+      </button>
+      <!-- Next Page Button -->
+      <button type="button" class="text-white font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2"
+      [ngClass]="{'bg-gray-500 cursor-default' : currentUrl === sections[7].route, 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300' : currentUrl !== sections[7].route}"
+      [routerLink]="[nextUrl]" routerLinkActive="active">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+        <span class="sr-only">Icon description</span>
+      </button>
     </div>
   </section>
 </div>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, Injectable, NgModule } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -23,6 +23,8 @@ import { FamilyBackgroundComponent } from './personal-data-sheet/family-backgrou
 import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app.routes';
 
 @NgModule({
   imports: [
@@ -46,7 +48,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FamilyBackgroundComponent,
     EducationalBackgroundComponent,
     BrowserAnimationsModule,
-    MeritsAndViolationsComponent
+    MeritsAndViolationsComponent,
+    BrowserModule,
+    BrowserAnimationsModule
+    AppRoutingModule
   ],
 })
 export class AppModule { }

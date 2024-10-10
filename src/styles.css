@@ -26,6 +26,7 @@ body {
     padding: 0;
     font-family: 'SF Pro Display', sans-serif;
     overflow: hidden;
+    position: relative;
   }
 
   .custom-scrollbar::-webkit-scrollbar {

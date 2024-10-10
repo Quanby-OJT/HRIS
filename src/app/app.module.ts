@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, Injectable, NgModule } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -16,6 +16,15 @@ import { TestBack4Component } from './test-back4/test-back4.component';
 import { PDSComponent } from './pds/pds.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
+import { LoanInformationComponent } from './loan-information/loan-information.component';
+import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app.routes';
 
 @NgModule({
   imports: [
@@ -33,7 +42,16 @@ import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and
     TestBack3Component,
     TestBack4Component,
     PDSComponent,
-    MeritsAndViolationsComponent
+    PersonalDataSheetComponent,
+    LoanInformationComponent,
+    PersonalInformationComponent,
+    FamilyBackgroundComponent,
+    EducationalBackgroundComponent,
+    BrowserAnimationsModule,
+    MeritsAndViolationsComponent,
+    BrowserModule,
+    BrowserAnimationsModule
+    AppRoutingModule
   ],
 })
 export class AppModule { }

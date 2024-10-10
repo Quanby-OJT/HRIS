@@ -25,6 +25,7 @@ export class SidebarNavigationComponent {
     { name: 'Workflow Approval', route: '/workflow-approval' },
     { name: 'Personal Information Management', route: '/pimam' },
     { name: 'Personal Data Sheet', route: '/personal-data-sheet'},
+    { name: 'PDS', route: '/pds'},
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},
 

@@ -28,7 +28,7 @@
               {{getIconForRoute(item.route)}}
             </span>
             <span class="transition-all ease-in-out whitespace-nowrap overflow-hidden"
-                  [ngClass]="{'opacity-0 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
+                  [ngClass]="{'opacity-100 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
               {{item.name}}
             </span>
           </a>
@@ -66,6 +66,6 @@
   <!-- Main Content -->
   <div class="flex-1 p-4 transition-all duration-300 ease-in-out ml-10">
     <!-- Your main content goes here -->
-    <router-outlet></router-outlet>
+    <!-- <router-outlet></router-outlet> -->
   </div>
 </div>

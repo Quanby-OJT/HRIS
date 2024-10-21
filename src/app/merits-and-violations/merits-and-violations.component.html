@@ -78,23 +78,25 @@
                                 <h2 class="text-lg font-semibold text-gray-700 mb-2 px-4 py-4">Merits and Violations for {{ selectedProfile.first_name }} {{ selectedProfile.surname }}</h2>
                             
                                 <!-- Show form when adding merit or violation -->
-                                <div *ngIf="showForm"  class="bg-white p-4 rounded mb-4">
+                                <div *ngIf="showForm"  class="bg-white p-4 text-sm rounded mb-4">
                                     <form [formGroup]="meritsViolationsForm" (ngSubmit)="submitForm()">
                                         <div class="mb-4">
                                             <label class="block text-gray-700">Violation</label>
-                                            <input type="text" formControlName="violations" class="mt-1 p-2 border rounded w-full" />
+                                            <input type="text" formControlName="violations" class="text-sm mt-1 p-2 border rounded w-full" 
+                                            placeholder="Description of Violation"/>
                                         </div>
                                         <div class="mb-4">
                                             <label class="block text-gray-700">Merit</label>
-                                            <input type="text" formControlName="merits" class="mt-1 p-2 border rounded w-full" />
+                                            <input type="text" formControlName="merits" class="text-sm mt-1 p-2 border rounded w-full"
+                                            placeholder="Description of Merit" />
                                         </div>
                                         <div class="mb-4">
                                             <label class="block text-gray-700">Date of Record (Violation)</label>
-                                            <input type="date" formControlName="date_of_record_v" class="mt-1 p-2 border rounded w-full" />
+                                            <input type="date" formControlName="date_of_record_v" class="text-sm mt-1 p-2 border rounded w-full text-gray-700" />
                                         </div>
                                         <div class="mb-4">
                                             <label class="block text-gray-700">Date of Record (Merit)</label>
-                                            <input type="date" formControlName="date_of_record_m" class="mt-1 p-2 border rounded w-full" />
+                                            <input type="date" formControlName="date_of_record_m" class="text-sm mt-1 p-2 border rounded w-full text-gray-700" />
                                         </div>
                                         <input formControlName="user_id" type="hidden" [value]="selectedProfile?.user_id" />
                                         <div class="flex justify-between">

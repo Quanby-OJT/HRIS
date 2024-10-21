@@ -21,7 +21,7 @@ import { initFlowbite } from 'flowbite';
 
 })
 export class AppComponent {
-  title = 'HRIS_login-page';
+  title = 'HRIS';
   passwordHidden: boolean = true;
 
   togglePasswordVisibility(): void {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
+import { SidebarNavigationModule } from 'src/app/sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -11,8 +11,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
   imports: [RouterLinkActive, RouterOutlet,
     SidebarNavigationModule, CommonModule,
     RouterLink],
-  templateUrl: './personal-data-sheet.component.html',
-  styleUrl: './personal-data-sheet.component.css',
+  templateUrl: './edit.component.html',
+  styleUrl: './edit.component.css',
   animations: [
     trigger('slideAnimation', [
       transition(':enter', [
@@ -25,18 +25,20 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ],
 })
-export class PersonalDataSheetComponent {
+export class EditPDSComponent {
   date: Date | undefined;
 
+  rootUrl = '/personal-data-sheet/edit/';
+
   sections = [
-    { title: 'I. Personal Information', route: '/personal-data-sheet/personal-information'},
-    { title: 'II. Family Background', route: '/personal-data-sheet/family-background'},
-    { title: 'III. Educational Background', route: '/personal-data-sheet/educational-background'},
-    { title: 'IV. Civil Service Eligibility', route: '/personal-data-sheet/civil-service-eligibility'},
-    { title: 'V. Work Experience', route: '/personal-data-sheet/work-experience'},
-    { title: 'VI. Voluntary Work', route: '/personal-data-sheet/voluntary-work'},
-    { title: 'VII. Learning and Development Interventions', route: '/personal-data-sheet/learning-and-development-interventions'},
-    { title: 'VIII. Other Information', route: '/personal-data-sheet/other-information'},
+    { title: 'I. Personal Information', route: this.rootUrl + 'personal-information'},
+    { title: 'II. Family Background', route: this.rootUrl + 'family-background'},
+    { title: 'III. Educational Background', route: this.rootUrl + 'educational-background'},
+    { title: 'IV. Civil Service Eligibility', route: this.rootUrl + 'civil-service-eligibility'},
+    { title: 'V. Work Experience', route: this.rootUrl + 'work-experience'},
+    { title: 'VI. Voluntary Work', route: this.rootUrl + 'voluntary-work'},
+    { title: 'VII. Learning and Development Interventions', route: this.rootUrl + 'learning-and-development-interventions'},
+    { title: 'VIII. Other Information', route: this.rootUrl + 'other-information'},
   ];
 
   prepareRoute = (outlet: RouterOutlet) => { return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'] };

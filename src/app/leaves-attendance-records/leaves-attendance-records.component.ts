@@ -1,10 +1,11 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import 'flowbite'; // Import Flowbite JS
 import { Datepicker } from 'flowbite';
+import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
 @Component({
   selector: 'app-leaves-attendance-records',
   standalone: true,
-  imports: [],
+  imports: [SidebarNavigationModule],
   templateUrl: './leaves-attendance-records.component.html',
   styleUrl: './leaves-attendance-records.component.css'
 })

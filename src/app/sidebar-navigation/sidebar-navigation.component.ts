@@ -28,6 +28,7 @@ export class SidebarNavigationComponent {
     { name: 'PDS', route: '/pds'},
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},
+    { name: 'Leaves and Attendance Records', route: '/leaves-attendance-records'},
 
   ];
 
@@ -40,6 +41,7 @@ export class SidebarNavigationComponent {
     '/workflow-approval': 'person_add',
     '/support-ticket': 'contact_support',
     '/merits-and-violations' : 'list',
+    '/leaves-attendance-records': 'perm_contact_calendar',
     '/pimam': 'badge',
     // '/pds': 'account_circle',
     '/loan-information': 'account_balance',

@@ -23,6 +23,7 @@ import { CompensationRecordsComponent } from './compensation-records/compensatio
 import { LoanInformationComponent } from './loan-information/loan-information.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
 import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
 import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
 import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
@@ -53,6 +54,7 @@ export const routes: Routes = [
   { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
 
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
+  { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent},
 
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},

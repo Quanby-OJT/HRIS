@@ -52,7 +52,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-gray-500 text-sm font-light">
-                                    <tr *ngFor="let user of paginatedProfiles; let i = index" class="border-b border-gray-200 hover:bg-gray-50" (click)="selectProfile(user)">
+                                    <tr *ngFor="let user of paginatedProfiles; let i = index" class="border-b border-gray-200 hover:bg-gray-50 cursor-pointer" (click)="selectProfile(user)">
                                     <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
                                         <div class="flex items-center"><img [src]="user.photo_url" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
                                     </td>

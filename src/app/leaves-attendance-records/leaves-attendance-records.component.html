@@ -83,7 +83,8 @@
                                             <button *ngIf="isManaging" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
                                                 + Add Request
                                             </button>
-                                            <button (click)="onManageButtonClick()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                            <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManaging, 'bg-pink-500 hover:bg-pink-600': isManaging }"
+                                                    class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick()">
                                                 {{ manageButtonText }}
                                             </button>
                                         </div>

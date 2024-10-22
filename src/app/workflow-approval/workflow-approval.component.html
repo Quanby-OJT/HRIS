@@ -1,105 +1,98 @@
-<main class="flex flex-col min-h-screen bg-white">
-  <div class="flex-grow px-4 pt-2 pb-8 max-w-7xl mx-auto w-full max-md:px-2">
-    <header class="flex gap-2 justify-between w-full text-black whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
-      <h1 class="flex gap-2 justify-between text-2xl font-bold max-md:text-xl">
-        <span class="max-md:text-xl">Quanby</span>
-        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/ab4e5bd827f14f911a2d583072c36d16d70f94a881729504f6e5d71e5dc42681?apiKey=f35c25b17acb406083beeda46a28c843&" alt="" class="shrink-0 my-auto w-3 aspect-square" />
-      </h1>
-      <nav class="my-auto text-lg">
-        <button class="text-gray-700 hover:text-blue-600 focus:text-blue-600 transition-colors duration-300 cursor-pointer" (click)="goHome()">Home</button>
-      </nav>
-    </header>
-    
-    <section class="flex gap-2 justify-between self-start mt-3 ml-4 text-xl font-bold text-center text-black whitespace-nowrap max-md:ml-1 max-md:text-lg">
-      <h2 class="max-md:text-lg">Workflow</h2>
-      <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/5aba0972af733b54318d4cb929daf1afd60afdc61c7fbbc6ea18ef0ec7bbe940?apiKey=f35c25b17acb406083beeda46a28c843&" alt="" class="shrink-0 my-auto w-3 aspect-square" />
-    </section>
-    
-    <div class="flex gap-2 justify-between pr-1 mt-2 text-xs text-neutral-800 text-opacity-70 max-md:flex-wrap max-md:max-w-full">
-      <div class="flex flex-col justify-center px-2 py-1 whitespace-nowrap">
-        <select [(ngModel)]="selectedStatus" (change)="filterWorkflows()" class="justify-center items-start px-2 py-1 bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 max-md:px-1 text-xs">
-          <option value="">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </div>
-      <div class="justify-center px-2 py-1 my-auto bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 max-md:px-1 max-md:max-w-full">
-        <input
-          type="text"
-          [(ngModel)]="searchTerm"
-          (input)="filterWorkflows()"
-          placeholder="Search workflow..."
-          class="w-full bg-transparent text-xs"
-        />
+<!-- Main Component -->
+<div class="flex">
+  <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex-grow">
+      <div class="min-h-screen">
+        <main class="p-6">
+          <div class="mb-6 flex justify-between items-center">
+            <div>
+              <p class="max-md:text-xl text-2xl font-bold">Approval Workflows</p>
+              <p class="max-md:text-lg">Manage approvals and reviews</p>
+            </div>
+            
+          </div>
+
+          <div class="rounded-xl shadow-lg bg-white">        
+            <div class="flex flex-col md:flex-row items-center justify-between p-4">
+              <div class="relative w-full md:w-[20%] md:mr-auto">
+                <input type="text" [(ngModel)]="searchTerm" (input)="filterWorkflows()" placeholder="Search workflow..." class="w-full h-full p-2 pr-8 border rounded-full border-gray-300">
+                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+              </div>
+            
+              <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                <select [(ngModel)]="selectedStatus" (change)="filterWorkflows()" class="px-2 py-1 bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 text-xs">
+                  <option value="">All</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+                <button (click)="previousPage()" [disabled]="currentPage === 1" class="text-black p-1 bg-gray-100 rounded-md"><</button>
+                <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+                <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="text-black p-1 bg-gray-100 rounded-md">></button>
+              </div>
+            </div>
+            <div *ngIf="filteredWorkflows.length > 0" class="overflow-x-auto overflow-y-auto max-h[28rem] custom-scrollbar">
+              <table class="w-full">
+                  <thead>
+                    <tr class="bg-gray-100 text-gray-700 leading-normal">
+                      <div class="flex w-full text-sm font-medium text-black bg-gray-100">
+                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Status</th>
+                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Submitted for</th>
+                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Reviewer</th>
+                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Request</th>
+                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Requested by</th>
+                      </div>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let workflow of paginatedWorkflows; trackBy: trackById">
+                      <div class="flex w-full bg-white border-b border-gray-200">
+                        <td class="flex-1 p-3">
+                          <span class="px-2 py-1 text-xs font-semibold rounded"
+                                [ngClass]="{
+                                  'bg-yellow-200 text-yellow-800': workflow.status === 'Pending',
+                                  'bg-green-200 text-green-800': workflow.status === 'Approved',
+                                  'bg-red-200 text-red-800': workflow.status === 'Rejected'
+                                }">
+                            {{ workflow.status }}
+                          </span>
+                        </td>
+                        <td class="flex-1 p-3">
+                          <div class="flex items-center">
+                            <img [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + workflow.submitted_for" 
+                                [alt]="workflow.submitted_for" 
+                                class="w-8 h-8 mr-2 rounded-full">
+                            <div>
+                              <div class="font-medium">{{ workflow.submitted_for }}</div>
+                              <div class="text-xs text-gray-500">{{ workflow.submitted_for_id }}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="flex-1 p-3">
+                          <div class="flex items-center">
+                            <img [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + workflow.reviewer" 
+                                [alt]="workflow.reviewer" 
+                                class="w-8 h-8 mr-2 rounded-full">
+                            <div>
+                              <div class="font-medium">{{ workflow.reviewer }}</div>
+                              <div class="text-xs text-gray-500">{{ workflow.reviewer_id }}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="flex-1 p-3">
+                          <div>{{ workflow.request }}</div>
+                          <a href="#" class="text-xs text-blue-600 hover:underline">View</a>
+                        </td>
+                        <td class="flex-1 p-3">
+                          <div>{{ workflow.requested_by }}</div>
+                        </td>
+                      </div>
+                    </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
-    
-    <section class="mt-4 ml-2 w-full rounded-md bg-zinc-300 max-md:max-w-full">
-      <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <div class="flex w-full text-sm font-medium text-black bg-gray-100">
-                <th class="flex-1 p-3 text-left">Status</th>
-                <th class="flex-1 p-3 text-left">Submitted for</th>
-                <th class="flex-1 p-3 text-left">Reviewer</th>
-                <th class="flex-1 p-3 text-left">Request</th>
-                <th class="flex-1 p-3 text-left">Requested by</th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            @for (workflow of paginatedWorkflows; track workflow.id) {
-              <tr>
-                <div class="flex w-full bg-white border-b border-gray-200">
-                  <td class="flex-1 p-3">
-                    <span class="px-2 py-1 text-xs font-semibold rounded"
-                          [ngClass]="{
-                            'bg-yellow-200 text-yellow-800': workflow.status === 'Pending',
-                            'bg-green-200 text-green-800': workflow.status === 'Approved',
-                            'bg-red-200 text-red-800': workflow.status === 'Rejected'
-                          }">
-                      {{ workflow.status }}
-                    </span>
-                  </td>
-                  <td class="flex-1 p-3">
-                    <div class="flex items-center">
-                      <img [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + workflow.submitted_for" 
-                          [alt]="workflow.submitted_for" 
-                          class="w-8 h-8 mr-2 rounded-full">
-                      <div>
-                        <div class="font-medium">{{ workflow.submitted_for }}</div>
-                        <div class="text-xs text-gray-500">{{ workflow.submitted_for_role }}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="flex-1 p-3">{{ workflow.reviewer }}</td>
-                  <td class="flex-1 p-3">
-                    <div>{{ workflow.request }}</div>
-                    <a href="#" class="text-xs text-blue-600 hover:underline">View</a>
-                  </td>
-                  <td class="flex-1 p-3">
-                    <div>{{ workflow.requested_by }}</div>
-                    <div class="text-xs text-gray-500">{{ workflow.requested_by_role }}</div>
-                  </td>
-                </div>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-      <!-- buttons for the prev and next button -->
-      @if (filteredWorkflows.length > 0) {
-        <nav class="flex justify-between items-center p-2 bg-gray-300 text-xs">
-          <button (click)="previousPage()" [disabled]="currentPage === 1" class="px-2 py-0.5 bg-blue-500 text-white rounded disabled:bg-gray-500">Prev</button>
-          <span>Page {{ currentPage }} of {{ totalPages }}</span>
-          <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-2 py-0.5 bg-blue-500 text-white rounded disabled:bg-gray-500">Next</button>
-        </nav>
-      }
-      @else {
-        <p class="text-center py-4">No items found.</p>
-      }
-    </section>
-  </div>
-</main>
+</div>

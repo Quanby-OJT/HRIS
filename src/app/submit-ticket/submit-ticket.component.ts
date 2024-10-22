@@ -12,7 +12,7 @@ import { TicketService } from './submit-ticket.service';
 })
 export class SubmitTicketComponent {
   ticket = {
-    title: 'Submit Ticket',
+    title: '',
     email: '',
     description: ''
   };
@@ -21,25 +21,32 @@ export class SubmitTicketComponent {
 
   @Output() close = new EventEmitter<void>();
 
+  constructor(private ticketService: TicketService) {}
+
   closePopup() {
     this.close.emit();
   }
-
-
-  constructor(private ticketService: TicketService) {}
 
   onSubmit() {
     if (!this.ticket.email.trim() || !this.ticket.title.trim() || !this.ticket.description.trim()) {
       this.submitError = 'Please fill in all fields.';
       return;
     }
-
+  
+    console.log('Submitting ticket from component:', this.ticket);
+  
     this.ticketService.submitTicket(this.ticket).subscribe(
       response => {
-        console.log('Ticket submitted successfully:', response);
-        this.ticketSubmitted = true;
-        this.submitError = '';
-        this.resetForm();
+        console.log('Response from service:', response);
+        if (response) {
+          console.log('Ticket submitted successfully:', response);
+          this.ticketSubmitted = true;
+          this.submitError = '';
+          this.resetForm();
+        } else {
+          console.error('Unexpected response format:', response);
+          this.submitError = 'An unexpected error occurred. Please try again.';
+        }
       },
       error => {
         console.error('Error submitting ticket:', error);
@@ -50,7 +57,7 @@ export class SubmitTicketComponent {
 
   resetForm() {
     this.ticket = {
-      title: 'Submit Ticket',
+      title: '',
       email: '',
       description: ''
     };

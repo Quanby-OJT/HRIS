@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
 
+// functions called for html
+
 interface AccessRights {
   [key: string]: boolean;
 } 
@@ -19,6 +21,7 @@ interface User {
   status: string;
   access: boolean;
   selected?: boolean;
+  dateAdded?: Date;
 }
 
 interface Employee {
@@ -31,8 +34,6 @@ interface Employee {
   type: string;
   photoUrl?: string; // Add a new property for photo URL
 }
-
-
 
 interface Ticket {
   id: number;
@@ -48,12 +49,11 @@ interface AuditLogEntry {
   action: string;
   affected_page: string;
   parameter: string;
-  old_value: string;
-  new_value: string;
+  old_parameter: string;
+  new_parameter: string;
   ip_address: string;
   date: string;
 }
-
 
 @Component({
   selector: 'app-user-management',
@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit {
   paginatedUsers: User[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
   totalPages: number = 1;
   activeTab: string = 'users';
   showManagePopup = false;
@@ -96,14 +96,14 @@ export class UserManagementComponent implements OnInit {
   weeklyRights: string = 'none';
   entriesRights: string = 'none';
 
-popupUsersRights: string = 'none';
-popupRolesRights: string = 'none';
-popupSupportRights: string = 'none';
-popupParametersRights: string = 'none';
-popupDailyRights: string = 'none';
-popupMonthlyRights: string = 'none'; 
-popupWeeklyRights: string = 'none';
-popupEntriesRights: string = 'none';
+  popupUsersRights: string = 'none';
+  popupRolesRights: string = 'none';
+  popupSupportRights: string = 'none';
+  popupParametersRights: string = 'none';
+  popupDailyRights: string = 'none';
+  popupMonthlyRights: string = 'none'; 
+  popupWeeklyRights: string = 'none';
+  popupEntriesRights: string = 'none';
 
   newDepartment = '';
   departmentType = 'all';
@@ -115,7 +115,6 @@ popupEntriesRights: string = 'none';
   showFileSizeAlert = false;
   photoFile: File | null = null;
   
-
   // Functions for Support tickets tab
   paginatedTickets: Ticket[] = [];
   searchTicketTerm: string = '';
@@ -167,6 +166,24 @@ popupEntriesRights: string = 'none';
   originalRoleName: string | null = null;
 
   selectedCount: number = 0;
+
+  sortDirection: 'none' | 'asc' | 'desc' = 'none';
+
+  onSortChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.sortDirection = selectElement.value as 'none' | 'asc' | 'desc';
+    this.sortedRoles();
+  }
+
+  sortedRoles() {
+    return this.roles.sort((a, b) => {
+      if (this.sortDirection === 'asc') {
+        return a.role_name.localeCompare(b.role_name);
+      } else {
+        return b.role_name.localeCompare(a.role_name);
+      }
+    });
+  }
 
   deselectAllCheckboxes(): void {
     this.selectedUserIds.clear();
@@ -729,8 +746,8 @@ cancelEdit() {
         action: 'UPDATE_EMPLOYEE',
         affected_page: 'User Management',
         parameter: 'Employee Update',
-        old_value: JSON.stringify(originalEmployee),
-        new_value: JSON.stringify(updatedUser),
+        old_parameter: JSON.stringify(originalEmployee),
+        new_parameter: JSON.stringify(updatedUser),
         ip_address: await this.getClientIpAddress(), // Implement this method to get the client's IP
         date: new Date().toISOString()
       };
@@ -905,6 +922,8 @@ cancelEdit() {
     this.loadEmployeeNames();
     this.loadRoles();
     this.filteredRoles = this.roles;
+    this.filterOption = 'none';
+    this.filteredUsers = [...this.users];
 
   } 
 
@@ -972,7 +991,7 @@ cancelEdit() {
       if (!data || data.length === 0) {
         console.warn('No employee data received');
         this.users = [];
-        this.filteredUsers = [];
+        this.filteredUsers = [...this.users];
         this.updatePagination();
         return;
       }
@@ -1030,9 +1049,7 @@ cancelEdit() {
       console.error('Unexpected error while fetching employees:', error);
       // Here you might want to set some error state or show a user-facing error message
     }
-  }
-
-  
+  }  
 
   searchTable() {
     this.filteredUsers = this.users.filter(user =>
@@ -1438,6 +1455,28 @@ async replyTicket(): Promise<void> {
   } else {
     console.log('No ticket selected to reply.');
   }
+}
+
+// Functions for Sorting alphabetically, ascending and descending order
+
+sortUsers(sortOption: string): void {
+  if (sortOption === 'none') {
+    // Default sort: most recently added users
+    this.filteredUsers = [...this.users].sort((a, b) => (b.dateAdded || new Date()).getTime() - (a.dateAdded || new Date()).getTime());
+  } else if (sortOption === 'asc') {
+    // Sort alphabetically ascending
+    this.filteredUsers = [...this.users].sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortOption === 'desc') {
+    // Sort alphabetically descending
+    this.filteredUsers = [...this.users].sort((a, b) => b.name.localeCompare(a.name));
+  }
+  this.updatePagination();
+}
+
+onSortOptionChange(event: Event): void {
+  const target = event.target as HTMLSelectElement;
+  const selectedOption = target.value as 'asc' | 'desc';
+  this.sortUsers(selectedOption);
 }
 
 

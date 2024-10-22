@@ -17,8 +17,8 @@ interface AuditLogEntry {
   action: string;
   affected_page: string;
   parameter: string;
-  old_value: string;
-  new_value: string;
+  old_parameter: string;
+  new_parameter: string;
   ip_address: string;
   date?: string;
   email?: string;
@@ -67,14 +67,14 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('roles')
       .select('role_name, role_id');
-  
+
     if (error) {
       throw error;
     }
-  
+
     return data;
   }
-  
+
   async getAssignedEmployees(roleId: number): Promise<any> {
     const { data, error } = await this.supabase
       .from('user_roles')
@@ -90,11 +90,11 @@ export class SupabaseService {
     let { data, error } = await this.supabase
       .from('profile')
       .select('user_id, first_name, mid_name, surname');
-  
+
     if (error) {
       throw new Error(error.message);
     }
-  
+
     return data;
   }
 
@@ -166,111 +166,191 @@ export class SupabaseService {
   }
 
   async createEmployee(employee: any): Promise<{ data: any; error: any }> {
-    
     console.log('Creating employee:', JSON.stringify(employee, null, 2));
-      // Step 1: Sign up the user in Supabase Authentication
-    const { data: authData, error: authError } = await this.supabase.auth.signUp({
-      email: employee.email,
-      password: employee.password, // Ensure the password is hashed when storing in the profile table
-    });
 
-    if (authError) {
-      console.error('Error signing up user:', authError.message);
-      return { data: null, error: authError };
+    // Step 1: Insert the employee data into the 'profile' table
+    const { data: profileData, error: profileError } = await this.supabase
+      .from('profile')
+      .insert([{
+        email: employee.email,
+        first_name: employee.first_name,
+        mid_name: employee.mid_name,
+        surname: employee.surname,
+        password: employee.password, // Hash the password before storing
+        department: employee.department,
+        position: employee.position,
+        types: employee.types,
+        access: employee.access,
+        photo_url: employee.photo_url
+      }])
+      .select('user_id');
+
+    if (profileError) {
+      console.error('Error creating employee:', profileError.message);
+      return { data: null, error: profileError };
     }
-    if (authData?.user) {
-      // Step 2: Insert the employee data into the 'profile' table
-      const { data: profileData, error: profileError } = await this.supabase
-        .from('profile')
-        .insert([{
-          auth_user_id: authData.user.id,  // Reference to the auth user
-          email: employee.email,
-          first_name: employee.first_name,
-          mid_name: employee.mid_name,
-          surname: employee.surname,
-          password: employee.password, // Store the hashed password
-          department: employee.department,
-          position: employee.position,
-          types: employee.types,
-          access: employee.access,
-          photo_url: employee.photo_url
-        }])
-        .select('user_id');
-  
-      if (profileError) {
-        console.error('Error creating employee:', profileError.message);
-        return { data: null, error: profileError };
-      }
-  
-      const newUserId = profileData[0].user_id;
-      console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
-  
-      // Step 3: Fetch the corresponding role_id for the role_name
-      const { data: rolesData, error: rolesError } = await this.supabase
-        .from('roles')
-        .select('role_id')
-        .eq('role_name', employee.position)
-        .single();
-  
-      if (rolesError) {
-        console.error('Error fetching role_id:', rolesError.message);
-        return { data: null, error: rolesError };
-      }
-  
-      const roleId = rolesData.role_id;
-  
-      // Step 4: Assign role to the user and store role_name
-      const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
-  
-      if (assignRoleResponse.error) {
-        console.error('Error assigning role:', assignRoleResponse.error.message);
-        return { data: profileData[0], error: assignRoleResponse.error };
-      } else {
-        console.log('Role assigned successfully:', assignRoleResponse.data);
-      }
-  
-      // Step 5: Create an audit log entry
-      const auditLogData: AuditLogEntry = {
-        user_id: await this.getCurrentUserId(),
-        action: 'Create',
-        affected_page: 'Employee Management',
-        parameter: 'New employee created',
-        old_value: '',  // No old value for a new employee
-        new_value: JSON.stringify(profileData[0]),
-        ip_address: await this.getUserIpAddress(),
-        date: new Date().toISOString(),
-        email: await this.getCurrentUserEmail()
-      };
-  
-      console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
-  
-      const auditLogResult = await this.createAuditLog(auditLogData);
-      if (!auditLogResult.success) {
-        console.error('Failed to create audit log:', auditLogResult.error);
-      } else {
-        console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
-      }
-  
-      // Step 6: Refresh the session
-      await this.refreshSession();
-  
-      return { data: profileData[0], error: null };
+
+    const newUserId = profileData[0].user_id;
+    console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
+
+    // Step 2: Fetch the corresponding role_id for the role_name
+    const { data: rolesData, error: rolesError } = await this.supabase
+      .from('roles')
+      .select('role_id')
+      .eq('role_name', employee.position)
+      .single();
+
+    if (rolesError) {
+      console.error('Error fetching role_id:', rolesError.message);
+      return { data: null, error: rolesError };
     }
-  
-    return { data: null, error: new Error('Unexpected error occurred during employee creation.') };
+
+    const roleId = rolesData.role_id;
+
+    // Step 3: Assign role to the user and store role_name
+    const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
+
+    if (assignRoleResponse.error) {
+      console.error('Error assigning role:', assignRoleResponse.error.message);
+      return { data: profileData[0], error: assignRoleResponse.error };
+    } else {
+      console.log('Role assigned successfully:', assignRoleResponse.data);
+    }
+
+    // Step 4: Create an audit log entry
+    const auditLogData: AuditLogEntry = {
+      user_id: await this.getCurrentUserId(),
+      action: 'Create',
+      affected_page: 'Employee Management',
+      parameter: 'New employee created',
+      old_parameter: '',  // No old value for a new employee
+      new_parameter: JSON.stringify(profileData[0]),
+      ip_address: await this.getUserIpAddress(),
+      date: new Date().toISOString(),
+      email: await this.getCurrentUserEmail()
+    };
+
+    console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
+
+    const auditLogResult = await this.createAuditLog(auditLogData);
+    if (!auditLogResult.success) {
+      console.error('Failed to create audit log:', auditLogResult.error);
+    } else {
+      console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+    }
+
+    // Step 5: Refresh the session
+    await this.refreshSession();
+
+    return { data: profileData[0], error: null };
   }
-  
+
+  // async createEmployee(employee: any): Promise<{ data: any; error: any }> {
+
+  //   console.log('Creating employee:', JSON.stringify(employee, null, 2));
+  //     // Step 1: Sign up the user in Supabase Authentication
+  //   const { data: authData, error: authError } = await this.supabase.auth.signUp({
+  //     email: employee.email,
+  //     password: employee.password, // Ensure the password is hashed when storing in the profile table
+  //   });
+
+  //   if (authError) {
+  //     console.error('Error signing up user:', authError.message);
+  //     return { data: null, error: authError };
+  //   }
+  //   if (authData?.user) {
+  //     // Step 2: Insert the employee data into the 'profile' table
+  //     const { data: profileData, error: profileError } = await this.supabase
+  //       .from('profile')
+  //       .insert([{
+  //         auth_user_id: authData.user.id,  // Reference to the auth user
+  //         email: employee.email,
+  //         first_name: employee.first_name,
+  //         mid_name: employee.mid_name,
+  //         surname: employee.surname,
+  //         password: employee.password, // Store the hashed password
+  //         department: employee.department,
+  //         position: employee.position,
+  //         types: employee.types,
+  //         access: employee.access,
+  //         photo_url: employee.photo_url
+  //       }])
+  //       .select('user_id');
+
+  //     if (profileError) {
+  //       console.error('Error creating employee:', profileError.message);
+  //       return { data: null, error: profileError };
+  //     }
+
+  //     const newUserId = profileData[0].user_id;
+  //     console.log('Employee created successfully:', JSON.stringify(profileData, null, 2));
+
+  //     // Step 3: Fetch the corresponding role_id for the role_name
+  //     const { data: rolesData, error: rolesError } = await this.supabase
+  //       .from('roles')
+  //       .select('role_id')
+  //       .eq('role_name', employee.position)
+  //       .single();
+
+  //     if (rolesError) {
+  //       console.error('Error fetching role_id:', rolesError.message);
+  //       return { data: null, error: rolesError };
+  //     }
+
+  //     const roleId = rolesData.role_id;
+
+  //     // Step 4: Assign role to the user and store role_name
+  //     const assignRoleResponse = await this.assignUserRole(newUserId, roleId);
+
+  //     if (assignRoleResponse.error) {
+  //       console.error('Error assigning role:', assignRoleResponse.error.message);
+  //       return { data: profileData[0], error: assignRoleResponse.error };
+  //     } else {
+  //       console.log('Role assigned successfully:', assignRoleResponse.data);
+  //     }
+
+  //     // Step 5: Create an audit log entry
+  //     const auditLogData: AuditLogEntry = {
+  //       user_id: await this.getCurrentUserId(),
+  //       action: 'Create',
+  //       affected_page: 'Employee Management',
+  //       parameter: 'New employee created',
+  //       old_value: '',  // No old value for a new employee
+  //       new_value: JSON.stringify(profileData[0]),
+  //       ip_address: await this.getUserIpAddress(),
+  //       date: new Date().toISOString(),
+  //       email: await this.getCurrentUserEmail()
+  //     };
+
+  //     console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
+
+  //     const auditLogResult = await this.createAuditLog(auditLogData);
+  //     if (!auditLogResult.success) {
+  //       console.error('Failed to create audit log:', auditLogResult.error);
+  //     } else {
+  //       console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+  //     }
+
+  //     // Step 6: Refresh the session
+  //     await this.refreshSession();
+
+  //     return { data: profileData[0], error: null };
+  //   }
+
+  //   return { data: null, error: new Error('Unexpected error occurred during employee creation.') };
+  // }
+
 
   //Writes in the "user_roles" table in Supabase. Relates a user_id to an assigned role_id
   async assignUserRole(userId: number, roleId: number): Promise<PostgrestSingleResponse<any>> {
     const response = await this.supabase
       .from('user_roles')
       .insert({ user_id: userId, role_id: roleId });
-  
+
     if (response.error) {
       console.error('Error assigning role:', response.error.message);
     }
-  
+
     return response;
   }
 
@@ -341,7 +421,7 @@ export class SupabaseService {
       .from('roles')
       .update({ role_name })
       .eq('role_id', role_id);
-  
+
     if (error) {
       throw new Error(error.message);
     }
@@ -357,7 +437,7 @@ export class SupabaseService {
       profile:profile(first_name, mid_name, surname)
     `)
       .eq('role_id', roleId);
-  
+
     if (error) {
       console.error('Error fetching assigned users:', error.message);
       return [];
@@ -412,14 +492,14 @@ export class SupabaseService {
   async deleteUser(email: string): Promise<PostgrestSingleResponse<any>> {
     try {
       console.log(`Starting deletion process for user: ${email}`);
-  
+
       // Retrieve the user's profile
       const { data: userProfile, error: userProfileError } = await this.supabase
         .from('profile')
         .select('user_id, photo_url, first_name, surname')
         .eq('email', email)
         .single();
-  
+
       if (userProfileError) {
         console.error('Error retrieving user profile:', userProfileError.message);
         return {
@@ -430,9 +510,9 @@ export class SupabaseService {
           statusText: 'Error retrieving user profile'
         };
       }
-  
+
       console.log('User profile retrieved:', userProfile);
-  
+
       // Delete the photo from storage if it exists
       if (userProfile?.photo_url) {
         const fileName = userProfile.photo_url.split('/').pop();
@@ -441,7 +521,7 @@ export class SupabaseService {
             .storage
             .from('photos')
             .remove([fileName]);
-  
+
           if (storageError) {
             console.error('Error deleting image from storage:', storageError.message);
           } else {
@@ -449,47 +529,53 @@ export class SupabaseService {
           }
         }
       }
-  
+
       // Delete the user profile
       const response = await this.supabase
         .from('profile')
         .delete()
         .eq('email', email);
-  
+
       if (response.error) {
         console.error('Error deleting user:', response.error.message);
         return response;
       }
-  
+
       console.log('User deleted successfully:', response.data);
-  
+
       // Create audit log
+      const formatParameter = (param: any) => {
+  return Object.entries(param)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n');
+    };
+
       const auditLogData = {
-        email: await this.getCurrentUserEmail(),
-        affected_page: 'Employee Management',
-        action: 'Delete',
-        parameter: 'Employee deleted',
-        old_parameter: JSON.stringify({
-          user_id: userProfile.user_id,
-          email: email,
-          first_name: userProfile.first_name,
-          surname: userProfile.surname
-        }),
-        new_parameter: null
-      };
-  
+      email: await this.getCurrentUserEmail(),
+      affected_page: 'Employee Management',
+      action: 'Delete',
+      parameter: 'Employee deleted',
+      old_parameter: formatParameter({
+      //user_id: userProfile.user_id,
+      email: email,
+      first_name: userProfile.first_name,
+      surname: userProfile.surname
+      }),
+      new_parameter: 'N/A'
+    };
+
       console.log('Attempting to create audit log with data:', auditLogData);
-  
+
       const auditLogResult = await this.createAuditLog(auditLogData);
       if (!auditLogResult.success) {
         console.error('Failed to create audit log:', auditLogResult.error);
       } else {
         console.log('Audit log created successfully:', auditLogResult.data);
       }
-  
+
       // Refresh the session after the delete operation
       await this.refreshSession();
-  
+
       return response;
     } catch (error) {
       console.error('Unexpected error deleting user:', error);
@@ -502,9 +588,9 @@ export class SupabaseService {
       };
     }
   }
-  
-  
-  
+
+
+
 
   async acquireLock(): Promise<boolean> {
     if (this.isLockAcquired) {
@@ -607,7 +693,7 @@ subscribeToAuditLogs(callback: (payload: any) => void) {
         console.log('New audit log:', payload.new);
         callback(payload.new);
       }
-    ) 
+    )
     .subscribe((status) => {
       console.log('Subscription status:', status);
     });
@@ -629,8 +715,6 @@ isValidEmail(email: string): boolean {
   return regex.test(email);
 }
 async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
-  // ... (previous code remains the same)
-
   try {
     // Step 1: Get the old employee data before update
     const { data: oldEmployeeData, error: oldDataError } = await this.supabase
@@ -673,48 +757,38 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     // Step 3: Update the user's role if the position has changed
     // ... (role update code remains the same)
 
-    // Step 4: Create an audit log entry with old and new parameters
-    const oldParameterValue = JSON.stringify({
-      first_name: oldEmployeeData.first_name,
-      mid_name: oldEmployeeData.mid_name,
-      surname: oldEmployeeData.surname,
-      email: oldEmployeeData.email,
-      department: oldEmployeeData.department,
-      position: oldEmployeeData.position,
-      types: oldEmployeeData.types,
-      photo_url: oldEmployeeData.photo_url,
-    });
+    // Step 4: Create an audit log entry with only changed fields
+    const changedFields = this.getChangedFields(oldEmployeeData, updatedData[0]);
 
-    const newParameterValue = JSON.stringify({
-      first_name: updatedData[0].first_name,
-      mid_name: updatedData[0].mid_name,
-      surname: updatedData[0].surname,
-      email: updatedData[0].email,
-      department: updatedData[0].department,
-      position: updatedData[0].position,
-      types: updatedData[0].types,
-      photo_url: updatedData[0].photo_url,
-    });
+    if (Object.keys(changedFields).length > 0) {
+      const formatChanges = (changes: Record<string, { old: any, new: any }>, type: 'old' | 'new') => {
+        return Object.entries(changes)
+          .map(([key, value]) => `${key}: ${value[type]}`)
+          .join('\n');
+      };
 
-    const auditLogData: AuditLogEntry = {
-      user_id: await this.getCurrentUserId(),
-      action: 'Update',
-      affected_page: 'Employee Management',
-      parameter: 'Employee updated',
-      old_value: oldParameterValue,
-      new_value: newParameterValue,
-      ip_address: await this.getUserIpAddress(),
-      date: new Date().toISOString(),
-      email: await this.getCurrentUserEmail()
-    };
+      const auditLogData: AuditLogEntry = {
+        user_id: await this.getCurrentUserId(),
+        action: 'Update',
+        affected_page: 'Employee Management',
+        parameter: 'Employee updated',
+        old_parameter: formatChanges(await changedFields, 'old'),
+        new_parameter: formatChanges(await changedFields, 'new'),
+        ip_address: await this.getUserIpAddress(),
+        date: new Date().toISOString(),
+        email: await this.getCurrentUserEmail()
+      };
 
-    console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
+      console.log('Audit log data being sent:', JSON.stringify(auditLogData, null, 2));
 
-    const auditLogResult = await this.createAuditLog(auditLogData);
-    if (!auditLogResult.success) {
-      console.error('Failed to create audit log:', auditLogResult.error);
+      const auditLogResult = await this.createAuditLog(auditLogData);
+      if (!auditLogResult.success) {
+        console.error('Failed to create audit log:', auditLogResult.error);
+      } else {
+        console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+      }
     } else {
-      console.log('Audit log created successfully:', JSON.stringify(auditLogResult.data, null, 2));
+      console.log('No changes detected, skipping audit log creation');
     }
 
     // Step 5: Refresh the session
@@ -727,9 +801,16 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     return { data: null, error: { message: 'An unexpected error occurred' } };
   }
 }
-  
 
-  
+async getChangedFields(oldData: any, newData: any): Promise<Record<string, { old: any, new: any }>> {
+  const changes: Record<string, { old: any, new: any }> = {};
+  for (const key in newData) {
+    if (oldData[key] !== newData[key]) {
+      changes[key] = { old: oldData[key], new: newData[key] };
+    }
+  }
+  return changes;
+}
   // Method to get the current user's email
   async getCurrentUserEmail(): Promise<string> {
     const { data, error } = await this.supabase.auth.getSession();
@@ -742,7 +823,7 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
         throw new Error('No user is currently logged in.');
       }
   }
-  
+
 
   // Example implementation of getCurrentUserId
   async getCurrentUserId(): Promise<string> {
@@ -762,25 +843,25 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
     // This method should be implemented to return the user's IP address
     return '127.0.0.1';
   }
-  
+
   // // Helper method to get current user ID
   // async getCurrentUserId(): Promise<string> {
   //   const { data: { user } } = await this.supabase.auth.getUser();
   //   return user?.id || 'Unknown';
   // }
 
-  
+
   async getWorkflows(): Promise<{ data: any[]; error: any }> {
     try {
       const { data, error } = await this.supabase
         .from('workflow')
         .select('*');
-  
+
       if (error) {
         console.error('Error fetching workflows:', error.message);
         return { data: [], error };
       }
-  
+
       return { data, error: null };
     } catch (error) {
       console.error('Unexpected error fetching workflows:', error);
@@ -807,18 +888,18 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
       }
       return { data, error };
     }
-  
+
     async updateTicketPriority(ticketId: number, priority: string) {
       const { data, error } = await this.supabase
         .from('ticket')  // Replace with your actual table name
         .update({ priority: priority })
         .eq('id', ticketId);
-    
+
       if (error) {
         console.error('Error updating ticket priority:', error);
         throw error;
       }
-    
+
       return data;
     }
 
@@ -832,39 +913,39 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
             contentType: file.type,
             upsert: false
           });
-    
+
         if (error) {
           console.error('Error during upload:', error.message);
           return { data: null, error };
         }
-    
+
         console.log('Upload successful:', data);
-    
+
         // Get the public URL for the uploaded file
         const { data: publicUrlData } = this.supabase
           .storage
           .from(bucket)
           .getPublicUrl(data.path);
-    
+
         if (!publicUrlData || !publicUrlData.publicUrl) {
           return { data: null, error: new Error('Failed to get public URL') };
         }
-    
+
         console.log('Public URL:', publicUrlData.publicUrl);
-    
-        return { 
-          data: { 
+
+        return {
+          data: {
             path: data.path,
             publicUrl: publicUrlData.publicUrl
-          }, 
-          error: null 
+          },
+          error: null
         };
       } catch (error) {
         console.error('Unexpected error during upload:', error);
         return { data: null, error: error as Error };
       }
     }
-  
+
 
 
 
@@ -875,26 +956,26 @@ async updateEmployee(employee: any): Promise<{ data: any; error: any }> {
         console.error(`Invalid employee ID: ${employeeId}`);
         return { data: null, error: new Error('Invalid employee ID') };
       }
-  
+
       console.log(`Updating photo URL for employee ID: ${employeeId}`);
       console.log(`New photo URL: ${photoUrl}`);
-  
+
       const { data, error } = await this.supabase
         .from('profile')
         .update({ photo_url: photoUrl })
         .eq('id', employeeId)
         .single();
-  
+
       if (error) {
         console.error('Error updating profile photo URL:', error);
         //return { data: null, error };
       }
-  
+
       if (!data) {
         console.warn(`No data returned when updating photo URL for employee ID: ${employeeId}`);
         return { data: null, error: new Error('No data returned from update operation') };
       }
-  
+
       console.log(`Successfully updated photo URL for employee ID ${employeeId}`);
       return { data, error: null };
     } catch (error) {
@@ -935,7 +1016,7 @@ async logAction(logEntry: AuditLogEntry): Promise<void> {
   const { data, error } = await this.supabase
     .from('audit_trail')
     .insert([logEntry]);
-  
+
   if (error) {
     console.error('Error logging action:', error.message);
     throw error;
@@ -986,7 +1067,7 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
 
     return data;
   }
-  
+
   async setStoragePolicy(): Promise<boolean> {
     try {
       const supabaseAny = this.supabase as any; // Cast supabase to any temporarily
@@ -1026,16 +1107,20 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
 
 
 
-  //parameters
-  async getParameters() {
-    const { data, error } = await this.supabase
-      .from('parameters')
-      .select('*');
-    if (error) throw error;
-    console.log('Fetched data from Supabase:', data);
-    return data;
-  }
-  
+// parameters
+async getParameters() {
+  const { data, error } = await this.supabase
+    .from('parameters')
+    .select('*');
+  if (error) throw error;
+
+  // Sort the data by id in descending order (assuming higher id means newer)
+  const sortedData = data.sort((a, b) => b.id - a.id);
+
+  console.log('Fetched and sorted data from Supabase:', sortedData);
+  return sortedData;
+}
+
   async createParameter(parameter: any) {
     const { data, error } = await this.supabase
       .from('parameters')
@@ -1049,7 +1134,7 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
       .from('parameters')
       .delete()
       .eq('parameter_name', parameterName);
-  
+
     if (error) {
       throw error;
     }
@@ -1092,7 +1177,23 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
     } catch (error) {
       console.error('Error fetching attendances from Supabase:', error);
       throw error;
+
     }
+  }
+  async getAttendancesByDate(date: string): Promise<any[]> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const { data, error } = await this.supabase
+      .from('DTR')
+      .select('*')
+      .gte('clock_in', startOfDay.toISOString())
+      .lt('clock_in', endOfDay.toISOString());
+
+    if (error) throw error;
+    return data || [];
   }
 
   async insertDTRRecord(status: string, name: string) {
@@ -1100,25 +1201,25 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
       const { data, error } = await this.supabase
         .from('DTR')
         .insert([
-          { 
-            status, 
-            name, 
+          {
+            status,
+            name,
             clock_in: new Date(),
             clock_out: null,  // Explicitly set clock_out to null
             schedule_in: '09:00:00',  // 9:00 AM
-            schedule_out: '19:00:00' 
+            schedule_out: '19:00:00'
           }
         ]);
-  
+
       if (error) throw error;
-  
+
       return data;
     } catch (error) {
       console.error('Error inserting DTR record:', error);
       throw error;
     }
   }
-  
+
   async updateDTRClockOut(name: string) {
     try {
       const { data: existingRecords, error: fetchError } = await this.supabase
@@ -1126,21 +1227,21 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
         .select('*')
         .eq('name', name)
         .is('clock_out', null);
-  
+
       if (fetchError) throw fetchError;
-  
+
       if (existingRecords.length === 0) {
         throw new Error('No matching Time In record found.');
       }
-  
+
       const { data, error } = await this.supabase
         .from('DTR')
         .update({ clock_out: new Date() })
         .eq('name', name)
         .is('clock_out', null);
-  
+
       if (error) throw error;
-  
+
       return { data, error: null };
     } catch (error) {
       console.error('Error updating DTR record:', error);
@@ -1162,12 +1263,12 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
         .is('clock_out', null)
         .order('clock_in', { ascending: false })
         .limit(1);
-  
+
       if (error) {
         console.error('Error fetching existing Time In records:', error);
         throw error;
       }
-  
+
       return { data, error: null };
     } catch (error) {
       console.error('Error checking Time In record:', error);
@@ -1178,7 +1279,7 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
   async hasTimedInToday(name: string): Promise<boolean> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
+
     try {
       const { data, error } = await this.supabase
         .from('DTR')
@@ -1186,9 +1287,9 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
         .eq('name', name)
         .gte('clock_in', today.toISOString())
         .limit(1);
-  
+
       if (error) throw error;
-  
+
       return data && data.length > 0;
     } catch (error) {
       console.error('Error checking if user has timed in today:', error);
@@ -1199,17 +1300,17 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
     try {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-  
+
       const { data, error } = await this.supabase
         .from('DTR')
         .select('*')
         .gte('clock_in', today.toISOString())
         .order('clock_in', { ascending: false });
-  
+
       if (error) {
         throw error;
       }
-  
+
       console.log('Fetched today\'s data from Supabase:', data);
       return data;
     } catch (error) {
@@ -1217,7 +1318,7 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
       throw error;
     }
   }
-  
+
   //reply
   async createReply(reply: any) {
     return await this.supabase
@@ -1237,5 +1338,232 @@ async fetchAuditLogs(): Promise<{ data: any[]; error: any }> {
       .eq('id', ticket.id)
       .select();
   }
+
+  //dashboard
+  async getHolidays() {
+    const now = new Date();
+    const firstDayOfYear = new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0];
+    const lastDayOfYear = new Date(now.getFullYear(), 11, 31).toISOString().split('T')[0];
+
+    console.log('Fetching holidays from', firstDayOfYear, 'to', lastDayOfYear);
+
+    const { data, error } = await this.supabase
+      .from('parameters')
+      .select('*')
+      .eq('parameter_type', 'Holiday')  // Ensure correct case
+      .gte('parameter_date', firstDayOfYear)
+      .lte('parameter_date', lastDayOfYear)
+      .order('parameter_date', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching holidays:', error);
+      throw error;
+    }
+
+    console.log('Fetched holidays:', data);
+    return data;
+  }
+
+  async addTestHoliday() {
+    const testName = 'Test Holiday';
+    const testDate = new Date().toISOString().split('T')[0]; // Today's date
+    const { data, error } = await this.supabase
+      .from('parameters')
+      .insert([
+        { parameter_name: testName, parameter_type: 'Holiday', parameter_date: testDate }
+      ]);
+
+    if (error) {
+      console.error('Error adding test holiday:', error);
+      throw error;
+    }
+
+    console.log('Test holiday added:', data);
+    return data;
+  }
+
+
+  // PIMAM DASHBOARD
+  async getEmployeesTable(): Promise<any> {
+    const { data, error } = await this.supabase
+        .from('profile')
+        .select('*')
+    return data;
+  }
+
+  // PDS READING
+
+  async getPersonalInfo(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('personal_information')
+      .select('*')
+    return data;
+  }
+
+  //COMPENSATION RECORDS PAGE QUERIES
+  async getEmployeeCompensationRecords(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('employee')
+      .select('compensation_benefits(*), employee_compensation(*), employee_deductions(*), employee_payslips(*)')
+    return {
+      compensation_benefits: data?.[0]['compensation_benefits'],
+      employee_compensation: data?.[0]['employee_compensation'],
+      employee_deductions: data?.[0]['employee_deductions'],
+      employee_payslips: data?.[0]['employee_payslips']
+    };
+  }
+
+  async insertEmployeeCompensationRecord(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('compensation_benefits')
+      .insert(data);
+    return { data: insertedData, error };
+  }
+
+  // WRITING ACCESS STARTS HERE
+  async insertFamilyBackground(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('family_background')
+      .insert(data);
+
+    return { data: insertedData, error };
+  }
+
+  // async insertPersonalInformation(data: any) {
+  //   const { data: response, error } = await this.supabase
+  //     .from('personal_information') // replace with your table name
+  //     .insert([data]);
+
+  //   if (error) {
+  //     throw new Error(error.message);
+  //   }
+  //   return response;
+  // }
+
+  async insertEducationalBackground(data: any) {
+    const { data: result, error } = await this.supabase
+      .from('educational_background')
+      .insert([data]);
+
+    return { result, error };
+  }
+
+  async insertPersonalInformation(formData: any) {
+    const { data, error } = await this.supabase
+      .from('personal_information_pds')
+      .insert([formData]);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+  async insertPersonalInformationTest(formData: any) {
+    const { data, error } = await this.supabase
+      .from('personal_information')
+      .insert([formData]);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+
+  async insertCivilServiceEligibility(tableName: string, formData: any) {
+
+    const { data, error } = await this.supabase
+      .from('civil_service_eligibility')
+      .insert([formData]);
+
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
+  //MERITS AND VIOLATIONS
+
+  async insertMeritOrViolation(record: {
+    violations: string,
+    merits: string,
+    date_of_record_v: string | null,
+    date_of_record_m: string | null,
+    user_id: number 
+  }) {
+    const { data, error } = await this.supabase
+      .from('merits_and_violations')
+      .insert([{
+        violations: record.violations,
+        merits: record.merits,
+        date_of_record_v: record.date_of_record_v,
+        date_of_record_m: record.date_of_record_m,
+        user_id: record.user_id 
+      }]);
+
+    return { data, error }; 
+  }
+
+  async getProfiles() {
+    const { data, error } = await this.supabase
+      .from('profile')
+      .select('*');
+
+    return { data, error }; 
+  }
+
+  async getRecords() {
+    const { data, error } = await this.supabase
+      .from('merits_and_violations')
+      .select('*');
+
+    return { data, error };
+  }
+
+  async getLoanInfo() {
+
+  }
+
+
+  //LEAVE REQUESTS
+
+  async getLeaveRequests() {
+    const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
+    if (error) {
+      console.error('Error fetching leave requests:', error);
+      return [];
+    }
+    return data;
+  }
+
+  async updateLeaveRequestStatus(requestId: number, newStatus: 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave') {
+    const { data, error } = await this.supabase
+         .from('leave_requests')
+         .update({ status: newStatus })
+         .eq('id', requestId);
+
+      if (error) {
+        console.error('Error updating leave request status:', error);
+        return null;
+      }
+    return data;
+  }
+
+  async updateLeaveBalance(requestId: number, newBalance: number) {
+    const { data, error } = await this.supabase
+        .from('leave_requests')
+        .update({ leave_balance: newBalance })
+        .eq('id', requestId);
+    
+    if (error) {
+        console.error('Error updating leave balance:', error);
+        return { error };
+    }
+    return { data };
+  }
+
 
 }

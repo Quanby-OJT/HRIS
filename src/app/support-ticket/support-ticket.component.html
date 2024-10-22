@@ -1,0 +1,151 @@
+<!-- Flexible container that holds a sidebar navigation component and user-management area -->
+<div class="flex">
+    <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex-grow"> 
+      <!-- Main componenet -->
+      <div class="min-h-screen">
+        <main class="p-6">
+          <div class="mb-6">
+        <p class="mb-2 text-3xl font-bold text-neutral-900">Support Tickets<br></p>
+        <p class="mb-2 pb-5 text-slate-500 text-sm">View and reply to complaint ticket details</p>
+          </div>
+      
+  
+          <!-- Support tickets -->
+       
+        <section id="ticket-list" class="flex flex-col h-full">
+        <!-- Table for support tickets -->
+          <div class="overflow-x-auto shadow-lg rounded-xl bg-white">
+            <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+              <!-- Search Input -->
+              <div class="relative w-[20%]">
+                <input 
+                  type="text" 
+                  [(ngModel)]="searchTicketTerm" 
+                  placeholder="Search Tickets..." 
+                  (input)="searchTicketTable()"
+                  class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
+                />
+                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+              </div>
+              <!-- Filter Dropdown, Delete Button, and Pagination Controls -->
+              <div class="flex items-center space-x-4">
+                <!-- Filter Dropdown -->
+                <div class="relative">
+                  <select class=" text-black border px-4 py-2 rounded appearance-none pr-10"[(ngModel)]="filterOption"(change)="filterTickets()">
+                    <option value="all">All</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                  <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <!-- Delete Button -->
+                <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"(click)="deleteSelectedTickets()">Delete</button>
+                <!-- Pagination Controls -->
+                <div class="flex items-center space-x-2">
+                  <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketPrevPage()"[disabled]="ticket_currentPage === 1">&lt;</button>
+                  <span class="text-gray-600 text-center">{{ ticket_currentPage }} of {{ ticket_totalPages }}</span>
+                  <button class="text-black p-1 bg-gray-100 rounded-md"(click)="ticketNextPage()"[disabled]="ticket_currentPage === ticket_totalPages">&gt;</button>
+                </div>
+              </div>
+            </div>        
+            <div class="overflow-x-auto overflow-y-auto max-h-[28rem] custom-scrollbar">
+          <table class="min-w-full text-sm text-center text-black dark:text-gray-700 border-collapse rounded shadow-lg table-fixed bg-white">
+            <thead class="bg-[#E9ECF1] text-gray-700 leading-normal">
+              <tr class="overflow-x-auto overflow-y-auto max-h-96 custom-scrollbar">
+                <th scope="col" class="p-4"><input type="checkbox" (click)="toggleAllTickets()"></th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">TICKET ID</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">TITLE</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">EMAIL</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">DESCRIPTION</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">STATUS</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">DATE CREATED</th>
+                <th scope="col" class="px-6 py-3 text-left font-medium text-gray-500">PRIORITY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ticket of ticketPaginate(); let i = index" class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer text-left font-medium text-gray-500"(click)="openTicketDetails(ticket)">
+                <!-- Checkbox -->
+                <td class="p-4">
+                  <input type="checkbox" [(ngModel)]="selectedTickets[i]" (click)="$event.stopPropagation()"></td>
+                <!-- Ticket ID -->
+                <td class="px-6 py-3">{{ ticket.id }}</td>
+                <!-- Ticket Title -->
+                <td class="px-6 py-3 font-semibold text-gray-600">{{ ticket.title }}</td>
+                <!-- Ticket Email -->
+                <td class="px-6 py-3 text-left">{{ ticket.email }}</td>
+                <!-- Ticket Description -->
+                <td class="px-6 py-3 text-left overflow-hidden max-w-xs whitespace-nowrap overflow-ellipsis">{{ ticket.description }}</td>
+                <!-- Ticket Status -->
+                <td class="px-6 py-3">
+                  <span class="bg-green-200 py-1 px-3 rounded-full text-xs">
+                    <span [ngClass]="{
+                      'text-green-700': ticket.status === 'Open',
+                      'text-blue-700': ticket.status === 'In Progress',
+                      'text-red-700': ticket.status === 'Closed'
+                    }">{{ ticket.status }}</span>
+                  </span>
+                </td>
+                <!-- Ticket Date -->
+                <td class="px-6 py-3 text-sm">{{ ticket.dateTime | date:'hh:mm a' }}<br>{{ ticket.dateTime | date:'MMMM d, yyyy' }}</td>
+                <!-- Ticket Priority -->
+                <td class="px-6 py-3"><div (click)="$event.stopPropagation()">
+                  <select class="py-2 pl-3 pr-10 rounded font-bold shadow-md"[(ngModel)]="ticket.priority"(change)="updateTicketPriority(ticket, $event)">
+                      <option value="Low" [ngValue]="'Low'" style="font-weight: 600; color: green;">Low</option>
+                      <option value="Medium" [ngValue]="'Medium'" style="font-weight: 600; color: yellow;">Medium</option>
+                      <option value="High" [ngValue]="'High'" style="font-weight: 600; color: orange;">High</option>
+                      <option value="Urgent" [ngValue]="'Urgent'" style="font-weight: 600; color: red;">Urgent</option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+            </tbody>      
+            </table>
+            </div>
+          </div>
+        </section>
+        
+  
+          <!-- Ticket Details Modal -->
+          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
+            <div class="bg-white rounded p-4 max-w-md w-full">
+              <div class="flex justify-between items-center border-b">
+                <p class="text-xl font-black py-2 m-0">Ticket Details</p>
+                <button class="text-white rounded p-2 flex items-center justify-center" (click)="closeModal()">
+                  <i class="fa fa-times text-gray-500" aria-hidden="true"></i>
+                </button>
+              </div>
+                          
+              <div class="mt-4">
+                <p><strong>Title:</strong> {{ selectedTicket?.title }}</p>
+                <p><strong>Email:</strong> {{ selectedTicket?.email }}</p>
+                <p><strong>Status:</strong>
+                  <span [ngClass]="{
+                    'text-green-700': selectedTicket?.status === 'Open',
+                    'text-blue-700': selectedTicket?.status === 'In Progress',
+                    'text-red-700': selectedTicket?.status === 'Closed'
+                  }">{{ selectedTicket?.status }}</span>
+                </p>
+                <div class="mt-2">
+                  <p class="font-semibold text-gray-700">Description:</p>
+                  <div class="border border-gray-300 rounded p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
+                      {{ selectedTicket?.description }}
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <p><strong>Admin Reply:</strong></p>
+                  <textarea [(ngModel)]="replyText" class="w-full p-2 border rounded" placeholder="Type your reply here..."></textarea>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-end">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded mr-2" (click)="replyTicket()">Reply</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+    

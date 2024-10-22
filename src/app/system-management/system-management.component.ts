@@ -13,6 +13,7 @@ interface Parameter {
   parameter_time?: string | null;
   parameter_time2?: string | null;
   selected?: boolean;
+  
 }
 
 @Component({
@@ -41,8 +42,10 @@ export class SystemManagementComponent implements OnInit {
   isError = false;
   selectedParameter: Parameter | null = null;
   currentPage = 1;
-  itemsPerPage = 8;
+  itemsPerPage = 10;
   totalPages = 1;
+  showDeletePopup = false;
+  parametersToDelete: Parameter[] = [];
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -105,6 +108,7 @@ export class SystemManagementComponent implements OnInit {
   }
 
   openTable() {
+    console.log('openTable called');
     this.showTable = true;
     this.loadParameters();
   }
@@ -146,6 +150,7 @@ export class SystemManagementComponent implements OnInit {
   async loadParameters() {
     try {
       const data = await this.supabaseService.getParameters();
+      // The data is already sorted by the Supabase query, so we don't need to sort it again
       this.parameters = data;
       this.filteredParameters = data;
       this.updatePagination();
@@ -267,5 +272,34 @@ export class SystemManagementComponent implements OnInit {
       this.showMessage('Failed to save/update parameter', true);
     }
   }
-  
+
+  openDeletePopup() {
+    this.parametersToDelete = this.filteredParameters.filter(param => param.selected);
+    if (this.parametersToDelete.length > 0) {
+      this.showDeletePopup = true;
+    } else {
+      this.showMessage('Please select at least one parameter to delete', true);
+    }
+  }
+
+  closeDeletePopup() {
+    this.showDeletePopup = false;
+    this.parametersToDelete = [];
+  }
+
+  async confirmDelete() {
+    try {
+      const deletions = this.parametersToDelete.map(param =>
+        this.supabaseService.deleteParameter(param.parameter_name)
+      );
+      await Promise.all(deletions);
+      await this.loadParameters();
+      this.showMessage('Parameters deleted successfully');
+      this.closeDeletePopup();
+    } catch (error) {
+      console.error('Error deleting parameters:', error);
+      this.showMessage('Failed to delete parameters', true);
+    }
+  }
+ 
 }

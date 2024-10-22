@@ -14,7 +14,45 @@ interface Employee {
     terminationDate?: Date;
     emergencyContactInformation: string;
   }
-  
+
+  // Personal Information PDS
+  interface PersonalInformation {
+    surname: string;
+    firstname: string;
+    middlename: string;
+    name_extension?: string;
+    date_of_birth: string;
+    sex: string;
+    place_of_birth: string;
+    civil_status: string;
+    height: string;
+    weight: string;
+    blood_type: string;
+    gsis_id_no: string;
+    pagibig_id_no: string;
+    philhealth_id_no: string;
+    sss_no: string;
+    tin_no: string;
+    agency_employee_no: string;
+    citizenship: string [];
+    residential_address_house_block_lot_no: string;
+    residential_address_street: string;
+    residential_address_subdivision: string;
+    residential_address_barangay: string;
+    residential_address_city_municipality: string;
+    residential_address_province: string;
+    residential_address_zip_code: string;
+    permanent_address_house_block_lot_no: string;
+    permanent_address_street: string;
+    permanent_address_subdivision: string;
+    permanent_address_barangay: string;
+    permanent_address_city_municipality: string;
+    permanent_address_province: string;
+    permanent_address_zip_code: string;
+    telephone_no: string;
+    mobile_no: string;
+    email_address: string;
+  }
   // Payroll Management
   interface PayrollRecord {
     employeeId: number;
@@ -165,3 +203,5 @@ interface Employee {
     { dataType: 'Financial Data', rolePermission: 'Finance Team', usersGroups: ['finance1', 'finance2'] },
     // Add more entries as needed
   ];
+
+  

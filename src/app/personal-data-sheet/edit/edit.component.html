@@ -1,0 +1,72 @@
+<div class="flex flex-row sm:flex-wrap md:flex-wrap lg:flex-nowrap h-screen w-screen relative sm:overflow-x-hidden">
+  <app-sidebar-navigation></app-sidebar-navigation>
+  <!-- Left Main Column -->
+  <aside class="lg:w-[25%] md:w-screen sm:w-screen h-auto flex flex-col items-center">
+    <!-- Heading Div -->
+    <div class="flex flex-col w-full basis-1/5 p-6 justify-center">
+      <p class="text-3xl font-bold text-neutral-900">Personal Data Sheet</p>
+      <p class="pb-5 text-slate-500 text-sm">View and Modify User Details</p>
+    </div>
+    <!-- Div For Section Headers -->
+    <div class="flex flex-col border shadow-lg rounded-lg bg-white justify-evenly gap-2 items-center mt-2 mb-4 p-2 w-full basis-4/5">
+      <div *ngFor="let section of sections" class="flex flex-col items-center w-full h-full">
+        <button routerLink="{{ section.route }}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+        [ngClass]="{'bg-blue-500 text-white cursor-default': section.route === currentUrl, 'bg-white text-gray-900 hover:bg-gray-200 transition-colors': section.route !== currentUrl}"
+        class="flex flex-col justify-center items-start w-full h-full px-6 m-0 py-0 rounded-lg">
+          <span class="font-normal tracking-widest text-left">{{ section.title }}</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <!-- Right Main Column -->
+  <section class="lg:w-[75%] bg-white rounded-lg shadow-lg m-4 p-4 border relative max-h-full overflow-hidden flex flex-col">
+    <div class="flex flex-row">
+      <div class="flex w-full justify-center basis-2/5 pb-4">
+        <div class="flex flex-row justify-end items-center basis-2/5 pr-3">
+          <img src="assets/user_icon.svg" class="h-20 w-auto" alt="Person Circle Icon">
+        </div>
+        <div class="flex flex-col justify-center items-start text-center basis-3/5 pl-3">
+          <span class="m-0 p-0 text-2xl">Juan Dela Cruz</span>
+          <span class="m-0 p-0 text-sm text-gray-600">Janitor</span>
+        </div>
+      </div>
+      <div class="items-center basis-3/5">
+        <div class="flex justify-between my-4">
+          <span class="text-base font-medium text-blue-700 dark:text-white">Step {{ currentStep }}/8</span>
+          <span class="text-sm font-medium text-blue-700 dark:text-white">{{ progressBarWidth }}</span>
+        </div>
+        <div class="flex flex-row w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+          <div class="bg-blue-600 h-2.5 rounded-full" [ngStyle]="{'width': progressBarWidth, 'transition': 'width 0.5s ease-in-out'}"></div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <!-- [@routeAnimations]="prepareRoute(outlet)" -->
+    <div class="mt-4 w-full h-full max-h-full flex flex-col overflow-x-hidden overflow-y-auto">
+      <!-- Form Pages Here -->
+      <ng-container>
+        <router-outlet [@slideAnimation]></router-outlet>
+      </ng-container>
+    </div>
+    <div class="w-full flex justify-center pt-2">
+      <!-- Previous Page Button -->
+      <button type="button" class="transform scale-x-[-1] text-white font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2"
+      [ngClass]="{'bg-gray-500 cursor-default' : currentUrl === sections[0].route, 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300' : currentUrl !== sections[0].route}"
+      [routerLink]="[previousUrl]" routerLinkActive="active">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+        <span class="sr-only">Icon description</span>
+      </button>
+      <!-- Next Page Button -->
+      <button type="button" class="text-white font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2"
+      [ngClass]="{'bg-gray-500 cursor-default' : currentUrl === sections[7].route, 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300' : currentUrl !== sections[7].route}"
+      [routerLink]="[nextUrl]" routerLinkActive="active">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+        <span class="sr-only">Icon description</span>
+      </button>
+    </div>
+  </section>
+</div>

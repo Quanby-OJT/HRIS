@@ -1,0 +1,18 @@
+@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+  
+  .animated-gradient-bg {
+    background: linear-gradient(45deg, #708fe5, #0062ff); /* Blue to light blue gradient */
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite; /* Adjust duration for a smoother wave effect */
+  }
+  

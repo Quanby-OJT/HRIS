@@ -1,81 +1,93 @@
 <div class="flex">
     <app-sidebar-navigation></app-sidebar-navigation>
 
-    <div *ngIf="showTable" class="flex flex-col w-full bg-white pt-8 px-6">
+    <div *ngIf="showTable" class="flex flex-col w-full pt-8 px-6">
         <div class="flex justify-between items-start mb-6">
             <div class="flex flex-col">
-                <h2 class="text-2xl font text-neutral-900 mb-1">Today's Time-In Records</h2>
+                <p class="text-3xl font-bold text-neutral-900">Today's Time-In Records</p>
                 <p class="text-sm text-gray-500">Showing records for: {{ today | date:'mediumDate' }}</p>
             </div>
-            <button (click)="goToAuditTrail()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Back</button>
         </div>
 
-        <p class="text-sm text-gray-500 mb-6">View parameters made into your data</p>
-        <!-- Search input -->
-        <div class="mb-6">
-            <div class="flex items-center space-x-4">
-                <div class="relative flex-grow">
-                    <input type="text" placeholder="Search parameters" class="w-full py-3 px-4 pr-10 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" [(ngModel)]="searchTerm" (keyup)="applySearch()">
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                        </svg>
+        <div class="bg-white pt-4 rounded-xl shadow-lg">
+            <div class="mb-2 flex items-center px-4 pb-2">
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-[20%] md:mr-auto">
+                    <input type="text" [(ngModel)]="searchTerm" (input)="applySearch()" placeholder="Search Users..." class="w-full h-full p-2 pr-8 border rounded-full border-gray-300">
+                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+                </div>
+            
+                <!-- Spacer to push other elements to the right -->
+                <div class="ml-auto flex items-center space-x-5">
+                    <!-- Date Input -->
+                    <div class="relative w-48">
+                        <input 
+                            type="date" 
+                            [value]="selectedDate | date:'yyyy-MM-dd'"
+                            (change)="onDateChange($event)"
+                            class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent opacity-0 absolute inset-0 cursor-pointer"
+                        >
+                        <div class="w-full py-3 px-4 rounded-lg bg-white border border-gray-300 flex justify-between items-center">
+                            <span class="text-gray-500">{{ formattedDate }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+            
+                    <!-- Pagination Controls -->
+                    <div class="flex items-center space-x-4">
+                        <button class="text-black p-2 bg-gray-100 rounded-md" 
+                            (click)="prevPage()" 
+                            [disabled]="currentPage === 1">
+                            &lt;
+                        </button>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-gray-600">{{ currentPage }}</span>
+                            <span class="text-gray-600">of</span>
+                            <span class="text-gray-600">{{ totalPages }}</span>
+                        </div>
+                        <button class="text-black p-2 bg-gray-100 rounded-md" 
+                            (click)="nextPage()" 
+                            [disabled]="currentPage === totalPages">
+                            &gt;
+                        </button>
                     </div>
                 </div>
-                <button *ngIf="isManageMode" (click)="deleteSelectedAttendances()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-4">Delete</button>
-                <button (click)="toggleManageMode()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Manage</button>
             </div>
-        </div>
-  
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="w-full text-left border-collapse" *ngIf="paginatedAttendances && paginatedAttendances.length > 0">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th *ngIf="isManageMode" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Select</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Clock In</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Clock Out</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">OT-IN</th>
-                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">OT-OUT</th>
-                        <th *ngIf="isManageMode" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr *ngFor="let attendance of paginatedAttendances">
-                        <td *ngIf="isManageMode" class="px-3 py-4 whitespace-nowrap">
-                            <input type="checkbox" [(ngModel)]="attendance.selected" class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out">
-                        </td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{{ attendance.name || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ attendance.status || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatSchedule(attendance.schedule_in, attendance.schedule_out) || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.clock_in) || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.clock_out) || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.OT_IN) || 'N/A' }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.OT_OUT) || 'N/A' }}</td>
-                        <td *ngIf="isManageMode" class="px-3 py-4 whitespace-nowrap text-sm font-medium">
-                            <button (click)="editAttendance(attendance)" class="text-blue-600 hover:text-blue-800">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 013.536 3.536L7.5 18.5H3v-4.5L16.732 3.732z"></path>
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div *ngIf="!paginatedAttendances || paginatedAttendances.length === 0" class="p-4 text-center text-gray-500">
-                No parameters found.
-            </div>
+            
+
+            <div class="overflow-x-auto">
+                <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-left" *ngIf="paginatedAttendances && paginatedAttendances.length > 0">
+                        <thead class="bg-gray-100 z-10 sticky top-0">
+                            <tr>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Clock In</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Clock Out</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">OT-IN</th>
+                                <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">OT-OUT</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let attendance of paginatedAttendances">
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{{ attendance.name || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ attendance.status || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatSchedule(attendance.schedule_in, attendance.schedule_out) || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.clock_in) || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.clock_out) || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.OT_IN) || 'N/A' }}</td>
+                                <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(attendance.OT_OUT) || 'N/A' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="!paginatedAttendances || paginatedAttendances.length === 0" class="p-4 text-center text-gray-500">
+                        No Time In Recorded
+                    </div>
+                </div>
+            </div> 
         </div>   
-        <div class="flex justify-between items-center mt-4">
-            <div class="flex">
-                <button (click)="prevPage()" [disabled]="currentPage === 1" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">Previous</button>
-            </div>
-            <div>Page {{ currentPage }} of {{ totalPages }}</div>
-            <div class="flex">
-                <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">Next</button>
-            </div>
-        </div>       
     </div>
 </div>

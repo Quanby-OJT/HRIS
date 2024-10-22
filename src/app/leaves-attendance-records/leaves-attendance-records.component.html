@@ -4,7 +4,7 @@
         <div class="min-h-screen">
             <div class="p-6">
                 <div class="mb-6">
-                    <p class="mb-2 text-3xl font-bold text-neutral-900">Leaves and Attendance Recrords<br></p>
+                    <p class="mb-2 text-3xl font-bold text-neutral-900">Leaves and Attendance Records<br></p>
                     <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage attendance</p>
                     
                     <div class="z-10 relative">
@@ -51,7 +51,7 @@
                                     <!-- Employee Schedule -->
 
                                     <div class="flex justify-between items-center w-full px-5">
-                                        <p class="text-xl font-semibold tracking-wider mt-10">EMPLOYEE'S SCHEDULE</p>
+                                        <p class="text-xl font-semibold tracking-wider mt-10">SCHEDULE ADJUSTMENT REQUESTS</p>
                                         <button (click)="onAdjustButtonClick()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
                                             {{ adjustButtonText }}
                                         </button>
@@ -154,6 +154,7 @@
 
             <!-- Display details of the request -->
             <p><strong>Request ID:</strong> {{ selectedRequest?.id }}</p>
+            <p><strong>Requested by:</strong> {{ selectedRequest?.profile?.email }}</p>
             <p><strong>Leave Type:</strong> {{ selectedRequest?.leave_type }}</p>
             <p><strong>Leave Balance:</strong> {{ selectedRequest?.leave_balance }}</p>
             <p><strong>Start Date:</strong> {{ selectedRequest?.start_date }}</p>

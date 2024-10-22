@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PersonalDataSheetComponent } from './personal-data-sheet.component';
+import { PersonalDataSheetComponent } from './edit.component';
 
 describe('PersonalDataSheetComponent', () => {
   let component: PersonalDataSheetComponent;
@@ -11,7 +11,7 @@ describe('PersonalDataSheetComponent', () => {
       imports: [PersonalDataSheetComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(PersonalDataSheetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

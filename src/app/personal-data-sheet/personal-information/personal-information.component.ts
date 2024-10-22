@@ -4,6 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 
+interface Field {
+  label : string,
+  type : string,
+  options? : string[]
+}
+
 @Component({
   selector: 'app-personal-information',
   standalone: true,
@@ -13,66 +19,61 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class PersonalInformationComponent {
   date: Date | undefined;
-
   civil_status: string = '';
 
-  basicInfoFields = [
-    { fieldName: 'First Name'},
-    { fieldName: 'Middle Name'},
-    { fieldName: 'Last Name'},
-    { fieldName: 'Name Extension'},
-    { fieldName: 'Date of Birth'},
-    { fieldName: 'Place of Birth'},
-    { fieldName: 'Sex'},
-    { fieldName: 'Civil Status'},
-    { fieldName: 'Height'},
-    { fieldName: 'Weight'},
-    { fieldName: 'Blood Type'}
-  ]
+  basicInformation: Field[] = [
+    { label: 'First Name', type: 'text' },
+    { label: 'Middle Name', type: 'text' },
+    { label: 'Last Name', type: 'text' },
+    { label: 'Name Extension', type: 'text' },
+    { label: 'Date of Birth', type: 'date' },
+    { label: 'Place of Birth', type: 'text' },
+    { label: 'Sex', type: 'boolean', options: ['Male', 'Female'] },
+    { label: 'Civil Status', type: 'dropdown', options: ['Single', 'Married', 'Widowed', 'Separated'] },
+    { label: 'Height', type: 'text' },
+    { label: 'Weight', type: 'text' },
+    { label: 'Blood Type', type: 'dropdown', options: ['A', 'B', 'AB', 'O'] }
+  ];
 
-  contactFields = [
-    { fieldName : 'Telephone No.'},
-    { fieldName : 'Mobile No.'},
-    { fieldName : 'Email Address'},
-  ]
+  contactDetails: Field[] = [
+    { label: 'Telephone No.', type: 'text' },
+    { label: 'Mobile No.', type: 'text' },
+    { label: 'Email Address', type: 'text' }
+  ];
 
-  govIdNoFields = [
-    { fieldName: 'GSIS ID No.'},
-    { fieldName: 'PAG-IBIG ID No.'},
-    { fieldName: 'PhilHealth ID No.'},
-    { fieldName: 'SSS No.'},
-    { fieldName: 'TIN No.'},
-    { fieldName: 'Agency Employee No.'},
-  ]
+  govIdNos: Field[] = [
+    { label: 'GSIS ID No.', type: 'text' },
+    { label: 'PAG-IBIG ID No.', type: 'text' },
+    { label: 'PhilHealth ID No.', type: 'text' },
+    { label: 'SSS No.', type: 'text' },
+    { label: 'TIN No.', type: 'text' },
+    { label: 'Agency Employee No.', type: 'text' }
+  ];
 
-  addressFields = [
-    { fieldName : 'House/Block/Lot No.'},
-    { fieldName : 'Street'},
-    { fieldName : 'Subdivision/Village'},
-    { fieldName : 'Barangay'},
-    { fieldName : 'City/Municipality'},
-    { fieldName : 'Province'},
-    { fieldName : 'Zip Code'},
-  ]
+  addressDetails: Field[] = [
+    { label: 'House/Block/Lot No.', type: 'text' },
+    { label: 'Street', type: 'text' },
+    { label: 'Subdivision/Village', type: 'text' },
+    { label: 'Barangay', type: 'text' },
+    { label: 'City/Municipality', type: 'text' },
+    { label: 'Province', type: 'text' },
+    { label: 'Zip Code', type: 'text' }
+  ];
 
+  fieldsets: { label: string, fields: Field[] }[] = [
+    { label: 'Basic Information', fields: this.basicInformation },
+    { label: 'Contact Details', fields: this.contactDetails },
+    { label: 'Government Issued ID Nos', fields: this.govIdNos },
+    { label: 'Current Address Details', fields: this.addressDetails },
+    { label: 'Permanent Address Details', fields: this.addressDetails },
+  ];
 
+  private dropdowns!: NodeListOf<Element>;
 
   ngOnInit() {}
 
   ngAfterViewInit() {
     this.initializeDropdown();
-  }
-
-  // Dropdown setup
-  private initializeDropdown() {
-    const dropdownButton = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdown');
-
-    if (dropdownButton && dropdownMenu) {
-      dropdownButton.addEventListener('click', function() {
-        dropdownMenu.classList.toggle('hidden');
-      });
-    }
   }
 
   selectStatus(status: string) {
@@ -83,6 +84,16 @@ export class PersonalInformationComponent {
     }
   }
 
+  private initializeDropdown() {
+    const dropdownButton = document.getElementById('dropdownButton');
+    const dropdownMenu = document.getElementById('dropdown');
+
+    if (dropdownButton && dropdownMenu) {
+      dropdownButton.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('hidden');
+      });
+    }
+  }
 }
 
 export class NgModule { }

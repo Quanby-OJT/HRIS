@@ -1,46 +1,71 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+
+
+interface Field {
+  label : string,
+  type : string,
+  value? : string, // dito ilagay input value ng field for backend
+  defaultValue? : string,
+  options? : string[],
+  selectedOption? : string
+}
 
 @Component({
   selector: 'app-family-background',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CalendarModule, DropdownModule, FormsModule],
   templateUrl: './family-background.component.html',
   styleUrl: './family-background.component.css'
 })
 export class FamilyBackgroundComponent {
-  parentalInformation: { label: string, type: string }[] = [
+  date: Date | undefined;
+
+  parentalInformation: Field[] = [
     { label: "Name", type: "text" },
     { label: "Occupation", type: "text" },
     { label: "Birthdate", type: "date" },
     { label: "Contact Number", type: "text" },
-    { label: "Address", type: "textarea" },
-    { label: "Marital Status of Parents", type: "dropdown" } // Dropdown options: Married, Separated, Divorced, Widowed, etc.
+    { label: "Address", type: "text" },
+    { label: "Marital Status of Parents", type: "dropdown",
+      defaultValue: 'Select Status',
+      options: ['Married', 'Separated', 'Divorced', 'Widowed'] }
   ];
 
-  spousalInformation: { label: string, type: string }[] = [
+  spousalInformation: Field[] = [
     { label: "Name", type: "text" },
     { label: "Occupation", type: "text" },
     { label: "Birthdate", type: "date" },
     { label: "Date of Marriage", type: "date" },
     { label: "Contact Number", type: "text" },
-    { label: "Address", type: "textarea" },
+    { label: "Address", type: "text" },
     { label: "Employer", type: "text" }
   ];
 
-  emergencyContact: { label: string, type: string }[] = [
+  emergencyContact: Field[] = [
     { label: "Contact Name", type: "text" },
     { label: "Relationship to Contact", type: "dropdown" }, // Dropdown options: Parent, Sibling, Spouse, Friend, Other
     { label: "Contact Number", type: "text" },
-    { label: "Contact Address", type: "textarea" }
+    { label: "Contact Address", type: "text" }
   ];
 
-  otherFamilyFields: { label: string, type: string }[] = [
-    { label: "Family Medical History", type: "textarea" },
-    { label: "Living with Family?", type: "boolean" }, // Can be a checkbox or toggle
-    { label: "Any Deceased Family Members?", type: "boolean" }, // Can be a checkbox or toggle
+  otherFamilyFields: Field[] = [
+    { label: "Family Medical History", type: "text" },
+    { label: "Living with Family?", type: "boolean", options : ['Yes', 'No'] }, // Can be a checkbox or toggle
+    { label: "Any Deceased Family Members?", type: "boolean", options : ['Yes', 'No'] }, // Can be a checkbox or toggle
     { label: "Primary Family Language Spoken", type: "text" },
     { label: "Household Annual Income", type: "text" }
+  ];
+
+  fieldsets: { label: string, fields: Field[] }[] = [
+    { label: 'Father Information', fields: this.parentalInformation },
+    { label: 'Mother Information', fields: this.parentalInformation },
+    { label: 'Spousal Information', fields: this.spousalInformation },
+    { label: 'Emergency Contact Information', fields: this.emergencyContact },
+    { label: 'Other Details', fields: this.otherFamilyFields },
   ];
 
   // siblingInformation: { label: string, type: string }[] = [
@@ -49,7 +74,7 @@ export class FamilyBackgroundComponent {
   //   { label: "Sibling's Occupation", type: "text" },
   //   { label: "Relationship to Sibling", type: "dropdown" }, // Dropdown options: Brother, Sister, Half-brother, etc.
   //   { label: "Sibling's Contact Number", type: "text" },
-  //   { label: "Sibling's Address", type: "textarea" },
+  //   { label: "Sibling's Address", type: "text" },
   //   { label: "Number of Siblings", type: "number" }
   // ];
 

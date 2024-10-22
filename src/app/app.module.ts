@@ -87,7 +87,7 @@ export class DataService {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'HRIS_login-page';
+  title = 'HRIS';
   passwordHidden: boolean = true;
 
   togglePasswordVisibility(): void {

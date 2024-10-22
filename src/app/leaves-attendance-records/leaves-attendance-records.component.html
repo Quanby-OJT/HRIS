@@ -9,10 +9,12 @@
                     
                     <div class="z-10 relative">
                         <div class="rounded-xl shadow-lg bg-white">
-
+                            
                             <div class="flex flex-col gap-5 w-full">
                                 <div class="overflow-x-auto flex flex-col gap-5 py-5 rounded-lg">
-                                    <div class="flex justify-end w-full px-5">
+
+                                    <!-- DTR -->
+                                    <!-- <div class="flex justify-end w-full px-5">
                                         <div class="w-1/4">
                                             <div class="relative max-w-sm">
                                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -44,18 +46,18 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Employee Schedule -->
 
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">EMPLOYEE'S SCHEDULE</p>
-                                        <button class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
-                                            Adjust Schedule
+                                        <button (click)="onAdjustButtonClick()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                            {{ adjustButtonText }}
                                         </button>
                                     </div>
                                     <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
-                                        <table class="w-full text-left" >
+                                        <table class="w-full text-left">
                                             <thead class="bg-gray-100 z-10 sticky top-0">
                                                 <tr>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
@@ -77,30 +79,54 @@
 
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">LEAVE REQUESTS</p>
-                                        <button class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
-                                            Adjust Schedule
-                                        </button>
+                                        <div class="flex space-x-2">
+                                            <button *ngIf="isManaging" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                                + Add Request
+                                            </button>
+                                            <button (click)="onManageButtonClick()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                                {{ manageButtonText }}
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="max-h-[29rem] overflow-y-auto custom-scrollbar">
+                                    <div class="max-h-[29rem] overflow-y-auto custom-scrollbar overflow-x-auto">
                                         <table class="w-full text-left" >
                                             <thead class="bg-gray-100 z-10 sticky top-0">
                                                 <tr>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Requested By</th>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Leave Type</th>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
                                                     <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                                    <th *ngIf="isManaging" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-200">
-                                                <tr class="cursor-pointer">
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
+                                                <tr *ngFor="let requests of leaveRequests" class="cursor-pointer">
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_type }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.start_date }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.end_date }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.request }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        <span class="px-2 py-1 text-xs font-semibold rounded"
+                                                                [ngClass]="{
+                                                                'bg-yellow-200 text-yellow-800': requests.status === 'Pending',
+                                                                'bg-green-200 text-green-800': requests.status === 'Approved',
+                                                                'bg-red-200 text-red-800': requests.status === 'Rejected'
+                                                                }">
+                                                            {{ requests.status }}
+                                                        </span>
+                                                    </td>
+                                                    <td *ngIf="isManaging" class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <button (click)="openModal(requests)" class="text-white bg-blue-500 hover:bg-blue-600 rounded-full p-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536-3.536L15.232 5.232zM4 13.5V21h7.5l11-11.5a2.5 2.5 0 00-3.5-3.5L4 13.5z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -110,6 +136,42 @@
                         </div>
                     </div>    
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+        <!-- Dark background -->
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+            <h2 class="text-xl font-semibold mb-4">Update Leave Request</h2>
+
+            <!-- Display details of the request -->
+            <p><strong>Request ID:</strong> {{ selectedRequest?.id }}</p>
+            <p><strong>Leave Type:</strong> {{ selectedRequest?.leave_type }}</p>
+            <p><strong>Start Date:</strong> {{ selectedRequest?.start_date }}</p>
+            <p><strong>End Date:</strong> {{ selectedRequest?.end_date }}</p>
+            <p><strong>Request:</strong> {{ selectedRequest?.request }}</p>
+            <p><strong>Status:</strong> {{ selectedRequest?.status }}</p>
+
+            <!-- Status dropdown -->
+            <label for="status" class="block mt-4 text-sm font-medium">Update Status</label>
+            <select [(ngModel)]="newStatus" id="status" class="block w-full mt-1 border border-gray-300 rounded-md">
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+
+            <!-- Buttons -->
+            <div class="flex justify-end mt-6">
+                <button (click)="updateStatus()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
+                    Update
+                </button>
+                <button (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>

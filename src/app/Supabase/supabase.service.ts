@@ -1528,5 +1528,29 @@ async getLoanInfo() {
 }
 
 
+//LEAVE REQUESTS
+
+async getLeaveRequests() {
+  const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
+  if (error) {
+    console.error('Error fetching leave requests:', error);
+    return [];
+  }
+  return data;
+}
+
+async updateLeaveRequestStatus(requestId: number, newStatus: 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave') {
+  const { data, error } = await this.supabase
+      .from('leave_requests')
+      .update({ status: newStatus })
+      .eq('id', requestId);
+
+  if (error) {
+      console.error('Error updating leave request status:', error);
+      return null; // Handle the error as needed
+  }
+  return data; // Return the updated data if needed
+}
+
 
 }

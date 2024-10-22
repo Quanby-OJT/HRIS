@@ -1473,84 +1473,97 @@ async getParameters() {
   }
 
 
-async insertCivilServiceEligibility(tableName: string, formData: any) {
+  async insertCivilServiceEligibility(tableName: string, formData: any) {
 
-  const { data, error } = await this.supabase
-    .from('civil_service_eligibility')
-    .insert([formData]);
+    const { data, error } = await this.supabase
+      .from('civil_service_eligibility')
+      .insert([formData]);
 
-  if (error) {
-    throw error;
+    if (error) {
+      throw error;
+    }
+    return data;
   }
-  return data;
-}
 
-//MERITS AND VIOLATIONS
+  //MERITS AND VIOLATIONS
 
-async insertMeritOrViolation(record: {
-  violations: string,
-  merits: string,
-  date_of_record_v: string | null,
-  date_of_record_m: string | null,
-  user_id: number 
-}) {
-  const { data, error } = await this.supabase
-    .from('merits_and_violations')
-    .insert([{
-      violations: record.violations,
-      merits: record.merits,
-      date_of_record_v: record.date_of_record_v,
-      date_of_record_m: record.date_of_record_m,
-      user_id: record.user_id 
-    }]);
+  async insertMeritOrViolation(record: {
+    violations: string,
+    merits: string,
+    date_of_record_v: string | null,
+    date_of_record_m: string | null,
+    user_id: number 
+  }) {
+    const { data, error } = await this.supabase
+      .from('merits_and_violations')
+      .insert([{
+        violations: record.violations,
+        merits: record.merits,
+        date_of_record_v: record.date_of_record_v,
+        date_of_record_m: record.date_of_record_m,
+        user_id: record.user_id 
+      }]);
 
-  return { data, error }; 
-}
-
-async getProfiles() {
-  const { data, error } = await this.supabase
-    .from('profile')
-    .select('*');
-
-  return { data, error }; 
-}
-
-async getRecords() {
-  const { data, error } = await this.supabase
-    .from('merits_and_violations')
-    .select('*');
-
-  return { data, error };
-}
-
-async getLoanInfo() {
-
-}
-
-
-//LEAVE REQUESTS
-
-async getLeaveRequests() {
-  const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
-  if (error) {
-    console.error('Error fetching leave requests:', error);
-    return [];
+    return { data, error }; 
   }
-  return data;
-}
 
-async updateLeaveRequestStatus(requestId: number, newStatus: 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave') {
-  const { data, error } = await this.supabase
-      .from('leave_requests')
-      .update({ status: newStatus })
-      .eq('id', requestId);
+  async getProfiles() {
+    const { data, error } = await this.supabase
+      .from('profile')
+      .select('*');
 
-  if (error) {
-      console.error('Error updating leave request status:', error);
-      return null; // Handle the error as needed
+    return { data, error }; 
   }
-  return data; // Return the updated data if needed
-}
+
+  async getRecords() {
+    const { data, error } = await this.supabase
+      .from('merits_and_violations')
+      .select('*');
+
+    return { data, error };
+  }
+
+  async getLoanInfo() {
+
+  }
+
+
+  //LEAVE REQUESTS
+
+  async getLeaveRequests() {
+    const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
+    if (error) {
+      console.error('Error fetching leave requests:', error);
+      return [];
+    }
+    return data;
+  }
+
+  async updateLeaveRequestStatus(requestId: number, newStatus: 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave') {
+    const { data, error } = await this.supabase
+         .from('leave_requests')
+         .update({ status: newStatus })
+         .eq('id', requestId);
+
+      if (error) {
+        console.error('Error updating leave request status:', error);
+        return null;
+      }
+    return data;
+  }
+
+  async updateLeaveBalance(requestId: number, newBalance: number) {
+    const { data, error } = await this.supabase
+        .from('leave_requests')
+        .update({ leave_balance: newBalance })
+        .eq('id', requestId);
+    
+    if (error) {
+        console.error('Error updating leave balance:', error);
+        return { error };
+    }
+    return { data };
+  }
 
 
 }

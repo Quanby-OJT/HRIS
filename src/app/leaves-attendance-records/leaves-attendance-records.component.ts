@@ -31,6 +31,9 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   selectedRequest: any = null;
   newStatus: LeaveStatus = 'Sick Leave'; //temp status
 
+  adjustLeaveAmount: number = 0;
+
+
   
   constructor(private supabaseService: SupabaseService) {}
 
@@ -74,7 +77,20 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
     this.selectedRequest = null; 
   }
 
-  updateStatus() {
+  onUpdateClicked() {
+    //update leave balance
+    const newBalance = (this.selectedRequest.leave_balance || 0) + this.adjustLeaveAmount;
+    this.supabaseService.updateLeaveBalance(this.selectedRequest.id, newBalance)
+      .then(updatedData => {
+        if (updatedData) {
+            console.log('Status updated in Supabase:', updatedData);
+        } else {
+            console.error('Failed to update status in Supabase');
+        }
+      });
+    this.selectedRequest.leave_balance = newBalance;
+    this.adjustLeaveAmount = 0;
+    //update request status
     if (this.selectedRequest) {
         this.selectedRequest.status = this.newStatus;
         this.supabaseService.updateLeaveRequestStatus(this.selectedRequest.id, this.newStatus)
@@ -87,11 +103,15 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
             });
         this.closeModal()
     }
+
+    
   }
+
+}
   
   // onDateChange(){
   //   console.log("-----------------");
   //   console.log("changed!")
   //   console.log("-----------------")
   // }
-}
+

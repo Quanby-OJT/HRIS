@@ -4,8 +4,8 @@
         <div class="min-h-screen">
             <div class="p-6">
                 <div class="mb-6">
-                    <p class="mb-2 text-3xl font-bold text-neutral-900">Leaves and Attendance Records<br></p>
-                    <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage attendance</p>
+                    <p class="mb-2 text-3xl font-bold text-neutral-900">Schedule Adjustments and Leave Requests<br></p>
+                    <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage schedule adjustment requests, as well as leave requests</p>
                     
                     <div class="z-10 relative">
                         <div class="rounded-xl shadow-lg bg-white">
@@ -52,7 +52,8 @@
 
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">SCHEDULE ADJUSTMENT REQUESTS</p>
-                                        <button (click)="onAdjustButtonClick()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                        <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isAdjusting, 'bg-pink-500 hover:bg-pink-600': isAdjusting }"
+                                                    class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onAdjustButtonClick()">
                                             {{ adjustButtonText }}
                                         </button>
                                     </div>
@@ -60,13 +61,14 @@
                                         <table class="w-full text-left">
                                             <thead class="bg-gray-100 z-10 sticky top-0">
                                                 <tr>
-                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
-                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Start Time</th>
-                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">End Time</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Requested by</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
+                                                    <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-200">
-                                                <tr class="cursor-pointer">
+                                                <tr>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"></td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500"></td>
@@ -105,7 +107,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-200">
-                                                <tr *ngFor="let requests of leaveRequests" class="cursor-pointer">
+                                                <tr *ngFor="let requests of leaveRequests">
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_balance }}</td>

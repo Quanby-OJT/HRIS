@@ -1,9 +1,10 @@
 <div class="w-full h-full">
-  <h1 class="relative">Educational Background</h1>
+  <h1 class="absolute w-full bg-white pb-4">Educational Background</h1>
+  <h1 class="w-full bg-white">Educational Background</h1>
   <form class="w-full flex flex-col gap-y-6">
     <!-- Elementary School Information Fieldset -->
     <fieldset *ngFor="let fieldset of fieldsets" class="border-t border-t-gray-300 p-4 min-w-full">
-      <legend class="px-4 bg-white text-lg">{{ fieldset.label }}</legend>
+      <legend class="px-4 bg-white text-xl font-medium tracking-widest">{{ fieldset.label }}</legend>
       <div class="grid gap-6 justify-start w-full"
            [ngClass]="{'grid-cols-4' : fieldset.fields.length % 4 === 0 || fieldset.fields.length % 4 === 3,
                        'grid-cols-3' : fieldset.fields.length % 3 === 0 || fieldset.fields.length % 3 === 2,

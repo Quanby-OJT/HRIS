@@ -1,25 +1,45 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
+import 'flowbite'; // Import Flowbite JS
+import { Datepicker } from 'flowbite';
+
 
 interface Field {
   label : string,
   type : string,
-  options? : string[]
+  options? : string[],
+  value?: string,
+  defaultValue?: string
 }
 
 @Component({
   selector: 'app-personal-information',
   standalone: true,
-  imports: [CalendarModule, FormsModule, DropdownModule, CommonModule],
+  imports: [DropdownModule, CommonModule],
   templateUrl: './personal-information.component.html',
   styleUrl: './personal-information.component.css'
 })
-export class PersonalInformationComponent {
+export class PersonalInformationComponent implements AfterViewInit {
   date: Date | undefined;
   civil_status: string = '';
+
+  @ViewChild('datePickerInput') datepickerInput!: ElementRef<HTMLInputElement>;
+
+  ngAfterViewInit(): void {
+    const datePicker = document.getElementById('default-datepicker');
+    if(datePicker){
+      const calendar = new Datepicker(datePicker);
+      calendar.setDate(new Date());
+      console.log("-----------------");
+      console.log(calendar.getDate());
+    }
+
+    this.datepickerInput.nativeElement.addEventListener('blur', (event: Event) => {
+      console.log('Date changed:', (event.target as HTMLInputElement).value);
+    });
+  }
+
 
   basicInformation: Field[] = [
     { label: 'First Name', type: 'text' },
@@ -72,26 +92,23 @@ export class PersonalInformationComponent {
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    this.initializeDropdown();
-  }
+  toggleDropdown(dropdownId : string) {
+    const dropdownButton = document.getElementById(dropdownId+'dropdownButton');
+    const dropdownPanel = document.getElementById(dropdownId+'dropdownPanel');
 
-  selectStatus(status: string) {
-    this.civil_status = status;
-    const dropdownMenu = document.getElementById('dropdown');
-    if (dropdownMenu) {
-      dropdownMenu.classList.add('hidden');
+
+    if (dropdownButton && dropdownPanel) {
+      dropdownPanel.classList.toggle('hidden');
     }
   }
 
-  private initializeDropdown() {
-    const dropdownButton = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdown');
+  selectOption(field: Field, option: string) {
+    const dropdownPanel = document.getElementById(field.label+'dropdownPanel');
 
-    if (dropdownButton && dropdownMenu) {
-      dropdownButton.addEventListener('click', function() {
-        dropdownMenu.classList.toggle('hidden');
-      });
+    field.value = option;
+
+    if (dropdownPanel) {
+      dropdownPanel.classList.add('hidden');
     }
   }
 }

@@ -3,8 +3,8 @@ import { ChartComponent } from "ng-apexcharts";
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { RouterModule, Router } from '@angular/router';
 import { DecimalPipe, CommonModule, isPlatformBrowser  } from '@angular/common';
-import { SupabaseService } from '../Supabase/supabase.service';
-import { FlowbiteService } from '../services/flowbite.service';
+import { SupabaseService } from '../../../Supabase/supabase.service';
+import { FlowbiteService } from '../../../services/flowbite.service';
 import { FormsModule, NgForm  } from '@angular/forms';
 import {
   ApexNonAxisChartSeries,
@@ -83,9 +83,9 @@ interface EmployeePayslips {
 })
 export class CompensationRecordsComponent implements OnInit{
   public chartOptions: ChartOptions = {
-    series: [], 
-    chart: { type: 'pie' }, 
-    labels: [], 
+    series: [],
+    chart: { type: 'pie' },
+    labels: [],
     responsive: [],
     plotOptions: {}
   };
@@ -194,7 +194,7 @@ export class CompensationRecordsComponent implements OnInit{
     this.employeeDeductions = compensationRecords.employee_deductions;
     this.employeePayslips = compensationRecords.employee_payslips;
 
-    
+
     this.calculateCompensationValues();
     console.log("==========");
     console.log(this.employeePayslips);

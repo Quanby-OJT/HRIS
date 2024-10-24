@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -72,23 +72,27 @@ export class FamilyBackgroundComponent implements AfterViewInit {
     { label: 'Other Details', fields: this.otherFamilyFields },
   ];
 
-  toggleDropdown(dropdownId: string) {
-    const dropdownButton = document.getElementById(dropdownId + 'dropdownButton');
-    const dropdownPanel = document.getElementById(dropdownId + 'dropdownPanel');
+  isOpen: boolean = false; // Track whether the dropdown is open
+  activeDropdownLabel: string | null = null; // Keep track of the active dropdown
 
-    if (dropdownButton && dropdownPanel) {
-      dropdownPanel.classList.toggle('hidden');
+  toggleDropdown(field: Field) {
+    // If the clicked dropdown is already open, close it; otherwise, open it
+    this.activeDropdownLabel = this.activeDropdownLabel === field.label ? null : field.label;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // If the click is not on a dropdown button or dropdown options, close the dropdown
+    if (!target.closest('.dropdown-container')) {
+      this.activeDropdownLabel = null; // Close the dropdown
     }
   }
 
   selectOption(field: Field, option: string) {
-    const dropdownPanel = document.getElementById(field.label + 'dropdownPanel');
-
-    field.value = option;
-
-    if (dropdownPanel) {
-      dropdownPanel.classList.add('hidden');
-    }
+    field.value = option; // Set the selected option
+    this.activeDropdownLabel = null; // Close the dropdown
   }
 }
 

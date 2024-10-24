@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { GeneralInformationComponent } from '../../view/general-information/general-information.component';
 
 interface Field {
   label : string,
@@ -15,7 +16,7 @@ interface Field {
 @Component({
   selector: 'app-learning-and-development-interventions',
   standalone: true,
-  imports: [CommonModule, CalendarModule, DropdownModule, FormsModule],
+  imports: [CommonModule, CalendarModule, DropdownModule, FormsModule, GeneralInformationComponent],
   templateUrl: './learning-and-development-interventions.component.html',
   styleUrl: './learning-and-development-interventions.component.css'
 })
@@ -27,29 +28,32 @@ export class LearningAndDevelopmentInterventionsComponent {
     { label: 'Inclusive Dates of Attendance (From)', type: 'date' },
     { label: 'Inclusive Dates of Attendance (To)', type: 'date' },
     { label: 'Number of Hours', type: 'text' },
-    { label: 'Type of LD (Managerial/Technical/Etc.)', type: 'dropdown', options: ['Managerial', 'Technical', 'Supervisory', 'Foundational'] },
+    { label: 'Type of LD', type: 'dropdown', options: ['Managerial', 'Technical', 'Supervisory', 'Foundational'] },
     { label: 'Conducted/Sponsored by', type: 'text' },
     { label: 'Certificate Given', type: 'boolean', options: ['Yes', 'No'] }
   ];
 
-  toggleDropdown(dropdownId : string) {
-    const dropdownButton = document.getElementById(dropdownId+'dropdownButton');
-    const dropdownPanel = document.getElementById(dropdownId+'dropdownPanel');
+  isOpen: boolean = false; // Track whether the dropdown is open
+  activeDropdownLabel: string | null = null; // Keep track of the active dropdown
 
+  toggleDropdown(field: Field) {
+    // If the clicked dropdown is already open, close it; otherwise, open it
+    this.activeDropdownLabel = this.activeDropdownLabel === field.label ? null : field.label;
+  }
 
-    if (dropdownButton && dropdownPanel) {
-      dropdownPanel.classList.toggle('hidden');
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // If the click is not on a dropdown button or dropdown options, close the dropdown
+    if (!target.closest('.dropdown-container')) {
+      this.activeDropdownLabel = null; // Close the dropdown
     }
   }
 
   selectOption(field: Field, option: string) {
-    const dropdownPanel = document.getElementById(field.label+'dropdownPanel');
-
-    field.value = option;
-
-    if (dropdownPanel) {
-      dropdownPanel.classList.add('hidden');
-    }
+    field.value = option; // Set the selected option
+    this.activeDropdownLabel = null; // Close the dropdown
   }
 }
 

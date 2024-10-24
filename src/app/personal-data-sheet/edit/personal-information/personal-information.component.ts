@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import 'flowbite'; // Import Flowbite JS
 import { Datepicker } from 'flowbite';
@@ -92,24 +92,27 @@ export class PersonalInformationComponent implements AfterViewInit {
 
   ngOnInit() {}
 
-  toggleDropdown(dropdownId : string) {
-    const dropdownButton = document.getElementById(dropdownId+'dropdownButton');
-    const dropdownPanel = document.getElementById(dropdownId+'dropdownPanel');
+  isOpen: boolean = false; // Track whether the dropdown is open
+  activeDropdownLabel: string | null = null; // Keep track of the active dropdown
 
+  toggleDropdown(field: Field) {
+    // If the clicked dropdown is already open, close it; otherwise, open it
+    this.activeDropdownLabel = this.activeDropdownLabel === field.label ? null : field.label;
+  }
 
-    if (dropdownButton && dropdownPanel) {
-      dropdownPanel.classList.toggle('hidden');
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // If the click is not on a dropdown button or dropdown options, close the dropdown
+    if (!target.closest('.dropdown-container')) {
+      this.activeDropdownLabel = null; // Close the dropdown
     }
   }
 
   selectOption(field: Field, option: string) {
-    const dropdownPanel = document.getElementById(field.label+'dropdownPanel');
-
-    field.value = option;
-
-    if (dropdownPanel) {
-      dropdownPanel.classList.add('hidden');
-    }
+    field.value = option; // Set the selected option
+    this.activeDropdownLabel = null; // Close the dropdown
   }
 }
 
